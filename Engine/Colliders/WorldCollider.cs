@@ -1,5 +1,8 @@
 ﻿namespace AntEngine.Colliders
 {
+    /// <summary>
+    /// Collider representing the engineWorld.
+    /// </summary>
     public class WorldCollider : Collider
     {
         protected override bool checkCollision(CircleCollider circleCollider)
