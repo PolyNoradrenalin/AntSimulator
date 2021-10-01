@@ -35,5 +35,24 @@ namespace AntEngine
                 entity.Update();
             }
         }
+
+        /// <summary>
+        /// Registers an entity in the world.
+        /// </summary>
+        public void AddEntity(Entity entity)
+        {
+            if (!Entities.Contains(entity))
+            {
+                Entities.Add(entity);
+            }
+        }
+
+        /// <summary>
+        /// Removes an entity from the world.
+        /// </summary>
+        public void RemoveEntity(Entity entity)
+        {
+            Entities.Remove(entity);
+        }
     }
 }
