@@ -31,5 +31,13 @@ namespace AntEngine.Entities
             State = state;
             State.OnStateStart(this);
         }
+
+        /// <summary>
+        /// Updates the state of the entity.
+        /// </summary>
+        public override void Update()
+        {
+            State.OnStateUpdate(this);
+        }
     }
 }
