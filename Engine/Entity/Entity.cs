@@ -7,7 +7,9 @@ namespace AntEngine.Entity
     /// </summary>
     public abstract class Entity
     {
-        public Entity() : this("Entity", new Transform())
+        private const string DefaultName = "Entity";
+        
+        public Entity() : this(DefaultName, new Transform())
         {
         }
 
