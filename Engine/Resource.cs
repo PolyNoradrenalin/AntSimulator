@@ -1,5 +1,8 @@
 ﻿namespace AntEngine
 {
+    /// <summary>
+    /// Represents a resource.
+    /// </summary>
     public class Resource
     {
         private int _quantity;
