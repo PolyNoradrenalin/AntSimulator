@@ -1,13 +1,18 @@
 using AntEngine.Entities.States;
+using AntEngine.Maths;
 
 namespace AntEngine.Entities
 {
     /// <summary>
     /// An entity that can be a finite set of states and change state with specific transitions.
     /// </summary>
-    public abstract class StateEntity
+    public abstract class StateEntity : Entity
     {
-        public StateEntity(IState initialState)
+        public StateEntity(World world, IState initialState) : this("StateEntity", new Transform(), world, initialState)
+        {
+        }
+        
+        public StateEntity(string name, Transform transform, World world, IState initialState) : base(name, transform, world)
         {
             State = initialState;
         }
