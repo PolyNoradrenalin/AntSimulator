@@ -28,5 +28,25 @@ namespace AntEngine.Maths
         }
         
         public Dictionary<Vector2, float> Weights { get; }
+
+        /// <summary>
+        /// Returns the mean vector of all direction with weights considered.
+        /// </summary>
+        public Vector2 Mean
+        {
+            get
+            {
+                float totalWeight = 0f;
+                Vector2 totalVector = Vector2.Zero;
+
+                foreach (Vector2 dir in Weights.Keys)
+                {
+                    totalVector += dir;
+                    totalWeight += Weights[dir];
+                }
+
+                return totalVector / totalWeight;
+            }
+        }
     }
 }
