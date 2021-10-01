@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace AntEngine.Maths
 {
@@ -7,6 +8,8 @@ namespace AntEngine.Maths
     /// </summary>
     public class Transform
     {
+        private float _rotation;
+        
         /// <summary>
         /// Default constructor for a Transform.
         /// </summary>
@@ -36,7 +39,11 @@ namespace AntEngine.Maths
         /// Stores a rotation value.
         /// Goes from 0 to 360 and default value is 0.
         /// </summary>
-        public float Rotation { get; set; }
+        public float Rotation
+        {
+            get => _rotation;
+            set => _rotation = value % (2 * MathF.PI);
+        }
         
         /// <summary>
         /// Stores a scale value in two dimensions (x and y).
