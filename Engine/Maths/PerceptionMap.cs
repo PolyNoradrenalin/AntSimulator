@@ -27,6 +27,9 @@ namespace AntEngine.Maths
             }
         }
         
+        /// <summary>
+        /// Each direction associated with its weight.
+        /// </summary>
         public Dictionary<Vector2, float> Weights { get; }
 
         /// <summary>
