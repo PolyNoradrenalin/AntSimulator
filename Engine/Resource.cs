@@ -2,17 +2,17 @@
 {
     public class Resource
     {
-        private int _amount;
+        private int _quantity;
 
         public Resource(int a)
         {
-            _amount = a;
+            _quantity = a;
         }
 
-        public int Amount
+        public int Quantity
         {
-            get => _amount;
-            set => _amount = value;
+            get => _quantity;
+            set => _quantity = value;
         }
     }
 }
