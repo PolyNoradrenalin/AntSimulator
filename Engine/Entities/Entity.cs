@@ -18,6 +18,8 @@ namespace AntEngine.Entities
             Name = name;
             Transform = transform;
             World = world;
+            
+            world.AddEntity(this);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Numerics;
 using AntEngine.Entities;
 
@@ -9,16 +10,22 @@ namespace AntEngine
     /// </summary>
     public class World
     {
+        private readonly IList<Entity> _entities;
+
         public World(Vector2 size)
         {
             Entities = new List<Entity>();
             Size = size;
         }
-        
+
         /// <summary>
         /// List of the entities present on the map.
         /// </summary>
-        public IList<Entity> Entities { get; private set; }
+        public IList<Entity> Entities
+        {
+            get => _entities.ToImmutableList();
+            private init => _entities = value;
+        }
         
         /// <summary>
         /// Size of the world.
@@ -43,7 +50,7 @@ namespace AntEngine
         {
             if (!Entities.Contains(entity))
             {
-                Entities.Add(entity);
+                _entities.Add(entity);
             }
         }
 
@@ -52,7 +59,7 @@ namespace AntEngine
         /// </summary>
         public void RemoveEntity(Entity entity)
         {
-            Entities.Remove(entity);
+            _entities.Remove(entity);
         }
     }
 }
