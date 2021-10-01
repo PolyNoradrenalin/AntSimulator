@@ -1,4 +1,3 @@
-using System.Data;
 using AntEngine.Maths;
 
 namespace AntEngine.Entity
@@ -8,6 +7,16 @@ namespace AntEngine.Entity
     /// </summary>
     public abstract class Entity
     {
+        public Entity() : this("Entity", new Transform())
+        {
+        }
+
+        public Entity(string name, Transform transform)
+        {
+            Name = name;
+            Transform = transform;
+        }
+
         /// <summary>
         /// Identifier of the entity.
         /// Names are not necessarily unique but it's better to distinguish entities. 
