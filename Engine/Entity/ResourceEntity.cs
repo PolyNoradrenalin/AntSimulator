@@ -8,11 +8,11 @@
         public ResourceEntity(int quantity, Resource.Resource resource)
         {
             Quantity = quantity;
-            Resource = resource;
+            Type = resource;
         }
 
         public int Quantity { get; set; }
-        public Resource.Resource Resource { get;  set; }
+        public Resource.Resource Type { get;  set; }
 
         public override void Update()
         {
