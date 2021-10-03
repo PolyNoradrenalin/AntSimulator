@@ -8,11 +8,11 @@ namespace AntEngine.Colliders
     public abstract class Collider
     {
         /// <summary>
-        /// Boundaries of the collider.
+        /// Position, rotation and scale of the collider.
         /// </summary>
         private Transform Transform;
 
-        protected Collider() { }
+        public Collider() { }
 
         /// <summary>
         /// Check for a collision between this and a generic "collider" object.
@@ -20,7 +20,7 @@ namespace AntEngine.Colliders
         /// </summary>
         /// <param name="collider"></param>
         /// <returns></returns>
-        protected bool checkCollision(Collider collider)
+        public bool checkCollision(Collider collider)
         {
             return collider.checkCollision(this);
         }
@@ -30,20 +30,20 @@ namespace AntEngine.Colliders
         /// </summary>
         /// <param name="circleCollider"></param>
         /// <returns></returns>
-        protected abstract bool checkCollision(CircleCollider circleCollider);
+        public abstract bool checkCollision(CircleCollider circleCollider);
 
         /// <summary>
         /// Checks for a collision between this and a rectangleCollider.
         /// </summary>
         /// <param name="rectCollider"></param>
         /// <returns></returns>
-        protected abstract bool checkCollision(RectangleCollider rectCollider);
+        public abstract bool checkCollision(RectangleCollider rectCollider);
 
         /// <summary>
         /// Checks for a collision between this and a worldCollider.
         /// </summary>
         /// <param name="worldCollider"></param>
         /// <returns></returns>
-        protected abstract bool checkCollision(WorldCollider worldCollider);
+        public abstract bool checkCollision(WorldCollider worldCollider);
     }
 }
