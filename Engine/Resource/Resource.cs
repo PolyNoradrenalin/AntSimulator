@@ -2,6 +2,9 @@
 
 namespace AntEngine.Resource
 {
+    /// <summary>
+    /// Represents a resource type.
+    /// </summary>
     public class Resource
     {
         public Resource(String type)
