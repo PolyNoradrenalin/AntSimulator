@@ -5,17 +5,11 @@
     /// </summary>
     public class Resource
     {
-        private int _quantity;
-
         public Resource(int a)
         {
-            _quantity = a;
+            Quantity = a;
         }
 
-        public int Quantity
-        {
-            get => _quantity;
-            set => _quantity = value;
-        }
+        public int Quantity { get; set; }
     }
 }
