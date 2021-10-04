@@ -8,7 +8,7 @@ namespace AntEngine.Entities.States
         /// <summary>
         /// Called when the state has just been assigned on an entity.
         /// </summary>
-        /// <param name="stateEntity">The entity that just started to be in this state.</param>
+        /// <param name="stateEntity">The entity that transitioned to this state.</param>
         void OnStateStart(StateEntity stateEntity);
         /// <summary>
         /// Called on each update of a StateEntity.
