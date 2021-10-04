@@ -21,6 +21,7 @@ namespace AntEngine.Entities
         
         /// <summary>
         /// Updates the state of the entity.
+        /// Will also call OnStateEnd on previous state and OnStateStart on the new state.
         /// </summary>
         /// <param name="state">The new state the entity will be in.</param>
         public void ChangeState(IState state)
@@ -33,7 +34,7 @@ namespace AntEngine.Entities
         }
 
         /// <summary>
-        /// Updates the state of the entity.
+        /// Calls the Update method of the current state. 
         /// </summary>
         public override void Update()
         {
