@@ -1,4 +1,4 @@
-﻿namespace AntEngine.Entity
+﻿namespace AntEngine.Entities
 {
     /// <summary>
     /// Represents a resource in the world.

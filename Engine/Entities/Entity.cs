@@ -1,6 +1,6 @@
 using AntEngine.Maths;
 
-namespace AntEngine.Entity
+namespace AntEngine.Entities
 {
     /// <summary>
     /// Base class for all things that can exist on a World.
