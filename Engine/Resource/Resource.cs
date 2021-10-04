@@ -12,6 +12,6 @@ namespace AntEngine.Resource
             Type = type;
         }
 
-        public String Type { get; set; }
+        public String Type { get; private set; }
     }
 }
