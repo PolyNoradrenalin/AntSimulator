@@ -33,7 +33,7 @@ namespace AntEngine.Maths
         public Dictionary<Vector2, float> Weights { get; }
 
         /// <summary>
-        /// Returns the mean vector of all direction with weights considered.
+        /// Returns the mean vector of all directions with weights considered.
         /// </summary>
         public Vector2 Mean
         {

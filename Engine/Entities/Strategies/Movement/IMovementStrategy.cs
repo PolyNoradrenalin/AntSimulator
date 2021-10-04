@@ -11,7 +11,7 @@ namespace AntEngine.Entities.Strategies.Movement
         /// <summary>
         /// Gives the direction the entity should go to respect the strategy.
         /// </summary>
-        /// <param name="map">A perception map representing how much the entity want to go in each direction.</param>
+        /// <param name="map">A weighted perception map representing how much the entity wants to go in each direction.</param>
         /// <returns>The target direction.</returns>
         Vector2 Move(PerceptionMap map);
     }
