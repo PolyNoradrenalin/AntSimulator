@@ -17,6 +17,9 @@ namespace AntEngine.Entities
             State = initialState;
         }
 
+        /// <summary>
+        /// Current state of the Entity.
+        /// </summary>
         private IState State { get; set; }
         
         /// <summary>
