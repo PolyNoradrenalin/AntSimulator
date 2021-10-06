@@ -15,17 +15,6 @@ namespace AntEngine.Colliders
         public Collider() { }
 
         /// <summary>
-        /// Check for a collision between this and a generic "collider" object.
-        /// Calls the checkCollision of the other object.
-        /// </summary>
-        /// <param name="collider"></param>
-        /// <returns></returns>
-        public bool checkCollision(Collider collider)
-        {
-            return collider.checkCollision(this);
-        }
-
-        /// <summary>
         /// Checks for a collision between this and a circleCollider.
         /// </summary>
         /// <param name="circleCollider"></param>
