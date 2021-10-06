@@ -31,5 +31,22 @@ namespace AntEngine.Entities
         /// Maximum health of the entity.
         /// </summary>
         public int MaxHealth { get; private set; }
+
+        /// <summary>
+        /// Kills the entity.
+        /// </summary>
+        public void Kill()
+        {
+            OnEntityDeath();
+            World.RemoveEntity(this);
+        }
+
+        /// <summary>
+        /// Called when the entity just died.
+        /// Note: this is called before the world removes the entity.
+        /// </summary>
+        protected virtual void OnEntityDeath()
+        {
+        }
     }
 }
