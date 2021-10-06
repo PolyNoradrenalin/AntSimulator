@@ -1,4 +1,5 @@
-﻿using AntEngine.Resources;
+﻿using System.Transactions;
+using AntEngine.Resources;
 
 namespace AntEngine.Entities
 {
@@ -7,7 +8,7 @@ namespace AntEngine.Entities
     /// </summary>
     public class ResourceEntity : Entity
     {
-        public ResourceEntity(int quantity, Resource resource)
+        public ResourceEntity(World world, int quantity, Resource resource) : base(world)
         {
             Quantity = quantity;
             Type = resource;
