@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AntEngine.Resource
+namespace AntEngine.Resources
 {
     /// <summary>
     /// Represents a resource type.
