@@ -10,9 +10,25 @@ namespace AntEngine.Colliders
         /// <summary>
         /// Position, rotation and scale of the collider.
         /// </summary>
-        private Transform Transform;
+        private Transform ColliderTransform;
+        private Transform ParentTransform;
 
-        public Collider() { }
+        /// <summary>
+        /// Constructor for a default collider without specifying any coordinates.
+        /// Will initialize a collider at 0,0 with a scale of 1,1 with its parent possessing the same coordinates.
+        /// </summary>
+        public Collider() : this(new Transform(), new Transform()) { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="colliderTransform"></param>
+        /// <param name="parentTransform"></param>
+        public Collider(Transform colliderTransform, Transform parentTransform)
+        {
+            ColliderTransform = colliderTransform;
+            ParentTransform = parentTransform;
+        }
 
         /// <summary>
         /// Checks for a collision between this and a circleCollider.
