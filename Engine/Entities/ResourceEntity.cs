@@ -13,8 +13,8 @@ namespace AntEngine.Entities
             Type = resource;
         }
 
-        public int Quantity { get; set; }
-        public Resource Type { get;  set; }
+        public int Quantity { get; private set; }
+        public Resource Type { get; private set; }
 
         public override void Update()
         {
