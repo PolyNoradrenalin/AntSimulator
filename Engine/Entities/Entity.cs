@@ -9,14 +9,17 @@ namespace AntEngine.Entities
     {
         private const string DefaultName = "Entity";
         
-        public Entity() : this(DefaultName, new Transform())
+        public Entity(World world) : this(DefaultName, new Transform(), world)
         {
         }
 
-        public Entity(string name, Transform transform)
+        public Entity(string name, Transform transform, World world)
         {
             Name = name;
             Transform = transform;
+            World = world;
+            
+            world.AddEntity(this);
         }
 
         /// <summary>
@@ -30,6 +33,11 @@ namespace AntEngine.Entities
         /// Represents the position, rotation and scale of the entity in the world.
         /// </summary>
         public Transform Transform { get; private set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public World World { get; private set; }
 
         /// <summary>
         /// Called by the world when this entity needs to update the status of each of its components.
