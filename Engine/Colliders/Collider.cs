@@ -10,8 +10,8 @@ namespace AntEngine.Colliders
         /// <summary>
         /// Position, rotation and scale of the collider.
         /// </summary>
-        private Transform ColliderTransform;
-        private Transform ParentTransform;
+        private Transform colliderTransform;
+        private Transform parentTransform;
 
         /// <summary>
         /// Constructor for a default collider without specifying any coordinates.
@@ -20,14 +20,14 @@ namespace AntEngine.Colliders
         public Collider() : this(new Transform(), new Transform()) { }
 
         /// <summary>
-        /// 
+        /// Constructor for a collider with a specified transform and parentTransform.
         /// </summary>
-        /// <param name="colliderTransform"></param>
-        /// <param name="parentTransform"></param>
-        public Collider(Transform colliderTransform, Transform parentTransform)
+        /// <param name="collider"></param>
+        /// <param name="parent"></param>
+        public Collider(Transform collider, Transform parent)
         {
-            ColliderTransform = colliderTransform;
-            ParentTransform = parentTransform;
+            colliderTransform = collider;
+            parentTransform = parent;
         }
 
         /// <summary>
