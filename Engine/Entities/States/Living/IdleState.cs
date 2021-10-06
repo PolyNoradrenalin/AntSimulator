@@ -3,15 +3,15 @@ namespace AntEngine.Entities.States.Living
     /// <summary>
     /// Starting state of a Living Entity.
     /// </summary>
-    public class LivingState : IState
+    public class IdleState : IState
     {
-        private static LivingState _instance;
+        private static IdleState _instance;
 
-        public static LivingState Instance
+        public static IdleState Instance
         {
             get
             {
-                _instance ??= new LivingState();
+                _instance ??= new IdleState();
                 return _instance;
             }
         }
