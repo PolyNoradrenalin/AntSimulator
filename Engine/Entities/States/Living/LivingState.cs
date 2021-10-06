@@ -5,24 +5,39 @@ namespace AntEngine.Entities.States.Living
     /// </summary>
     public class LivingState : IState
     {
+        private static LivingState _instance;
+
+        public static LivingState Instance
+        {
+            get
+            {
+                _instance ??= new LivingState();
+                return _instance;
+            }
+        }
+
         public void OnStateStart(StateEntity stateEntity)
         {
-            throw new System.NotImplementedException();
+            if (stateEntity is not LivingEntity) 
+                throw new System.ArgumentException("LivingState is only defined for Living entities.");
         }
 
         public void OnStateUpdate(StateEntity stateEntity)
         {
-            throw new System.NotImplementedException();
+            LivingEntity living = (LivingEntity)stateEntity;
+            if (living.Health <= 0)
+            {
+                living.ChangeState(Next(stateEntity));
+            }
         }
 
         public void OnStateEnd(StateEntity stateEntity)
         {
-            throw new System.NotImplementedException();
         }
 
         public IState Next(StateEntity stateEntity)
         {
-            throw new System.NotImplementedException();
+            return DeathState.Instance;
         }
     }
 }
