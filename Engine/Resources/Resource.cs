@@ -12,6 +12,7 @@ namespace AntEngine.Resources
             Type = type;
         }
 
+        public virtual String Name { get; set; } 
         public String Type { get; set; }
     }
 }
