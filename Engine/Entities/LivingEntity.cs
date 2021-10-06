@@ -10,11 +10,16 @@ namespace AntEngine.Entities
     public class LivingEntity : StateEntity
     {
         private int _health;
+
         public LivingEntity(World world) : this("Living Entity", new Transform(), world)
         {
         }
 
-        public LivingEntity(string name, Transform transform, World world) : base(name, transform, world, new IdleState())
+        public LivingEntity(string name, Transform transform, World world) : this(name, transform, world, new IdleState())
+        {
+        }
+
+        public LivingEntity(string name, Transform transform, World world, IState initialState) : base(name, transform, world, initialState)
         {
         }
 
