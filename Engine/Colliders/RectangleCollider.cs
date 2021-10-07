@@ -8,6 +8,7 @@ namespace AntEngine.Colliders
     public class RectangleCollider : Collider
     {
         public RectangleCollider(Transform transform, Transform parentTransform) : base(transform, parentTransform) {}
+        
         public override bool checkCollision(CircleCollider circleCollider)
         {
             //TODO : Implement
