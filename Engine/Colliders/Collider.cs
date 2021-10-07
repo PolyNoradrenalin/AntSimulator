@@ -8,12 +8,6 @@ namespace AntEngine.Colliders
     public abstract class Collider
     {
         /// <summary>
-        /// Constructor for a default collider without specifying any coordinates.
-        /// Will initialize a collider at 0,0 with a scale of 1,1 with its parent possessing the same coordinates.
-        /// </summary>
-        public Collider() : this(new Transform(), new Transform()) { }
-
-        /// <summary>
         /// Constructor for a collider with a specified transform and parentTransform.
         /// </summary>
         /// <param name="collider"></param>
