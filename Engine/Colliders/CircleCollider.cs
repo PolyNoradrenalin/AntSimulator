@@ -1,10 +1,14 @@
-﻿namespace AntEngine.Colliders
+﻿using AntEngine.Maths;
+
+namespace AntEngine.Colliders
 {
     /// <summary>
     /// Collider in the shape of a circle.
     /// </summary>
     public class CircleCollider : Collider
     {
+        public CircleCollider(Transform transform, Transform parentTransform) : base(transform, parentTransform) {}
+        
         //TODO : Add attributes
         public override bool checkCollision(CircleCollider circleCollider)
         {

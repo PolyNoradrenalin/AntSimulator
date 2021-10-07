@@ -1,3 +1,4 @@
+using AntEngine.Colliders;
 using AntEngine.Maths;
 
 namespace AntEngine.Entity
@@ -17,6 +18,7 @@ namespace AntEngine.Entity
         {
             Name = name;
             Transform = transform;
+            Collider = new RectangleCollider(new Transform(), Transform);
         }
 
         /// <summary>
@@ -31,6 +33,8 @@ namespace AntEngine.Entity
         /// </summary>
         public Transform Transform { get; private set; }
 
+        public Collider Collider { get; private set; }
+        
         /// <summary>
         /// Called by the world when this entity needs to update the status of each of its components.
         /// </summary>
