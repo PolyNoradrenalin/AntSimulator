@@ -76,7 +76,7 @@ namespace AntEngine.Entities.Colonies
         /// <summary>
         /// Instructions to spawn an entity of the colony.
         /// </summary>
-        public ColonySpawnMethod SpawnMethod { get; set; }
+        public ColonySpawnMethod SpawnMethod { private get; set; }
 
         /// <summary>
         /// Spawn entities stopping when at count or when stockpile has not enough resources.
