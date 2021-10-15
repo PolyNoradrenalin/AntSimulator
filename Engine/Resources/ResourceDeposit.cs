@@ -8,9 +8,14 @@ namespace AntEngine.Resources
     /// </summary>
     public class ResourceDeposit
     {
-        private Dictionary<Resource, int> _ressources;
+        private Dictionary<Resource, int> _resources;
+
+        public ResourceDeposit()
+        {
+            _resources = new Dictionary<Resource, int>();
+        }
         
-        public IDictionary<Resource, int> All => _ressources.ToImmutableDictionary();
+        public IDictionary<Resource, int> All => _resources.ToImmutableDictionary();
 
         /// <summary>
         /// Adds a specific amount of resources to the deposit. 
@@ -20,13 +25,13 @@ namespace AntEngine.Resources
         /// <param name="amount">How much resource we want to add</param>
         public void AddResource(Resource resource, int amount)
         {
-            if (_ressources.ContainsKey(resource))
+            if (_resources.ContainsKey(resource))
             {
-                _ressources[resource] += amount;
+                _resources[resource] += amount;
             }
             else
             {
-                _ressources.Add(resource, amount);
+                _resources.Add(resource, amount);
             }
         }
 
@@ -38,12 +43,12 @@ namespace AntEngine.Resources
         /// <param name="amount">How much resource we want to remove</param>
         public void RemoveResource(Resource resource, int amount)
         {
-            if (!_ressources.ContainsKey(resource)) return;
+            if (!_resources.ContainsKey(resource)) return;
             
-            _ressources[resource] -= amount;
-            if (_ressources[resource] <= 0)
+            _resources[resource] -= amount;
+            if (_resources[resource] <= 0)
             {
-                _ressources.Remove(resource);
+                _resources.Remove(resource);
             }
         }
     }
