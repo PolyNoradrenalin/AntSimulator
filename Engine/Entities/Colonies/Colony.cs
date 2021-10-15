@@ -13,7 +13,6 @@ namespace AntEngine.Entities.Colonies
     /// <summary>
     /// Entity that can spawn other entities with resources.
     /// </summary>
-    /// <typeparam name="E">The type of the entity to spawn.</typeparam>
     public class Colony : LivingEntity
     {
         private const string ColonyDefaultName = "Colony";
