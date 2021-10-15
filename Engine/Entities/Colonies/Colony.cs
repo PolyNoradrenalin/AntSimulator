@@ -38,7 +38,7 @@ namespace AntEngine.Entities.Colonies
 
             SpawnMethod = (s, t, w, c) =>
             {
-                Console.WriteLine("No spawn function defined, set the SpawnMethod.");
+                Log("No spawn method defined, set the SpawnMethod.");
                 return null;
             };
         }
