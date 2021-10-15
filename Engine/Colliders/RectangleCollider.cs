@@ -65,8 +65,8 @@ namespace AntEngine.Colliders
         public override bool checkCollision(RectangleCollider rectCollider)
         {
             // Get the rectangles' initial director vector, normal vector and vertices.
-            Vector2 direct1 = ColliderTransform.getDirectorVector();
-            Vector2 direct2 = rectCollider.ColliderTransform.getDirectorVector();
+            Vector2 direct1 = ColliderTransform.GetDirectorVector();
+            Vector2 direct2 = rectCollider.ColliderTransform.GetDirectorVector();
 
             Vector2 normal1 = new(-direct1.Y, direct1.X);
             Vector2 normal2 = new(-direct2.Y, direct2.X);

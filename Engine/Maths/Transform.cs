@@ -64,7 +64,13 @@ namespace AntEngine.Maths
         /// </summary>
         public Vector2 Scale { get; set; }
 
-        public Vector2 getDirectorVector()
+        /// <summary>
+        /// Generates the transform's director vector.
+        /// </summary>
+        /// <returns>
+        /// Vector2 representation of the transform's director vector.
+        /// </returns>
+        public Vector2 GetDirectorVector()
         {
             Vector2 director = Vector2.One;
 
