@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Numerics;
 
 namespace AntEngine.Maths
@@ -62,5 +63,15 @@ namespace AntEngine.Maths
         /// Default value is (1,1).
         /// </summary>
         public Vector2 Scale { get; set; }
+
+        public Vector2 getDirectorVector()
+        {
+            Vector2 director = Vector2.One;
+
+            director.X = director.X * MathF.Cos(Rotation) - director.Y * MathF.Sin(Rotation);
+            director.Y = director.X * MathF.Sin(Rotation) + director.Y * MathF.Cos(Rotation);
+
+            return director;
+        }
     }
 }
