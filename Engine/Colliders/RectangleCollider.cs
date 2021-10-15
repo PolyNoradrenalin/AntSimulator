@@ -14,6 +14,36 @@ namespace AntEngine.Colliders
     {
         public RectangleCollider(Transform transform, Transform parentTransform) : base(transform, parentTransform) {}
         
+        /// <summary>
+        /// Generates the colliders vertices in the world from ColliderTransform and ParentTransform.
+        /// </summary>
+        /// <returns>
+        /// A list of 4 Vector2(two dimensional vertices) objects.
+        /// </returns>
+        private List<Vector2> GetVertices()
+        {
+            List<Vector2> verts = new();
+
+            Vector2 vertCoords = new Vector2(
+                (ParentTransform.Position.X + ParentTransform.Scale.X + ColliderTransform.Position.X +
+                 ColliderTransform.Scale.X),
+                (ParentTransform.Position.Y + ParentTransform.Scale.Y + ColliderTransform.Position.Y +
+                 ColliderTransform.Scale.Y));
+
+            // Upper-right vertex
+            verts.Add(vertCoords);
+            // Upper-left vertex
+            verts.Add(new Vector2(-vertCoords.X, vertCoords.Y));
+            // Bottom-right vertex
+            verts.Add(new Vector2(vertCoords.X, -vertCoords.Y));
+            // Bottom-left vertex
+            verts.Add(new Vector2(-vertCoords.X, -vertCoords.Y));
+
+            Debug.Assert(verts.Count == 4);
+            
+            return verts;
+        }
+        
         public override bool checkCollision(CircleCollider circleCollider)
         {
             //TODO : Implement
@@ -50,8 +80,8 @@ namespace AntEngine.Colliders
             };
 
             // Gets the rectangles' vertices list.
-            List<Vector2> vertices1 = getVertices();
-            List<Vector2> vertices2 = rectCollider.getVertices();
+            List<Vector2> vertices1 = GetVertices();
+            List<Vector2> vertices2 = rectCollider.GetVertices();
             
             // Check that the vertex list has been correctly created
             if (vertices1?.Count == 0 || vertices2?.Count == 0)
@@ -85,7 +115,7 @@ namespace AntEngine.Colliders
                     maxProjection2 = MathF.Max(dot, maxProjection2);
                 }
                 
-                // Check if the projected vertices don't overlap.
+                // Check if the projected vertices overlap.
                 // If they do then according to Separating Axis Theorem, the rectangles cannot be in collision.
                 if (minProjection1 - maxProjection2 > 0 || minProjection2 - maxProjection1 > 0)
                 {
@@ -102,36 +132,6 @@ namespace AntEngine.Colliders
         {
             //TODO : Implement
             throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// Generates the colliders vertices in the world from ColliderTransform and ParentTransform.
-        /// </summary>
-        /// <returns>
-        /// A list of 4 Vector2(two dimensional vertices) objects.
-        /// </returns>
-        public List<Vector2> getVertices()
-        {
-            List<Vector2> verts = new();
-
-            Vector2 vertCoords = new Vector2(
-                (ParentTransform.Position.X + ParentTransform.Scale.X + ColliderTransform.Position.X +
-                 ColliderTransform.Scale.X),
-                (ParentTransform.Position.Y + ParentTransform.Scale.Y + ColliderTransform.Position.Y +
-                 ColliderTransform.Scale.Y));
-
-            // Upper-right vertex
-            verts.Add(vertCoords);
-            // Upper-left vertex
-            verts.Add(new Vector2(-vertCoords.X, vertCoords.Y));
-            // Bottom-right vertex
-            verts.Add(new Vector2(vertCoords.X, -vertCoords.Y));
-            // Bottom-left vertex
-            verts.Add(new Vector2(-vertCoords.X, -vertCoords.Y));
-
-            Debug.Assert(verts.Count == 4);
-            
-            return verts;
         }
     }
 }
