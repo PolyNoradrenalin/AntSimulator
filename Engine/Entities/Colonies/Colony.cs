@@ -20,8 +20,8 @@ namespace AntEngine.Entities.Colonies
         public delegate IColonyMember ColonySpawnMethod(string name, Transform transform, World world, Colony colony);
         
         private List<IColonyMember> _population;
-        private Dictionary<Resource, int> _stockpile;
-        private Dictionary<Resource, int> _spawnCost;
+        private ResourceDeposit _stockpile;
+        private ResourceDeposit _spawnCost;
 
         public Colony(World world, ColonySpawnMethod spawnMethod) : this(ColonyDefaultName, new Transform(), world, spawnMethod)
         {
@@ -30,8 +30,8 @@ namespace AntEngine.Entities.Colonies
         public Colony(string name, Transform transform, World world, ColonySpawnMethod spawnMethod) : base(name, transform, world, new IdleState())
         {
             _population = new List<IColonyMember>();
-            _stockpile = new Dictionary<Resource, int>();
-            _spawnCost = new Dictionary<Resource, int>();
+            _stockpile = new ResourceDeposit();
+            _spawnCost = new ResourceDeposit();
 
             SpawnMethod = spawnMethod;
         }
@@ -46,12 +46,12 @@ namespace AntEngine.Entities.Colonies
         /// Current stockpile of the colony.
         /// The resources that can be used to spawn more entities.
         /// </summary>
-        public IDictionary<Resource, int> Stockpile => _stockpile.ToImmutableDictionary();
+        public ResourceDeposit Stockpile => _stockpile;
 
         /// <summary>
         /// The cost in resources of spawning one entity.
         /// </summary>
-        public IDictionary<Resource, int> SpawnCost => _spawnCost.ToImmutableDictionary();
+        public ResourceDeposit SpawnCost => _spawnCost;
 
         /// <summary>
         /// Distance of spawning from the colony center.
@@ -95,51 +95,16 @@ namespace AntEngine.Entities.Colonies
         }
 
         /// <summary>
-        /// Adds a specific amount of resources to the stockpile. 
-        /// </summary>
-        /// If the resource is already stored in the stockpile, the amount will be added to the already existing entry.
-        /// <param name="resource">Resource to add</param>
-        /// <param name="amount">How much resource we want to add</param>
-        public void AddResource(Resource resource, int amount)
-        {
-            if (_stockpile.ContainsKey(resource))
-            {
-                _stockpile[resource] += amount;
-            }
-            else
-            {
-                _stockpile.Add(resource, amount);
-            }
-        }
-
-        /// <summary>
-        /// Removes a specific amount of resources from the stockpile.
-        /// </summary>
-        /// If the resource is depleted, the entry will be removed.
-        /// <param name="resource">Resource to remove</param>
-        /// <param name="amount">How much resource we want to remove</param>
-        public void RemoveResource(Resource resource, int amount)
-        {
-            if (!_stockpile.ContainsKey(resource)) return;
-            
-            _stockpile[resource] -= amount;
-            if (_stockpile[resource] <= 0)
-            {
-                _stockpile.Remove(resource);
-            }
-        }
-        
-        /// <summary>
         /// Checks if the colony has enough resources in its stockpile to spawn an entity.
         /// </summary>
         /// <returns>True if it can, false otherwise</returns>
         protected bool HasEnoughResources()
         {
-            foreach ((Resource resource, int cost) in _spawnCost)
+            foreach ((Resource resource, int cost) in _spawnCost.All)
             {
-                if (_stockpile.ContainsKey(resource))
+                if (_stockpile.All.ContainsKey(resource))
                 {
-                    if (_stockpile[resource] < cost) return false;
+                    if (_stockpile.All[resource] < cost) return false;
                 }
                 else
                 {
@@ -158,9 +123,9 @@ namespace AntEngine.Entities.Colonies
         {
             if (!HasEnoughResources()) return;
             
-            foreach ((Resource resource, int cost) in _spawnCost)
+            foreach ((Resource resource, int cost) in _spawnCost.All)
             {
-                RemoveResource(resource, cost);
+                _stockpile.RemoveResource(resource, cost);
             }
         }
     }
