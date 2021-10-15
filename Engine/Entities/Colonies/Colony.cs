@@ -18,29 +18,23 @@ namespace AntEngine.Entities.Colonies
     {
         private const string ColonyDefaultName = "Colony";
 
+        public delegate IColonyMember ColonySpawnMethod(string name, Transform transform, World world, Colony colony);
+        
         private List<IColonyMember> _population;
         private Dictionary<Resource, int> _stockpile;
         private Dictionary<Resource, int> _spawnCost;
 
-        public Colony(World world) : this(ColonyDefaultName, new Transform(), world)
+        public Colony(World world, ColonySpawnMethod spawnMethod) : this(ColonyDefaultName, new Transform(), world, spawnMethod)
         {
         }
 
-        public Colony(string name, Transform transform, World world) : this(name, transform, world, new IdleState())
-        {
-        }
-
-        public Colony(string name, Transform transform, World world, IState initialState) : base(name, transform, world, initialState)
+        public Colony(string name, Transform transform, World world, ColonySpawnMethod spawnMethod) : base(name, transform, world, new IdleState())
         {
             _population = new List<IColonyMember>();
             _stockpile = new Dictionary<Resource, int>();
             _spawnCost = new Dictionary<Resource, int>();
 
-            SpawnMethod = (s, t, w, c) =>
-            {
-                Log("No spawn method defined, set the SpawnMethod.");
-                return null;
-            };
+            SpawnMethod = spawnMethod;
         }
 
         /// <summary>
@@ -83,7 +77,7 @@ namespace AntEngine.Entities.Colonies
         /// <summary>
         /// Instructions to spawn an entity of the colony.
         /// </summary>
-        public Func<string, Transform, World, Colony, IColonyMember> SpawnMethod { get; set; }
+        public ColonySpawnMethod SpawnMethod { get; set; }
 
         /// <summary>
         /// Spawn entities stopping when at count or when stockpile has not enough resources.
