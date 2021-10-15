@@ -38,7 +38,7 @@ namespace AntEngine.Entities.Colonies
 
         /// <summary>
         /// Current population of the colony.
-        /// This is basically the entities that have been spawned by the colony.
+        /// This corresponds to a list of the entities that have been spawned by the colony.
         /// </summary>
         public IList<IColonyMember> Population => _population.ToImmutableList();
 
@@ -79,7 +79,7 @@ namespace AntEngine.Entities.Colonies
         public ColonySpawnMethod SpawnMethod { private get; set; }
 
         /// <summary>
-        /// Spawn entities stopping when at count or when stockpile has not enough resources.
+        /// Spawn entities stopping when at count or when the stockpile no longer has enough resources.
         /// </summary>
         /// <param name="count">Number of entities to spawn</param>
         public virtual void Spawn(int count = 1)
