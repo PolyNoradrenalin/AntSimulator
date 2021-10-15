@@ -1,3 +1,4 @@
+using System;
 using AntEngine.Colliders;
 using AntEngine.Maths;
 
@@ -49,5 +50,14 @@ namespace AntEngine.Entities
         /// Called by the world when this entity needs to update the status of each of its components.
         /// </summary>
         public abstract void Update();
+
+        /// <summary>
+        /// Displays a message in the console.
+        /// </summary>
+        /// <param name="msg">The message to display</param>
+        public virtual void Log(string msg)
+        {
+            Console.WriteLine($"[{GetType().Name}] {Name} : {msg}");
+        }
     }
 }
