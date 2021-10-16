@@ -13,6 +13,11 @@ namespace AntEngine.Colliders
     public class RectangleCollider : Collider
     {
         public RectangleCollider(Transform transform, Transform parentTransform) : base(transform, parentTransform) {}
+
+        public Vector2 GetPosition()
+        {
+            return ParentTransform.Position + ColliderTransform.Position;
+        }
         
         /// <summary>
         /// Generates the colliders vertices in the world from ColliderTransform and ParentTransform.
@@ -20,24 +25,41 @@ namespace AntEngine.Colliders
         /// <returns>
         /// A list of 4 Vector2(two dimensional vertices) objects.
         /// </returns>
-        private List<Vector2> GetVertices()
+        public List<Vector2> GetVertices()
         {
             List<Vector2> verts = new();
 
+            Vector2 colliderPosition = GetPosition();
+
             Vector2 vertCoords = new Vector2(
-                (ParentTransform.Position.X + ParentTransform.Scale.X + ColliderTransform.Position.X +
-                 ColliderTransform.Scale.X),
-                (ParentTransform.Position.Y + ParentTransform.Scale.Y + ColliderTransform.Position.Y +
-                 ColliderTransform.Scale.Y));
+                (colliderPosition.X + (ParentTransform.Scale.X + ColliderTransform.Scale.X) / 2),
+                (colliderPosition.Y + (ParentTransform.Scale.Y + ColliderTransform.Scale.Y) / 2));
 
             // Upper-right vertex
             verts.Add(vertCoords);
             // Upper-left vertex
-            verts.Add(new Vector2(-vertCoords.X, vertCoords.Y));
+            verts.Add(new Vector2(vertCoords.X, vertCoords.Y));
             // Bottom-right vertex
             verts.Add(new Vector2(vertCoords.X, -vertCoords.Y));
             // Bottom-left vertex
             verts.Add(new Vector2(-vertCoords.X, -vertCoords.Y));
+
+            float rotation = ParentTransform.Rotation + ColliderTransform.Rotation;
+
+            if (rotation != 0)
+            {
+                // Applying rotation of colliders to coordinates
+                for (int index = 0; index < verts.Count; index++)
+                {
+                    Vector2 vertex = verts[index];
+                    verts.Remove(verts[index]);
+                    vertex.X = vertex.X * MathF.Cos(rotation) -
+                               vertex.Y * MathF.Sin(rotation);
+                    vertex.Y = vertex.X * MathF.Sin(rotation) +
+                               vertex.Y * MathF.Cos(rotation);
+                    verts.Insert(index, vertex);
+                }
+            }
 
             Debug.Assert(verts.Count == 4);
             
