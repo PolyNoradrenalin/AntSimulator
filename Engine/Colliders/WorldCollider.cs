@@ -26,11 +26,36 @@ namespace AntEngine.Colliders
         /// NB: If the World Collider is not a square, the pixels won't be squares as well.
         /// </summary>
         public int Subdivision { get; private set; }
+
         /// <summary>
         /// Stores all the "collision states" of the grid.
+        /// True = Collision
+        /// False = No collision
         /// </summary>
         private bool[][] Matrix { get; set; }
 
+        /// <summary>
+        /// Change the value of one element of the matrix.
+        /// </summary>
+        /// <param name="x">Column</param>
+        /// <param name="y">Row</param>
+        /// <param name="value">New value.</param>
+        public void SetPixel(int x, int y, bool value)
+        {
+            Matrix[y][x] = value;
+        }
+
+        /// <summary>
+        /// Returns the value of one element of the matrix.
+        /// </summary>
+        /// <param name="x">Column</param>
+        /// <param name="y">Row</param>
+        /// <returns>true if there's a collision at (x,y), false otherwise</returns>
+        public bool GetPixel(int x, int y)
+        {
+            return Matrix[y][x];
+        }
+        
         public override bool checkCollision(CircleCollider circleCollider)
         {
             //TODO : Implement
