@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using AntEngine.Maths;
 
 namespace AntEngine.Colliders
@@ -70,8 +71,17 @@ namespace AntEngine.Colliders
 
         public override bool checkCollision(WorldCollider worldCollider)
         {
-            //TODO : Implement
-            throw new System.NotImplementedException();
+            int minDiv = Math.Min(Subdivision, worldCollider.Subdivision);
+            
+            for (int y = 0; y < minDiv; y++)
+            {
+                for (int x = 0; x < minDiv; x++)
+                {
+                    if (GetPixel(x, y) && worldCollider.GetPixel(x, y)) return true;
+                }
+            }
+
+            return false;
         }
     }
 }
