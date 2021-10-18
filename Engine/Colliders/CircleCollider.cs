@@ -18,8 +18,8 @@ namespace AntEngine.Colliders
 
         public override bool checkCollision(CircleCollider circleCollider)
         {
-            //TODO : Implement
-            throw new System.NotImplementedException();
+            float distance = Vector2.Distance(ColliderTransform.Position, circleCollider.ColliderTransform.Position);
+            return distance < Radius + circleCollider.Radius;
         }
 
         public override bool checkCollision(RectangleCollider rectCollider)
