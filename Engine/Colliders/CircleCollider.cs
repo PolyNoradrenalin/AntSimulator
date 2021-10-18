@@ -1,4 +1,6 @@
-﻿using AntEngine.Maths;
+﻿using System;
+using System.Numerics;
+using AntEngine.Maths;
 
 namespace AntEngine.Colliders
 {
@@ -8,8 +10,12 @@ namespace AntEngine.Colliders
     public class CircleCollider : Collider
     {
         public CircleCollider(Transform transform, Transform parentTransform) : base(transform, parentTransform) {}
-        
-        //TODO : Add attributes
+
+        /// <summary>
+        /// Radius of the circle. This is the maximum component of the scale vector. (we're not handling ellipses)
+        /// </summary>
+        public float Radius => MathF.Max(ColliderTransform.Scale.X, ColliderTransform.Scale.Y);
+
         public override bool checkCollision(CircleCollider circleCollider)
         {
             //TODO : Implement
