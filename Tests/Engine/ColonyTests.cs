@@ -21,7 +21,7 @@ namespace Tests.Engine
         [Fact]
         public void SpawnPop_EnoughResources_ShouldSuccess()
         {
-            Resource resource = new("cheese");
+            Resource resource = new("cheese", "Cheese");
             World world = new(Vector2.One * 100);
             Colony colony = new(world, (_, _, _, _) => new TestEntity(world));
             colony.Stockpile.AddResource(resource, 100);
@@ -35,7 +35,7 @@ namespace Tests.Engine
         [Fact]
         public void SpawnPop_NotEnoughResources_ShouldPartiallySuccess()
         {
-            Resource resource = new("cheese");
+            Resource resource = new("cheese", "Cheese");
             World world = new(Vector2.One * 100);
             Colony colony = new(world, (_, _, _, _) => new TestEntity(world));
             colony.Stockpile.AddResource(resource, 50);
@@ -49,7 +49,7 @@ namespace Tests.Engine
         [Fact]
         public void SpawnPop_NoResources_ShouldFail()
         {
-            Resource resource = new("cheese");
+            Resource resource = new("cheese", "Cheese");
             World world = new(Vector2.One * 100);
             Colony colony = new(world, (_, _, _, _) => new TestEntity(world));
             colony.Stockpile.AddResource(resource, 0);
@@ -63,8 +63,8 @@ namespace Tests.Engine
         [Fact]
         public void SpawnPop_SeveralResources_ShouldSuccess()
         {
-            Resource cheese = new("cheese");
-            Resource oysters = new("oysters");
+            Resource cheese = new("cheese", "Cheese");
+            Resource oysters = new("oysters", "Oysters");
             World world = new(Vector2.One * 100);
             Colony colony = new(world, (_, _, _, _) => new TestEntity(world));
             colony.Stockpile.AddResource(cheese, 1000);
@@ -80,8 +80,8 @@ namespace Tests.Engine
         [Fact]
         public void SpawnPop_NotEnoughSeveralResources_ShouldPartiallySuccess()
         {
-            Resource cheese = new("cheese");
-            Resource oysters = new("oysters");
+            Resource cheese = new("cheese", "Cheese");
+            Resource oysters = new("oysters", "Oysters");
             World world = new(Vector2.One * 100);
             Colony colony = new(world, (_, _, _, _) => new TestEntity(world));
             colony.Stockpile.AddResource(cheese, 200);
