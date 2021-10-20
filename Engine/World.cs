@@ -68,5 +68,17 @@ namespace AntEngine
             _entities.Remove(entity);
             _colliders.Remove(entity.Collider);
         }
+
+        /// <summary>
+        /// Returns all colliders in a range of a specific position.
+        /// </summary>
+        /// <param name="position">Origin of the detection range</param>
+        /// <param name="radius">Radius of the range</param>
+        /// <returns>List of the colliders</returns>
+        public IList<Collider> CircleCast(Vector2 position, float radius)
+        {
+            CircleCollider cast = new(new Transform(position, 0, Vector2.One * radius), new Transform());
+            return _colliders.Where(collider => collider.checkCollision(cast)).ToList();
+        }
     }
 }
