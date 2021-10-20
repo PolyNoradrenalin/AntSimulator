@@ -14,9 +14,19 @@ namespace AntEngine.Colliders
     {
         public RectangleCollider(Transform transform, Transform parentTransform) : base(transform, parentTransform) {}
 
-        public Vector2 GetPosition()
+        private Vector2 GetScale()
+        {
+            return ParentTransform.Scale + ColliderTransform.Scale;
+        }
+        
+        private Vector2 GetPosition()
         {
             return ParentTransform.Position + ColliderTransform.Position;
+        }
+
+        private float GetRotation()
+        {
+            return ParentTransform.Rotation + ColliderTransform.Rotation;
         }
         
         /// <summary>
@@ -31,34 +41,29 @@ namespace AntEngine.Colliders
 
             Vector2 colliderPosition = GetPosition();
 
-            Vector2 vertCoords = new Vector2(
-                (colliderPosition.X + (ParentTransform.Scale.X + ColliderTransform.Scale.X) / 2),
-                (colliderPosition.Y + (ParentTransform.Scale.Y + ColliderTransform.Scale.Y) / 2));
+            Vector2 colliderScale = GetScale();
+            
+            Vector2[] cornersFactor = {
+                new(1, 1),
+                new(-1, 1),
+                new(1, -1),
+                new(-1, -1)
+            };
 
-            // Upper-right vertex
-            verts.Add(vertCoords);
-            // Upper-left vertex
-            verts.Add(new Vector2(vertCoords.X, vertCoords.Y));
-            // Bottom-right vertex
-            verts.Add(new Vector2(vertCoords.X, -vertCoords.Y));
-            // Bottom-left vertex
-            verts.Add(new Vector2(-vertCoords.X, -vertCoords.Y));
+            float rotation = GetRotation();
 
-            float rotation = ParentTransform.Rotation + ColliderTransform.Rotation;
+            Vector2 v = new(colliderPosition.X, colliderPosition.Y);
 
-            if (rotation != 0)
-            {
-                // Applying rotation of colliders to coordinates
-                for (int index = 0; index < verts.Count; index++)
+            // Applying rotation of colliders to coordinates
+            for (int index = 0; index < verts.Count; index++)
+            { 
+                Vector2 vertex = new()
                 {
-                    Vector2 vertex = verts[index];
-                    verts.Remove(verts[index]);
-                    vertex.X = vertex.X * MathF.Cos(rotation) -
-                               vertex.Y * MathF.Sin(rotation);
-                    vertex.Y = vertex.X * MathF.Sin(rotation) +
-                               vertex.Y * MathF.Cos(rotation);
-                    verts.Insert(index, vertex);
-                }
+                    X = v.X + colliderScale.X / 2 * MathF.Cos(rotation) + cornersFactor[index].X * colliderScale.Y / 2 * MathF.Sin(rotation),
+                    Y = v.X + colliderScale.X / 2 * MathF.Sin(rotation) + cornersFactor[index].X * colliderScale.Y / 2 * MathF.Cos(rotation)
+                };
+
+                verts.Add(vertex);
             }
 
             Debug.Assert(verts.Count == 4);

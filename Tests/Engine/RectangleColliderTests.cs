@@ -31,14 +31,20 @@ namespace Tests.Engine
         [Fact]
         public void GetVerticesWithRotation()
         {
-            RectangleCollider rect1 = new RectangleCollider(new Transform(), new Transform());
-
-            List<Vector2> vertices = new List<Vector2>
+            RectangleCollider rect1 = new(new Transform(), new Transform())
             {
-                new Vector2(1,1),
-                new Vector2(-1,1),
-                new Vector2(1,-1),
-                new Vector2(-1,-1)
+                ColliderTransform =
+                {
+                    Rotation = MathF.PI
+                }
+            };
+
+            List<Vector2> vertices = new()
+            {
+                new Vector2(1, 1),
+                new Vector2(-1, 1),
+                new Vector2(1, -1),
+                new Vector2(-1, -1)
             };
 
             List<Vector2> retVertices = rect1.GetVertices();
