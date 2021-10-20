@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Numerics;
+using AntEngine.Colliders;
 using AntEngine.Entities;
+using AntEngine.Maths;
 
 namespace AntEngine
 {
@@ -11,11 +14,13 @@ namespace AntEngine
     public class World
     {
         private readonly IList<Entity> _entities;
-
+        private readonly IList<Collider> _colliders;
+        
         public World(Vector2 size)
         {
             Entities = new List<Entity>();
             Size = size;
+            _colliders = new List<Collider>();
         }
 
         /// <summary>
@@ -51,6 +56,7 @@ namespace AntEngine
             if (!Entities.Contains(entity))
             {
                 _entities.Add(entity);
+                _colliders.Add(entity.Collider);
             }
         }
 
@@ -60,6 +66,7 @@ namespace AntEngine
         public void RemoveEntity(Entity entity)
         {
             _entities.Remove(entity);
+            _colliders.Remove(entity.Collider);
         }
     }
 }
