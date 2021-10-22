@@ -12,7 +12,9 @@ namespace AntEngine.Colliders
     /// </summary>
     public class RectangleCollider : Collider
     {
-        public RectangleCollider(Transform transform, Transform parentTransform) : base(transform, parentTransform) {}
+        public RectangleCollider(Transform transform, Transform parentTransform) : base(transform, parentTransform)
+        {
+        }
 
         /// <summary>
         /// Generates the colliders vertices in the world from ColliderTransform and ParentTransform.
@@ -27,13 +29,8 @@ namespace AntEngine.Colliders
             Vector2 colliderPosition = GetPosition();
 
             Vector2 colliderScale = GetScale();
-            
-            Vector2[] rotationCoefficients = {
-                new(1, 1),
-                new(-1, 1),
-                new(-1, -1),
-                new(1, -1)
-            };
+
+            Vector2[] rotationCoefficients = {new(1, 1), new(-1, 1), new(-1, -1), new(1, -1)};
 
             float rotation = GetRotation();
 
@@ -41,19 +38,21 @@ namespace AntEngine.Colliders
 
             // Calculating each vertex
             for (int index = 0; index < rotationCoefficients.Length; index++)
-            { 
+            {
                 Vector2 vertex = new()
                 {
-                    X = v.X + colliderScale.X / 2 * rotationCoefficients[index].X * MathF.Cos(rotation) - rotationCoefficients[index].X * colliderScale.Y / 2 * MathF.Sin(rotation),
-                    Y = v.X + colliderScale.X / 2 * rotationCoefficients[index].Y * MathF.Sin(rotation) + rotationCoefficients[index].Y * colliderScale.Y / 2 * MathF.Cos(rotation)
+                    X = v.X + colliderScale.X / 2 * rotationCoefficients[index].X * MathF.Cos(rotation) -
+                        rotationCoefficients[index].X * colliderScale.Y / 2 * MathF.Sin(rotation),
+                    Y = v.X + colliderScale.X / 2 * rotationCoefficients[index].Y * MathF.Sin(rotation) +
+                        rotationCoefficients[index].Y * colliderScale.Y / 2 * MathF.Cos(rotation)
                 };
 
                 verts.Add(vertex);
             }
-            
+
             return verts;
         }
-        
+
         public override bool checkCollision(CircleCollider circleCollider)
         {
             //TODO : Implement
@@ -81,18 +80,12 @@ namespace AntEngine.Colliders
             Vector2 normal1 = new(-direct1.Y, direct1.X);
             Vector2 normal2 = new(-direct2.Y, direct2.X);
 
-            List<Vector2> axes = new()
-            {
-                direct1,
-                direct2,
-                normal1,
-                normal2
-            };
+            List<Vector2> axes = new() {direct1, direct2, normal1, normal2};
 
             // Gets the rectangles' vertices list.
             List<Vector2> vertices1 = GetVertices();
             List<Vector2> vertices2 = rectCollider.GetVertices();
-            
+
             // Check that the vertex list has been correctly created
             if (vertices1?.Count == 0 || vertices2?.Count == 0)
             {
@@ -105,6 +98,7 @@ namespace AntEngine.Colliders
                 float minProjection1 = Vector2.Dot(axis, vertices1[0]);
                 float maxProjection1 = minProjection1;
 
+                // Get the position of each vertex on the axis
                 foreach (Vector2 vertex in vertices1)
                 {
                     float dot = Vector2.Dot(axis, vertex);
@@ -124,7 +118,7 @@ namespace AntEngine.Colliders
                     minProjection2 = MathF.Min(dot, minProjection2);
                     maxProjection2 = MathF.Max(dot, maxProjection2);
                 }
-                
+
                 // Check if the projected vertices overlap.
                 // If they do then according to Separating Axis Theorem, the rectangles cannot be in collision.
                 if (minProjection1 - maxProjection2 > 0 || minProjection2 - maxProjection1 > 0)
@@ -143,12 +137,12 @@ namespace AntEngine.Colliders
             //TODO : Implement
             throw new System.NotImplementedException();
         }
-        
+
         private Vector2 GetScale()
         {
             return ParentTransform.Scale + ColliderTransform.Scale;
         }
-        
+
         private Vector2 GetPosition()
         {
             return ParentTransform.Position + ColliderTransform.Position;
@@ -159,6 +153,4 @@ namespace AntEngine.Colliders
             return ParentTransform.Rotation + ColliderTransform.Rotation;
         }
     }
-    
-    
 }
