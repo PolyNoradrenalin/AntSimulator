@@ -59,8 +59,8 @@ namespace AntEngine.Colliders
             { 
                 Vector2 vertex = new()
                 {
-                    X = MathF.Round(v.X + colliderScale.X / 2 * rotationCoefficients[index].X * MathF.Cos(rotation) - rotationCoefficients[index].X * colliderScale.Y / 2 * MathF.Sin(rotation)),
-                    Y = MathF.Round(v.X + colliderScale.X / 2 * rotationCoefficients[index].Y * MathF.Sin(rotation) + rotationCoefficients[index].Y * colliderScale.Y / 2 * MathF.Cos(rotation))
+                    X = v.X + colliderScale.X / 2 * rotationCoefficients[index].X * MathF.Cos(rotation) - rotationCoefficients[index].X * colliderScale.Y / 2 * MathF.Sin(rotation),
+                    Y = v.X + colliderScale.X / 2 * rotationCoefficients[index].Y * MathF.Sin(rotation) + rotationCoefficients[index].Y * colliderScale.Y / 2 * MathF.Cos(rotation)
                 };
 
                 verts.Add(vertex);
@@ -119,7 +119,7 @@ namespace AntEngine.Colliders
             foreach (Vector2 axis in axes)
             {
                 // Project the vertices of the first polygon onto the rectangle's normal vector
-                float minProjection1 = Vector2.Dot(normal1, vertices1[0]);
+                float minProjection1 = Vector2.Dot(axis, vertices1[0]);
                 float maxProjection1 = minProjection1;
 
                 foreach (Vector2 vertex in vertices1)

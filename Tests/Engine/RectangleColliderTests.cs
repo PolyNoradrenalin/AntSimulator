@@ -19,13 +19,17 @@ namespace Tests.Engine
             {
                 new Vector2(1,1),
                 new Vector2(-1,1),
-                new Vector2(1,-1),
-                new Vector2(-1,-1)
+                new Vector2(-1,-1),
+                new Vector2(1,-1)
             };
 
             List<Vector2> retVertices = rect1.GetVertices();
-            
-            Assert.Equal(vertices, retVertices);
+
+            for (int i = 0; i < retVertices.Count; i++) 
+            {
+                Assert.Equal(retVertices[i].X, vertices[i].X, 6);
+                Assert.Equal(retVertices[i].Y, vertices[i].Y, 6);
+            }
         }
 
         [Fact]
@@ -41,15 +45,19 @@ namespace Tests.Engine
 
             List<Vector2> vertices = new()
             {
-                new Vector2(1, 1),
-                new Vector2(-1, 1),
+                new Vector2(-1, -1),
                 new Vector2(1, -1),
-                new Vector2(-1, -1)
+                new Vector2(1, 1),
+                new Vector2(-1, 1)
             };
 
             List<Vector2> retVertices = rect1.GetVertices();
-            
-            Assert.Equal(vertices, retVertices);
+
+            for (int i = 0; i < retVertices.Count; i++) 
+            {
+                Assert.Equal(retVertices[i].X, vertices[i].X, 6);
+                Assert.Equal(retVertices[i].Y, vertices[i].Y, 6);
+            }
         }
 
         
