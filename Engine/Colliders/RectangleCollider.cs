@@ -43,24 +43,24 @@ namespace AntEngine.Colliders
 
             Vector2 colliderScale = GetScale();
             
-            Vector2[] cornersFactor = {
+            Vector2[] rotationCoefficients = {
                 new(1, 1),
                 new(-1, 1),
-                new(1, -1),
-                new(-1, -1)
+                new(-1, -1),
+                new(1, -1)
             };
 
             float rotation = GetRotation();
 
             Vector2 v = new(colliderPosition.X, colliderPosition.Y);
 
-            // Applying rotation of colliders to coordinates
-            for (int index = 0; index < verts.Count; index++)
+            // Calculating each vertex
+            for (int index = 0; index < rotationCoefficients.Length; index++)
             { 
                 Vector2 vertex = new()
                 {
-                    X = v.X + colliderScale.X / 2 * MathF.Cos(rotation) + cornersFactor[index].X * colliderScale.Y / 2 * MathF.Sin(rotation),
-                    Y = v.X + colliderScale.X / 2 * MathF.Sin(rotation) + cornersFactor[index].X * colliderScale.Y / 2 * MathF.Cos(rotation)
+                    X = MathF.Round(v.X + colliderScale.X / 2 * rotationCoefficients[index].X * MathF.Cos(rotation) - rotationCoefficients[index].X * colliderScale.Y / 2 * MathF.Sin(rotation)),
+                    Y = MathF.Round(v.X + colliderScale.X / 2 * rotationCoefficients[index].Y * MathF.Sin(rotation) + rotationCoefficients[index].Y * colliderScale.Y / 2 * MathF.Cos(rotation))
                 };
 
                 verts.Add(vertex);
