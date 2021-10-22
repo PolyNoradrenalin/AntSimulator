@@ -65,8 +65,6 @@ namespace AntEngine.Colliders
 
                 verts.Add(vertex);
             }
-
-            Debug.Assert(verts.Count == 4);
             
             return verts;
         }
