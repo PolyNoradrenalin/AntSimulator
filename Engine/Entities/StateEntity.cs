@@ -20,7 +20,7 @@ namespace AntEngine.Entities
         /// <summary>
         /// Current state of the Entity.
         /// </summary>
-        private IState State { get; set; }
+        protected IState State { get; set; }
         
         /// <summary>
         /// Updates the state of the entity.
