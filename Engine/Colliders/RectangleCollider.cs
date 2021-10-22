@@ -14,21 +14,6 @@ namespace AntEngine.Colliders
     {
         public RectangleCollider(Transform transform, Transform parentTransform) : base(transform, parentTransform) {}
 
-        private Vector2 GetScale()
-        {
-            return ParentTransform.Scale + ColliderTransform.Scale;
-        }
-        
-        private Vector2 GetPosition()
-        {
-            return ParentTransform.Position + ColliderTransform.Position;
-        }
-
-        private float GetRotation()
-        {
-            return ParentTransform.Rotation + ColliderTransform.Rotation;
-        }
-        
         /// <summary>
         /// Generates the colliders vertices in the world from ColliderTransform and ParentTransform.
         /// </summary>
@@ -160,5 +145,22 @@ namespace AntEngine.Colliders
             //TODO : Implement
             throw new System.NotImplementedException();
         }
+        
+        private Vector2 GetScale()
+        {
+            return ParentTransform.Scale + ColliderTransform.Scale;
+        }
+        
+        private Vector2 GetPosition()
+        {
+            return ParentTransform.Position + ColliderTransform.Position;
+        }
+
+        private float GetRotation()
+        {
+            return ParentTransform.Rotation + ColliderTransform.Rotation;
+        }
     }
+    
+    
 }
