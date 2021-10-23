@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using AntEngine.Entities.Colonies;
 using AntEngine.Entities.States;
 using AntEngine.Entities.States.Living;
 using AntEngine.Entities.Strategies.Movement;
@@ -10,7 +11,7 @@ namespace AntEngine.Entities.Ants
     /// <summary>
     /// Entity representing an Ant.
     /// </summary>
-    public class Ant : LivingEntity
+    public class Ant : LivingEntity, IColonyMember
     {
         private float _speed;
 
@@ -70,5 +71,7 @@ namespace AntEngine.Entities.Ants
             // TODO: Implement
             return new PerceptionMap(new []{0,0});
         }
+
+        public Colony Home { get; set; }
     }
 }
