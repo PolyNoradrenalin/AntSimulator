@@ -89,37 +89,17 @@ namespace AntEngine.Colliders
 
             foreach (Vector2 axis in axes)
             {
-                // Project the vertices of the first polygon onto the rectangle's normal vector
-                float minProjection1 = Vector2.Dot(axis, vertices1[0]);
-                float maxProjection1 = minProjection1;
-
-                // Get the position of each vertex on the axis
-                foreach (Vector2 vertex in vertices1)
-                {
-                    float dot = Vector2.Dot(axis, vertex);
-
-                    minProjection1 = MathF.Min(dot, minProjection1);
-                    maxProjection1 = MathF.Max(dot, maxProjection1);
-                }
-
-                // Project the vertices of the second polygon onto the rectangle's normal vector
-                float minProjection2 = Vector2.Dot(normal1, vertices2[0]);
-                float maxProjection2 = minProjection2;
-
-                foreach (Vector2 vertex in vertices2)
-                {
-                    float dot = Vector2.Dot(axis, vertex);
-
-                    minProjection2 = MathF.Min(dot, minProjection2);
-                    maxProjection2 = MathF.Max(dot, maxProjection2);
-                }
+                // Project the vertices of both rectangles on to axis.
+                Tuple<float, float> projectionResult1 = ProjectVertsOnAxis(axis, vertices1);
+                Tuple<float, float> projectionResult2 = ProjectVertsOnAxis(axis, vertices2);
 
                 // Check if the projected vertices overlap.
                 // If they do then according to Separating Axis Theorem, the rectangles cannot be in collision.
-                if (minProjection1 - maxProjection2 > 0 || minProjection2 - maxProjection1 > 0)
+                if (projectionResult1.Item1 - projectionResult2.Item2 > 0 || projectionResult2.Item1 - projectionResult1.Item2 > 0)
                 {
                     return false;
                 }
+                // Otherwise continue until all axes have been tested.
             }
 
             // If all possible projections have been completed and every time the projected points overlap
@@ -131,6 +111,29 @@ namespace AntEngine.Colliders
         {
             //TODO : Implement
             throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Projects a list of vertices onto an axis and returns the minimum and maximum value of the projection.
+        /// </summary>
+        /// <param name="axis"></param> Axis on which the vertices will be projected
+        /// <param name="vertices"></param> Vertices to be projected
+        /// <returns>Tuple composed of the minimum projection value and the maximum projection value.</returns>
+        private Tuple<float, float> ProjectVertsOnAxis(Vector2 axis, List<Vector2> vertices)
+        {
+            float minProjection = Vector2.Dot(axis, vertices[0]);
+            float maxProjection = minProjection;
+
+            // Get the position of each vertex on the axis
+            foreach (Vector2 vertex in vertices)
+            {
+                float dot = Vector2.Dot(axis, vertex);
+
+                minProjection = MathF.Min(dot, minProjection);
+                maxProjection = MathF.Max(dot, maxProjection);
+            }
+
+            return new Tuple<float, float>(minProjection, maxProjection);
         }
 
         private Vector2 GetScale()
