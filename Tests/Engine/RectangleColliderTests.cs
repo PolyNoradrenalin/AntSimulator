@@ -11,57 +11,6 @@ namespace Tests.Engine
     public class RectangleColliderTests
     {
         [Fact]
-        public void GetVerticesWithoutRotation()
-        {
-            RectangleCollider rect1 = new RectangleCollider(new Transform(), new Transform());
-
-            List<Vector2> vertices = new List<Vector2>
-            {
-                new Vector2(1,1),
-                new Vector2(-1,1),
-                new Vector2(-1,-1),
-                new Vector2(1,-1)
-            };
-
-            List<Vector2> retVertices = rect1.GetVertices();
-
-            for (int i = 0; i < retVertices.Count; i++) 
-            {
-                Assert.Equal(retVertices[i].X, vertices[i].X, 6);
-                Assert.Equal(retVertices[i].Y, vertices[i].Y, 6);
-            }
-        }
-
-        [Fact]
-        public void GetVerticesWithRotation()
-        {
-            RectangleCollider rect1 = new(new Transform(), new Transform())
-            {
-                ColliderTransform =
-                {
-                    Rotation = MathF.PI
-                }
-            };
-
-            List<Vector2> vertices = new()
-            {
-                new Vector2(-1, -1),
-                new Vector2(1, -1),
-                new Vector2(1, 1),
-                new Vector2(-1, 1)
-            };
-
-            List<Vector2> retVertices = rect1.GetVertices();
-
-            for (int i = 0; i < retVertices.Count; i++) 
-            {
-                Assert.Equal(retVertices[i].X, vertices[i].X, 6);
-                Assert.Equal(retVertices[i].Y, vertices[i].Y, 6);
-            }
-        }
-
-        
-        [Fact]
         public void NonCollidingRectanglesWithoutRotation()
         {
             RectangleCollider col1 = new(new Transform(), new Transform());
@@ -71,6 +20,20 @@ namespace Tests.Engine
             col2.ParentTransform.Position = new Vector2(100, 0);
 
             Assert.False(col1.checkCollision(col2));
+        }
+        
+        [Fact]
+        public void CollidingRectanglesWithoutRotation()
+        {
+            RectangleCollider col1 = new(new Transform(), new Transform());
+            RectangleCollider col2 = new(new Transform(), new Transform());
+
+            col1.ParentTransform.Position = new Vector2(-1, 0);
+            col2.ParentTransform.Position = new Vector2(1, 0);
+
+            col1.ParentTransform.Scale = new Vector2(10, 1);
+
+            Assert.True(col1.checkCollision(col2));
         }
     }
 }

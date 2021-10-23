@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace AntEngine.Maths
@@ -78,6 +79,37 @@ namespace AntEngine.Maths
             director.Y = director.X * MathF.Sin(Rotation) + director.Y * MathF.Cos(Rotation);
 
             return director;
+        }
+        
+        /// <summary>
+        /// Generates the colliders vertices in the world from ColliderTransform and ParentTransform.
+        /// </summary>
+        /// <returns>
+        /// A list of 4 Vector2(two dimensional vertices) objects.
+        /// </returns>
+        public List<Vector2> GetRectangleVertices()
+        {
+            List<Vector2> verts = new();
+            
+            Vector2[] rotationCoefficients = {new(1, 1), new(-1, 1), new(-1, -1), new(1, -1)};
+            float rotation = Rotation;
+            Vector2 v = new(Position.X, Position.Y);
+
+            // Calculating each vertex
+            for (int index = 0; index < rotationCoefficients.Length; index++)
+            {
+                Vector2 vertex = new()
+                {
+                    X = v.X + Scale.X / 2 * rotationCoefficients[index].X * MathF.Cos(rotation) -
+                        rotationCoefficients[index].X * Scale.Y / 2 * MathF.Sin(rotation),
+                    Y = v.X + Scale.X / 2 * rotationCoefficients[index].Y * MathF.Sin(rotation) +
+                        rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Cos(rotation)
+                };
+
+                verts.Add(vertex);
+            }
+
+            return verts;
         }
     }
 }

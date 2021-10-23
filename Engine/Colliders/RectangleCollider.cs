@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Numerics;
 using AntEngine.Maths;
 
@@ -14,38 +15,6 @@ namespace AntEngine.Colliders
     {
         public RectangleCollider(Transform transform, Transform parentTransform) : base(transform, parentTransform)
         {
-        }
-
-        /// <summary>
-        /// Generates the colliders vertices in the world from ColliderTransform and ParentTransform.
-        /// </summary>
-        /// <returns>
-        /// A list of 4 Vector2(two dimensional vertices) objects.
-        /// </returns>
-        public List<Vector2> GetVertices()
-        {
-            List<Vector2> verts = new();
-            Vector2 colliderPosition = GetPosition();
-            Vector2 colliderScale = GetScale();
-            Vector2[] rotationCoefficients = {new(1, 1), new(-1, 1), new(-1, -1), new(1, -1)};
-            float rotation = GetRotation();
-            Vector2 v = new(colliderPosition.X, colliderPosition.Y);
-
-            // Calculating each vertex
-            for (int index = 0; index < rotationCoefficients.Length; index++)
-            {
-                Vector2 vertex = new()
-                {
-                    X = v.X + colliderScale.X / 2 * rotationCoefficients[index].X * MathF.Cos(rotation) -
-                        rotationCoefficients[index].X * colliderScale.Y / 2 * MathF.Sin(rotation),
-                    Y = v.X + colliderScale.X / 2 * rotationCoefficients[index].Y * MathF.Sin(rotation) +
-                        rotationCoefficients[index].Y * colliderScale.Y / 2 * MathF.Cos(rotation)
-                };
-
-                verts.Add(vertex);
-            }
-
-            return verts;
         }
 
         public override bool checkCollision(CircleCollider circleCollider)
@@ -78,8 +47,8 @@ namespace AntEngine.Colliders
             List<Vector2> axes = new() {direct1, direct2, normal1, normal2};
 
             // Gets the rectangles' vertices list.
-            List<Vector2> vertices1 = GetVertices();
-            List<Vector2> vertices2 = rectCollider.GetVertices();
+            List<Vector2> vertices1 = ColliderTransform.GetRectangleVertices().Zip(ParentTransform.GetRectangleVertices(), (v1, v2) => v1 + v2).ToList();
+            List<Vector2> vertices2 = rectCollider.ColliderTransform.GetRectangleVertices().Zip(rectCollider.ParentTransform.GetRectangleVertices(), (v1, v2) => v1 + v2).ToList();
 
             // Check that the vertex list has been correctly created
             if (vertices1?.Count == 0 || vertices2?.Count == 0)
