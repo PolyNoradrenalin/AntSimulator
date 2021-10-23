@@ -9,7 +9,7 @@ namespace AntEngine.Entities
     /// </summary>
     public class LivingEntity : StateEntity
     {
-        private int _health;
+        protected int _health;
 
         public LivingEntity(World world) : this("Living Entity", new Transform(), world)
         {
@@ -30,12 +30,12 @@ namespace AntEngine.Entities
         public int Health
         {
             get => _health;
-            private set => _health = (value > MaxHealth) ? MaxHealth : value;
+            protected set => _health = (value > MaxHealth) ? MaxHealth : value;
         }
         /// <summary>
         /// Maximum health of the entity.
         /// </summary>
-        public int MaxHealth { get; private set; }
+        public int MaxHealth { get; protected set; }
 
         /// <summary>
         /// Kills the entity.

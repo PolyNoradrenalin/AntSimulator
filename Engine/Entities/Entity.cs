@@ -9,7 +9,7 @@ namespace AntEngine.Entities
     /// </summary>
     public abstract class Entity
     {
-        private const string DefaultName = "Entity";
+        protected const string DefaultName = "Entity";
         
         public Entity(World world) : this(DefaultName, new Transform(), world)
         {
@@ -44,7 +44,7 @@ namespace AntEngine.Entities
         /// <summary>
         /// Collider of the current entity.
         /// </summary>
-        public Collider Collider { get; private set; }
+        public Collider Collider { get; protected set; }
         
         /// <summary>
         /// Called by the world when this entity needs to update the status of each of its components.
