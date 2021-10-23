@@ -11,7 +11,7 @@ namespace Tests.Engine
     public class RectangleColliderTests
     {
         [Fact]
-        public void NonCollidingRectanglesWithoutRotation()
+        public void CheckCollision_WithoutRotation_ShouldNotCollide()
         {
             RectangleCollider col1 = new(new Transform(), new Transform());
             RectangleCollider col2 = new(new Transform(), new Transform());
@@ -23,7 +23,7 @@ namespace Tests.Engine
         }
         
         [Fact]
-        public void CollidingRectanglesWithoutRotation()
+        public void CheckCollision_WithoutRotation_ShouldCollide()
         {
             RectangleCollider col1 = new(new Transform(), new Transform());
             RectangleCollider col2 = new(new Transform(), new Transform());
