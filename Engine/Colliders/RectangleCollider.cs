@@ -25,15 +25,10 @@ namespace AntEngine.Colliders
         public List<Vector2> GetVertices()
         {
             List<Vector2> verts = new();
-
             Vector2 colliderPosition = GetPosition();
-
             Vector2 colliderScale = GetScale();
-
             Vector2[] rotationCoefficients = {new(1, 1), new(-1, 1), new(-1, -1), new(1, -1)};
-
             float rotation = GetRotation();
-
             Vector2 v = new(colliderPosition.X, colliderPosition.Y);
 
             // Calculating each vertex
