@@ -59,12 +59,12 @@ namespace AntEngine.Colliders
             foreach (Vector2 axis in axes)
             {
                 // Project the vertices of both rectangles on to axis.
-                Tuple<float, float> projectionResult1 = ProjectVertsOnAxis(axis, vertices1);
-                Tuple<float, float> projectionResult2 = ProjectVertsOnAxis(axis, vertices2);
+                (float projectionMinimum1, float projectionMaximum1) = ProjectVertsOnAxis(axis, vertices1);
+                (float projectionMinimum2, float projectionMaximum2) = ProjectVertsOnAxis(axis, vertices2);
 
                 // Check if the projected vertices overlap.
                 // If they do then according to Separating Axis Theorem, the rectangles cannot be in collision.
-                if (projectionResult1.Item1 - projectionResult2.Item2 > 0 || projectionResult2.Item1 - projectionResult1.Item2 > 0)
+                if (projectionMinimum1 - projectionMaximum2 > 0 || projectionMinimum2 - projectionMaximum1 > 0)
                 {
                     return false;
                 }
