@@ -7,7 +7,7 @@ namespace AntEngine.Entities
     /// <summary>
     /// An Entity that can live and die.
     /// </summary>
-    public class LivingEntity : StateEntity
+    public abstract class LivingEntity : StateEntity
     {
         protected int _health;
 
