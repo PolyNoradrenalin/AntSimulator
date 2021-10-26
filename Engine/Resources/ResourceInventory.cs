@@ -6,11 +6,11 @@ namespace AntEngine.Resources
     /// <summary>
     /// Represents the association Resource => amount.
     /// </summary>
-    public class ResourceDeposit
+    public class ResourceInventory
     {
         private Dictionary<Resource, int> _resources;
 
-        public ResourceDeposit()
+        public ResourceInventory()
         {
             _resources = new Dictionary<Resource, int>();
         }

@@ -20,8 +20,8 @@ namespace AntEngine.Entities.Colonies
         public delegate IColonyMember ColonySpawnMethod(string name, Transform transform, World world, Colony colony);
         
         private List<IColonyMember> _population;
-        private ResourceDeposit _stockpile;
-        private ResourceDeposit _spawnCost;
+        private ResourceInventory _stockpile;
+        private ResourceInventory _spawnCost;
 
         public Colony(World world, ColonySpawnMethod spawnMethod) : this(ColonyDefaultName, new Transform(), world, spawnMethod)
         {
@@ -30,8 +30,8 @@ namespace AntEngine.Entities.Colonies
         public Colony(string name, Transform transform, World world, ColonySpawnMethod spawnMethod) : base(name, transform, world, new IdleState())
         {
             _population = new List<IColonyMember>();
-            _stockpile = new ResourceDeposit();
-            _spawnCost = new ResourceDeposit();
+            _stockpile = new ResourceInventory();
+            _spawnCost = new ResourceInventory();
 
             SpawnMethod = spawnMethod;
         }
@@ -46,12 +46,12 @@ namespace AntEngine.Entities.Colonies
         /// Current stockpile of the colony.
         /// The resources that can be used to spawn more entities.
         /// </summary>
-        public ResourceDeposit Stockpile => _stockpile;
+        public ResourceInventory Stockpile => _stockpile;
 
         /// <summary>
         /// The cost in resources of spawning one entity.
         /// </summary>
-        public ResourceDeposit SpawnCost => _spawnCost;
+        public ResourceInventory SpawnCost => _spawnCost;
 
         /// <summary>
         /// Distance of spawning from the colony center.
