@@ -19,8 +19,10 @@ namespace AntEngine.Entities
         {
         }
 
-        public LivingEntity(string name, Transform transform, World world, IState initialState) : base(name, transform, world, initialState)
+        public LivingEntity(string name, Transform transform, World world, IState initialState, int maxHealth = 100) : base(name, transform, world, initialState)
         {
+            MaxHealth = maxHealth;
+            Health = MaxHealth;
         }
 
         /// <summary>
