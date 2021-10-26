@@ -59,8 +59,7 @@ namespace AntEngine.Colliders
         
         public override bool checkCollision(CircleCollider circleCollider)
         {
-            //TODO : Implement
-            throw new System.NotImplementedException();
+            return circleCollider.checkCollision(this);
         }
 
         public override bool checkCollision(RectangleCollider rectCollider)
