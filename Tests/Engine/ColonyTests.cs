@@ -19,7 +19,7 @@ namespace Tests.Engine
         }
 
         [Fact]
-        public void SpawnPop_EnoughResources_ShouldSuccess()
+        public void SpawnPop_EnoughResources_ShouldSucceed()
         {
             Resource resource = new("cheese", "Cheese");
             World world = new(Vector2.One * 100);
@@ -33,7 +33,7 @@ namespace Tests.Engine
         }
         
         [Fact]
-        public void SpawnPop_NotEnoughResources_ShouldPartiallySuccess()
+        public void SpawnPop_NotEnoughResources_ShouldPartiallySucceed()
         {
             Resource resource = new("cheese", "Cheese");
             World world = new(Vector2.One * 100);
@@ -61,7 +61,7 @@ namespace Tests.Engine
         } 
         
         [Fact]
-        public void SpawnPop_SeveralResources_ShouldSuccess()
+        public void SpawnPop_SeveralResources_ShouldSucceed()
         {
             Resource cheese = new("cheese", "Cheese");
             Resource oysters = new("oysters", "Oysters");
@@ -78,7 +78,7 @@ namespace Tests.Engine
         }
         
         [Fact]
-        public void SpawnPop_NotEnoughSeveralResources_ShouldPartiallySuccess()
+        public void SpawnPop_NotEnoughSeveralResources_ShouldPartiallySucceed()
         {
             Resource cheese = new("cheese", "Cheese");
             Resource oysters = new("oysters", "Oysters");
