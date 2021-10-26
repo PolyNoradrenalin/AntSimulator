@@ -115,14 +115,13 @@ namespace AntEngine.Maths
         }
 
         /// <summary>
-        /// Gets the distance between two transforms.
+        /// Gets the distance between two transforms (this and a).
         /// </summary>
-        /// <param name="a">First transform</param>
-        /// <param name="b">Second transform</param>
-        /// <returns>Distance between the centers of a and b.</returns>
-        public static float GetDistance(Transform a, Transform b)
+        /// <param name="a">Other transform</param>
+        /// <returns>Distance between the centers of both transforms.</returns>
+        public float GetDistance(Transform a)
         {
-            return MathF.Sqrt(MathF.Pow(b.Position.X - a.Position.X, 2) + MathF.Pow(b.Position.Y - a.Position.Y, 2));
+            return MathF.Sqrt(MathF.Pow(Position.X - a.Position.X, 2) + MathF.Pow(Position.Y - a.Position.Y, 2));
         } 
     }
 }
