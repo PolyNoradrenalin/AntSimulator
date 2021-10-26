@@ -58,6 +58,11 @@ namespace AntEngine.Entities.Ants
         public ResourceDeposit ResourceInventory { get; protected set; }
 
         /// <summary>
+        /// The distance in which the ant can perceive another entity.
+        /// </summary>
+        public float PerceptionDistance { get; protected set; }
+        
+        /// <summary>
         /// Applies movement to ant's coordinates.
         /// </summary>
         /// <param name="dir"></param>
@@ -66,9 +71,14 @@ namespace AntEngine.Entities.Ants
             Transform.Position += dir;
         }
 
+        /// <summary>
+        /// Creates the ant's perception map.
+        /// A perception map is used to represent which directions are attractive for the ant.
+        /// </summary>
+        /// <returns>Perception Map</returns>
         public PerceptionMap GetPerceptionMap()
         {
-            // TODO: Implement
+            // TODO: Implement, Pheromones have to be added first.
             return new PerceptionMap(new []{0,0});
         }
 
