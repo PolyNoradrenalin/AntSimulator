@@ -3,7 +3,8 @@
         xmlns:vm="using:AntUI.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1080"
+        xmlns:views="clr-namespace:AntUI.Views"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AntUI.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="App">
@@ -13,13 +14,10 @@
     </Design.DataContext>
 
     <DockPanel Name="rootPanel">
-        <!-- TODO: Replace with our drawing component -->
-        <Canvas 
-            MinHeight="500"
-            MinWidth="500"
-            Background="Blue" 
+        <views:SimulationCanvas
+            Height="300"
             DockPanel.Dock="Top">
-        </Canvas>
+        </views:SimulationCanvas>
         <WrapPanel 
             Name="toolbarPanel"
             Background="Gray"
