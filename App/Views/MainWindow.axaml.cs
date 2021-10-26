@@ -9,8 +9,6 @@ namespace AntUI.Views
 {
     public partial class MainWindow : Window
     {
-        private Button _testButton;
-        
         public MainWindow()
         {
             InitializeComponent();
@@ -22,7 +20,6 @@ namespace AntUI.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-            _testButton = this.FindControl<Button>("testButton");
         }
     }
 }
