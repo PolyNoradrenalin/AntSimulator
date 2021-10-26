@@ -102,7 +102,7 @@ namespace AntEngine.Maths
                 {
                     X = v.X + Scale.X / 2 * rotationCoefficients[index].X * MathF.Cos(rotation) -
                         rotationCoefficients[index].X * Scale.Y / 2 * MathF.Sin(rotation),
-                    Y = v.X + Scale.X / 2 * rotationCoefficients[index].Y * MathF.Sin(rotation) +
+                    Y = v.Y + Scale.Y / 2 * rotationCoefficients[index].Y * MathF.Sin(rotation) +
                         rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Cos(rotation)
                 };
 
