@@ -33,7 +33,7 @@ namespace AntEngine.Colliders
 
         public override bool checkCollision(WorldCollider worldCollider)
         {
-            // Get bounding rectangle pixels to check only the circle region on the world collider
+            // Get bounding rectangle pixels to check only in the appropriate sub-matrix of WorldCollider
             Transform rectTransform = new(ColliderTransform.Position, 0, ColliderTransform.Scale);
             IList<Vector2> rectVertices = rectTransform.GetRectangleVertices();
 
@@ -42,7 +42,7 @@ namespace AntEngine.Colliders
             float minYPos = rectVertices[2].Y;
             float maxYPos = rectVertices[0].Y;
             
-            // If the circle has a part outside the world that's a collision
+            // If a part of the circle exists outside the world, then there is a collision
             if (minXPos <= 0 || 
                 maxXPos >= worldCollider.Size.X || 
                 minYPos <= 0 || 
@@ -54,7 +54,7 @@ namespace AntEngine.Colliders
             int startYIndex = (int)(minYPos / worldCollider.Size.Y * worldCollider.Subdivision);
             int endYIndex = (int)(maxYPos / worldCollider.Size.Y * worldCollider.Subdivision);
             
-            // Check if any of the pixel inside the circle collide with the world
+            // Check if any of the pixels inside the circle collides with the world
             for (int x = startXIndex; x <= endXIndex; x++)
             {
                 for (int y = startYIndex; y <= endYIndex; y++)
