@@ -37,27 +37,27 @@ namespace AntEngine.Colliders
             Transform rectTransform = new(ColliderTransform.Position, 0, ColliderTransform.Scale);
             IList<Vector2> rectVertices = rectTransform.GetRectangleVertices();
 
-            float minXPos = rectVertices[2].X;
-            float maxXPos = rectVertices[0].X;
-            float minYPos = rectVertices[2].Y;
-            float maxYPos = rectVertices[0].Y;
-            
-            // If a part of the circle exists outside the world, then there is a collision
-            if (minXPos <= 0 || 
-                maxXPos >= worldCollider.Size.X || 
-                minYPos <= 0 || 
-                maxYPos >= worldCollider.Size.Y) return true;
+            (float min, float max) XPos = (rectVertices[2].X, rectVertices[0].X);
+            (float min, float max) YPos = (rectVertices[2].Y, rectVertices[0].Y);
+
+            // If the circle has a part outside the world that's a collision
+            if (XPos.min <= 0 || 
+                XPos.max >= worldCollider.Size.X || 
+                YPos.min <= 0 || 
+                YPos.max >= worldCollider.Size.Y) return true;
             
             // Convert the bounds into indexes to iterate through the world collider pixels
-            int startXIndex = (int)(minXPos / worldCollider.Size.X * worldCollider.Subdivision);
-            int endXIndex = (int)(maxXPos / worldCollider.Size.X * worldCollider.Subdivision);
-            int startYIndex = (int)(minYPos / worldCollider.Size.Y * worldCollider.Subdivision);
-            int endYIndex = (int)(maxYPos / worldCollider.Size.Y * worldCollider.Subdivision);
+            (int start, int end) XIndex = (
+                (int)(XPos.min / worldCollider.Size.X * worldCollider.Subdivision), 
+                (int)(XPos.max / worldCollider.Size.X * worldCollider.Subdivision));
+            (int start, int end) YIndex = (
+                (int)(YPos.min / worldCollider.Size.Y * worldCollider.Subdivision),
+                (int)(YPos.max / worldCollider.Size.Y * worldCollider.Subdivision));
             
-            // Check if any of the pixels inside the circle collides with the world
-            for (int x = startXIndex; x <= endXIndex; x++)
+            // Check if any of the pixel inside the circle collide with the world
+            for (int x = XIndex.start; x <= XIndex.end; x++)
             {
-                for (int y = startYIndex; y <= endYIndex; y++)
+                for (int y = YIndex.start; y <= YIndex.end; y++)
                 {
                     Vector2 pixelPos = new(
                         (float)x / worldCollider.Subdivision * worldCollider.Size.X, 
