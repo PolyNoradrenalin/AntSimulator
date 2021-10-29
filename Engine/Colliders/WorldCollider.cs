@@ -56,6 +56,17 @@ namespace AntEngine.Colliders
         {
             return Matrix[y][x];
         }
+
+        /// <summary>
+        /// Checks if the coordinates are in the world boundaries.
+        /// </summary>
+        /// <param name="posX">Min x and Max x</param>
+        /// <param name="poxY">Min y and Max y</param>
+        /// <returns>True if all constraints are in the world boundaries, false otherwise</returns>
+        public bool IsInBounds((float min, float max) posX, (float min, float max) poxY)
+        {
+            return posX.min <= 0 || posX.max >= Size.X || poxY.min <= 0 || poxY.max >= Size.Y;
+        }
         
         public override bool checkCollision(CircleCollider circleCollider)
         {

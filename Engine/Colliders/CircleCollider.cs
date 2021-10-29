@@ -41,10 +41,7 @@ namespace AntEngine.Colliders
             (float min, float max) YPos = (rectVertices[2].Y, rectVertices[0].Y);
 
             // If the circle has a part outside the world that's a collision
-            if (XPos.min <= 0 || 
-                XPos.max >= worldCollider.Size.X || 
-                YPos.min <= 0 || 
-                YPos.max >= worldCollider.Size.Y) return true;
+            if (worldCollider.IsInBounds(XPos, YPos)) return true;
             
             // Convert the bounds into indexes to iterate through the world collider pixels
             (int start, int end) XIndex = (
