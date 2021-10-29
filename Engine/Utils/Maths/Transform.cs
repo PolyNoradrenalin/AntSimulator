@@ -121,7 +121,7 @@ namespace AntEngine.Maths
         /// <returns>Distance between the centers of both transforms.</returns>
         public float GetDistance(Transform a)
         {
-            return MathF.Sqrt(MathF.Pow(Position.X - a.Position.X, 2) + MathF.Pow(Position.Y - a.Position.Y, 2));
-        } 
+            return Vector2.Distance(Position, a.Position);
+        }
     }
 }
