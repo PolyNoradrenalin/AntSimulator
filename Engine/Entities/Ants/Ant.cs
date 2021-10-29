@@ -1,5 +1,8 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Collections.Generic;
+using System.Numerics;
 using AntEngine.Entities.Colonies;
+using AntEngine.Entities.Pheromones;
 using AntEngine.Entities.States;
 using AntEngine.Entities.States.Living;
 using AntEngine.Entities.Strategies.Movement;
@@ -51,7 +54,7 @@ namespace AntEngine.Entities.Ants
         /// The ant's current movement strategy.
         /// </summary>
         public IMovementStrategy MovementStrategy { get; protected set; }
-        
+
         /// <summary>
         /// Represents the ant's inventory.
         /// </summary>
@@ -61,7 +64,12 @@ namespace AntEngine.Entities.Ants
         /// The distance in which the ant can perceive another entity.
         /// </summary>
         public float PerceptionDistance { get; protected set; }
-        
+
+        /// <summary>
+        /// Precision that will determine the size of the weights list.
+        /// </summary>
+        public int PerceptionMapPrecision { get; } = 24;
+
         /// <summary>
         /// Applies movement to ant's coordinates.
         /// </summary>
@@ -76,12 +84,57 @@ namespace AntEngine.Entities.Ants
         /// A perception map is used to represent which directions are attractive for the ant.
         /// </summary>
         /// <returns>Perception Map</returns>
-        public PerceptionMap GetPerceptionMap()
+        public PerceptionMap GetPerceptionMap<T>() where T : Pheromone, new()
         {
-            // TODO: Implement, Pheromones have to be added first.
-            return new PerceptionMap(new []{0,0});
+            List<float> weights = new(PerceptionMapPrecision);
+
+            foreach (Entity e in World.Entities)
+            {
+                if (e is not T) continue;
+                if (!(e.Transform.GetDistance(Transform) <= PerceptionDistance)) continue;
+                float rotVal = e.Transform.Rotation - Transform.Rotation;
+
+                int weightListIndex;
+
+                if (rotVal >= 0)
+                {
+                    weightListIndex = (int) (rotVal / 2 * MathF.PI * PerceptionMapPrecision);
+                }
+                else
+                {
+                    weightListIndex = (int) ((rotVal + 2 * MathF.PI) / 2 * MathF.PI * PerceptionMapPrecision);
+                }
+
+                float weightSum = 0;
+                weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform));
+                weightSum += GetWeightFactorFromRotation(rotVal);
+                weights.Insert(weightListIndex, weightSum);
+            }
+
+            return new PerceptionMap(weights);
         }
 
         public Colony Home { get; set; }
+
+        /// <summary>
+        /// Returns the weight factor associated to the distance between an ant and another entity.
+        /// </summary>
+        /// <param name="distance">Distance between this ant and an entity</param>
+        /// <returns>Weight value to be added to total weight</returns>
+        private float GetWeightFactorFromDistance(float distance)
+        {
+
+            return MathF.Pow(distance, 2) != 0 ? 1 / MathF.Pow(distance, 2) : 0;
+        }
+
+        /// <summary>
+        /// Returns the weight factor associated to the rotationDifference between an ant and another entity.
+        /// </summary>
+        /// <param name="rotationDelta">Difference in rotation between the entity and the ant</param>
+        /// <returns>Weight value to be added to total weight</returns>
+        private float GetWeightFactorFromRotation(float rotationDelta)
+        {
+            return MathF.Pow(rotationDelta, 2) != 0 ? 1 / MathF.Pow(rotationDelta, 2) : 0;
+        }
     }
 }
