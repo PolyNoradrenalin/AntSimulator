@@ -86,6 +86,8 @@ namespace AntEngine.Maths
         /// </summary>
         /// <returns>
         /// A list of 4 Vector2(two dimensional vertices) objects.
+        /// 
+        /// Top Right - Top Left - Bottom Left - Bottom Right
         /// </returns>
         public List<Vector2> GetRectangleVertices()
         {
