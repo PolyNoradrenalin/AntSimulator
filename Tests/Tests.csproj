@@ -12,7 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\App\App.csproj" />
       <ProjectReference Include="..\Engine\Engine.csproj" />
     </ItemGroup>
 
