@@ -13,15 +13,16 @@ namespace AntEngine.Maths
         /// <summary>
         /// Associates each weight of the list to a vector going all around a circle, equally spaced.
         /// </summary>
-        /// <param name="weights"></param>
-        public PerceptionMap(IReadOnlyList<int> weights)
+        /// <param name="weights">List of weights</param>
+        /// <param name="angleOffset"></param>
+        public PerceptionMap(IReadOnlyList<float> weights, float angleOffset = MathF.PI/2)
         {
             Weights = new Dictionary<Vector2, float>(weights.Count);
             float stepAngle = 2F * MathF.PI / weights.Count;
             
             for (int i = 0; i < weights.Count; i++)
             {
-                float angle = i * stepAngle;
+                float angle = i * stepAngle + angleOffset;
                 Vector2 dir = new(MathF.Cos(angle), MathF.Sin(angle));
                 Weights.Add(dir, weights[i]);
             }
