@@ -100,8 +100,8 @@ namespace AntEngine.Colliders
                 for (int y = MinIndex.y; y < MaxIndex.y; y++)
                 {
                     (int x, int y) rotatedPixels = (
-                        (int)((x - origin.x) * MathF.Cos(ColliderTransform.Rotation) - MathF.Sin(ColliderTransform.Rotation)), 
-                        (int)((y - origin.y) * MathF.Cos(ColliderTransform.Rotation) + MathF.Sin(ColliderTransform.Rotation)));
+                        (int)((x - origin.x) * MathF.Cos(ColliderTransform.Rotation) - (y - origin.y) * MathF.Sin(ColliderTransform.Rotation)), 
+                        (int)((x - origin.x) * MathF.Sin(ColliderTransform.Rotation) + (y - origin.y) * MathF.Cos(ColliderTransform.Rotation)));
 
                     if (worldCollider.IsOutOfBounds(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
                     if (worldCollider.GetPixel(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
