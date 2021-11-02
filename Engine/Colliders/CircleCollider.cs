@@ -34,7 +34,10 @@ namespace AntEngine.Colliders
         public override bool checkCollision(WorldCollider worldCollider)
         {
             // Get bounding rectangle pixels to check only in the appropriate sub-matrix of WorldCollider
-            Transform rectTransform = new(ColliderTransform.Position, 0, ColliderTransform.Scale);
+            Transform rectTransform = new(ColliderTransform.Position + ParentTransform.Position,
+                0,
+                ColliderTransform.Scale * ParentTransform.Scale);
+            
             IList<Vector2> rectVertices = rectTransform.GetRectangleVertices();
 
             (float min, float max) XPos = (rectVertices[2].X, rectVertices[0].X);
@@ -44,17 +47,13 @@ namespace AntEngine.Colliders
             if (worldCollider.IsOutOfBounds(XPos, YPos)) return true;
             
             // Convert the bounds into indexes to iterate through the world collider pixels
-            (int start, int end) XIndex = (
-                (int)(XPos.min / worldCollider.Size.X * worldCollider.Subdivision), 
-                (int)(XPos.max / worldCollider.Size.X * worldCollider.Subdivision));
-            (int start, int end) YIndex = (
-                (int)(YPos.min / worldCollider.Size.Y * worldCollider.Subdivision),
-                (int)(YPos.max / worldCollider.Size.Y * worldCollider.Subdivision));
+            (int x, int y) MinIndex = worldCollider.ConvertCoordsToIndex(new Vector2(XPos.min, YPos.min));
+            (int x, int y) MaxIndex = worldCollider.ConvertCoordsToIndex(new Vector2(XPos.max, YPos.max));
             
             // Check if any of the pixel inside the circle collide with the world
-            for (int x = XIndex.start; x <= XIndex.end; x++)
+            for (int x = MinIndex.x; x <= MaxIndex.x; x++)
             {
-                for (int y = YIndex.start; y <= YIndex.end; y++)
+                for (int y = MinIndex.y; y <= MaxIndex.y; y++)
                 {
                     Vector2 pixelPos = new(
                         (float)x / worldCollider.Subdivision * worldCollider.Size.X, 

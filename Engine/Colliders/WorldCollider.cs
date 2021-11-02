@@ -67,6 +67,16 @@ namespace AntEngine.Colliders
         {
             return posX.min <= 0 || posX.max >= Size.X || poxY.min <= 0 || poxY.max >= Size.Y;
         }
+
+        /// <summary>
+        /// Returns the indexes corresponding to the coordinates.
+        /// </summary>
+        public (int x, int y) ConvertCoordsToIndex(Vector2 position)
+        {
+            return (
+                (int)(position.X / Size.X * Subdivision),
+                (int)(position.Y / Size.Y * Subdivision));
+        }
         
         public override bool checkCollision(CircleCollider circleCollider)
         {
