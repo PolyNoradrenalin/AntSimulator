@@ -63,7 +63,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// The distance in which the ant can perceive another entity.
         /// </summary>
-        public float PerceptionDistance { get; protected set; }
+        public float PerceptionDistance { get; protected set; } = 5;
 
         /// <summary>
         /// Precision that will determine the size of the weights list.
@@ -84,9 +84,9 @@ namespace AntEngine.Entities.Ants
         /// A perception map is used to represent which directions are attractive for the ant.
         /// </summary>
         /// <returns>Perception Map</returns>
-        public PerceptionMap GetPerceptionMap<T>() where T : Pheromone, new()
+        public PerceptionMap GetPerceptionMap<T>() where T : Pheromone
         {
-            List<float> weights = new(PerceptionMapPrecision);
+            List<float> weights = new(new float[PerceptionMapPrecision]);
 
             foreach (Entity e in World.Entities)
             {
@@ -99,17 +99,18 @@ namespace AntEngine.Entities.Ants
 
                 if (rotVal >= 0)
                 {
-                    weightListIndex = (int) (rotVal / 2 * MathF.PI * PerceptionMapPrecision);
+                    weightListIndex = (int) MathF.Floor(rotVal / (2 * MathF.PI / PerceptionMapPrecision));
                 }
                 else
                 {
-                    weightListIndex = (int) ((rotVal + 2 * MathF.PI) / 2 * MathF.PI * PerceptionMapPrecision);
+                    weightListIndex =
+                        (int) MathF.Floor((rotVal + 2 * MathF.PI) / (2 * MathF.PI / PerceptionMapPrecision));
                 }
 
-                float weightSum = 0;
+                float weightSum = weights[weightListIndex];
                 weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform));
                 weightSum += GetWeightFactorFromRotation(rotVal);
-                weights.Insert(weightListIndex, weightSum);
+                weights[weightListIndex] = weightSum;
             }
 
             return new PerceptionMap(weights);
