@@ -103,8 +103,8 @@ namespace AntEngine.Maths
                 Vector2 vertex = new()
                 {
                     X = v.X + Scale.X / 2 * rotationCoefficients[index].X * MathF.Cos(rotation) -
-                        rotationCoefficients[index].X * Scale.Y / 2 * MathF.Sin(rotation),
-                    Y = v.Y + Scale.Y / 2 * rotationCoefficients[index].Y * MathF.Sin(rotation) +
+                        rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Sin(rotation),
+                    Y = v.Y + Scale.X / 2 * rotationCoefficients[index].X * MathF.Sin(rotation) +
                         rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Cos(rotation)
                 };
 

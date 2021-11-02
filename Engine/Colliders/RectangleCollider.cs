@@ -78,8 +78,37 @@ namespace AntEngine.Colliders
 
         public override bool checkCollision(WorldCollider worldCollider)
         {
-            //TODO : Implement
-            throw new System.NotImplementedException();
+            // Get the pixels of the world collider beneath the rectangle.
+            Transform rectTransform = new(ColliderTransform.Position, 0, ColliderTransform.Scale);
+            IList<Vector2> rectVertices = rectTransform.GetRectangleVertices();
+
+            (float min, float max) XPos = (rectVertices[2].X, rectVertices[0].X);
+            (float min, float max) YPos = (rectVertices[2].Y, rectVertices[0].Y);
+
+            // If the circle has a part outside the world that's a collision
+            if (worldCollider.IsOutOfBounds(XPos, YPos)) return true;
+            
+            // Convert the bounds into indexes to iterate through the world collider pixels
+            (int x, int y) MinIndex = worldCollider.ConvertCoordsToIndex(new Vector2(XPos.min, YPos.min));
+            (int x, int y) MaxIndex = worldCollider.ConvertCoordsToIndex(new Vector2(XPos.max, YPos.max));
+
+            (int x, int y) origin =
+                worldCollider.ConvertCoordsToIndex(ColliderTransform.Position + ParentTransform.Position);
+            
+            for (int x = MinIndex.x; x < MaxIndex.x; x++)
+            {
+                for (int y = MinIndex.y; y < MaxIndex.y; y++)
+                {
+                    (int x, int y) rotatedPixels = (
+                        (int)((x - origin.x) * MathF.Cos(ColliderTransform.Rotation) - (y - origin.y) * MathF.Sin(ColliderTransform.Rotation)), 
+                        (int)((x - origin.x) * MathF.Sin(ColliderTransform.Rotation) + (y - origin.y) * MathF.Cos(ColliderTransform.Rotation)));
+
+                    if (worldCollider.IsOutOfBounds(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
+                    if (worldCollider.GetPixel(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
