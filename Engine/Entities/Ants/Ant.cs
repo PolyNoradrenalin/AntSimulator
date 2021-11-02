@@ -92,7 +92,8 @@ namespace AntEngine.Entities.Ants
             {
                 if (e is not T) continue;
                 if (!(e.Transform.GetDistance(Transform) <= PerceptionDistance)) continue;
-                float rotVal = e.Transform.Rotation - Transform.Rotation;
+                float rotVal = MathF.Atan2(e.Transform.Position.X - Transform.Position.X,
+                    e.Transform.Position.Y - Transform.Position.Y);
 
                 int weightListIndex;
 
@@ -123,7 +124,6 @@ namespace AntEngine.Entities.Ants
         /// <returns>Weight value to be added to total weight</returns>
         private float GetWeightFactorFromDistance(float distance)
         {
-
             return MathF.Pow(distance, 2) != 0 ? 1 / MathF.Pow(distance, 2) : 0;
         }
 
