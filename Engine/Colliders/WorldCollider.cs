@@ -69,6 +69,17 @@ namespace AntEngine.Colliders
         }
 
         /// <summary>
+        /// Checks if the coordinates are in the world boundaries.
+        /// </summary>
+        /// <param name="posX">X coord</param>
+        /// <param name="poxY">Y coord</param>
+        /// <returns>True if all constraints are in the world boundaries, false otherwise</returns>
+        public bool IsOutOfBounds(float x, float y)
+        {
+            return IsOutOfBounds((x,x), (y,y));
+        }
+        
+        /// <summary>
         /// Returns the indexes corresponding to the coordinates.
         /// </summary>
         public (int x, int y) ConvertCoordsToIndex(Vector2 position)

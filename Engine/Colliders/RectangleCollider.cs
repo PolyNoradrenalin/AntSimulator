@@ -103,8 +103,8 @@ namespace AntEngine.Colliders
                         (int)((x - origin.x) * MathF.Cos(ColliderTransform.Rotation) - MathF.Sin(ColliderTransform.Rotation)), 
                         (int)((y - origin.y) * MathF.Cos(ColliderTransform.Rotation) + MathF.Sin(ColliderTransform.Rotation)));
 
-                    if (worldCollider.IsOutOfBounds(rotatedPixels, rotatedPixels)) return true;
-                    if (worldCollider.GetPixel(rotatedPixels.x, rotatedPixels.y)) return true;
+                    if (worldCollider.IsOutOfBounds(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
+                    if (worldCollider.GetPixel(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
                 }
             }
 
