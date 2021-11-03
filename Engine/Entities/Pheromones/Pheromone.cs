@@ -33,9 +33,9 @@ namespace AntEngine.Entities.Pheromones
             decayTimer.Update();
         }
 
-        public virtual void OnDecay(object sender, EventArgs e)
+        protected virtual void OnDecay(object sender, EventArgs e)
         {
-            
+            World.Entities.Remove(this);
         }
     }
 }
