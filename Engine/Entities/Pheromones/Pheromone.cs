@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Timers;
-using AntEngine.Maths;
+using AntEngine.Utils;
+using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities.Pheromones
 {

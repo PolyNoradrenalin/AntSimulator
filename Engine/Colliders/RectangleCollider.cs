@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using AntEngine.Maths;
+using AntEngine.Utils.Maths;
 
 namespace AntEngine.Colliders
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using AntEngine.Maths;
+using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities.Pheromones
 {

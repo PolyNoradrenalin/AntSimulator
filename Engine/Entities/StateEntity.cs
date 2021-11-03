@@ -1,5 +1,5 @@
 using AntEngine.Entities.States;
-using AntEngine.Maths;
+using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities
 {

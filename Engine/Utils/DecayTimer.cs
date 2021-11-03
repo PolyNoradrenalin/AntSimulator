@@ -1,7 +1,6 @@
 ﻿using System;
- using System.Timers;
- 
- namespace AntEngine.Entities
+
+namespace AntEngine.Utils
  {
      /// <summary>
      /// Allows for the use of a timer that decays over time.

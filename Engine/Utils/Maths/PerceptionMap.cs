@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace AntEngine.Maths
+namespace AntEngine.Utils.Maths
 {
     /// <summary>
     /// A list of Vector2 each associated with a weight.
