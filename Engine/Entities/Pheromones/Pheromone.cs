@@ -33,7 +33,7 @@ namespace AntEngine.Entities.Pheromones
             decayTimer.Update();
         }
 
-        public void OnDecay(object sender, EventArgs e)
+        public virtual void OnDecay(object sender, EventArgs e)
         {
             
         }
