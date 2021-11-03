@@ -93,16 +93,16 @@ namespace AntEngine.Entities.Ants
                 if (e is not T) continue;
                 if (!(e.Transform.GetDistance(Transform) <= PerceptionDistance)) continue;
 
-                Vector2 a = Transform.GetDirectorVector();
-                Vector2 b = e.Transform.Position - Transform.Position;
+                Vector2 antDirection = Transform.GetDirectorVector();
+                Vector2 pheromoneDirection = e.Transform.Position - Transform.Position;
                 
-                float rotVal = MathF.Acos(Vector2.Dot(a,b) / (a.Length() * b.Length()));
+                float angleDifference = MathF.Acos(Vector2.Dot(antDirection,pheromoneDirection) / (antDirection.Length() * pheromoneDirection.Length()));
 
-                int weightListIndex = (int) MathF.Floor(rotVal / (2 * MathF.PI / PerceptionMapPrecision));
+                int weightListIndex = (int) MathF.Floor(angleDifference / (2 * MathF.PI / PerceptionMapPrecision));
 
                 float weightSum = weights[weightListIndex];
                 weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform));
-                weightSum += GetWeightFactorFromRotation(rotVal);
+                weightSum += GetWeightFactorFromRotation(angleDifference);
                 weights[weightListIndex] = weightSum;
             }
 
