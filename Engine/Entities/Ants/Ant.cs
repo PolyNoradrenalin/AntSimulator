@@ -92,20 +92,13 @@ namespace AntEngine.Entities.Ants
             {
                 if (e is not T) continue;
                 if (!(e.Transform.GetDistance(Transform) <= PerceptionDistance)) continue;
-                float rotVal = MathF.Atan2(e.Transform.Position.X - Transform.Position.X,
-                    e.Transform.Position.Y - Transform.Position.Y);
 
-                int weightListIndex;
+                Vector2 a = Transform.GetDirectorVector();
+                Vector2 b = e.Transform.Position - Transform.Position;
+                
+                float rotVal = MathF.Acos(Vector2.Dot(a,b) / (a.Length() * b.Length()));
 
-                if (rotVal >= 0)
-                {
-                    weightListIndex = (int) MathF.Floor(rotVal / (2 * MathF.PI / PerceptionMapPrecision));
-                }
-                else
-                {
-                    weightListIndex =
-                        (int) MathF.Floor((rotVal + 2 * MathF.PI) / (2 * MathF.PI / PerceptionMapPrecision));
-                }
+                int weightListIndex = (int) MathF.Floor(rotVal / (2 * MathF.PI / PerceptionMapPrecision));
 
                 float weightSum = weights[weightListIndex];
                 weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform));
