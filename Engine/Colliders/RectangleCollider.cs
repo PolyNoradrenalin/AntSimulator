@@ -49,23 +49,10 @@ namespace AntEngine.Colliders
             //TODO : Remove duplicate axes.
             
             // Gets the rectangles' vertices list.
-            //TODO : Check this
-            Transform fig1Transform = new()
-            {
-                Position = ColliderTransform.Position + ParentTransform.Position,
-                Rotation = ColliderTransform.Rotation, //TODO : This is wrong!!!!!!!! ¯\_(ツ)_/¯
-                Scale = ColliderTransform.Scale * ParentTransform.Scale
-            };
-            
-            Transform fig2Transform = new()
-            {
-                Position = rectCollider.ColliderTransform.Position + rectCollider.ParentTransform.Position,
-                Rotation = rectCollider.ColliderTransform.Rotation, //TODO : This is wrong!!!!!!!! ¯\_(ツ)_/¯
-                Scale = rectCollider.ColliderTransform.Scale * rectCollider.ParentTransform.Scale
-            };
-
-            List<Vector2> vertices1 = fig1Transform.GetRectangleVertices();
-            List<Vector2> vertices2 = fig2Transform.GetRectangleVertices();
+            List<Vector2> vertices1 = ColliderTransform.GetRectangleVertices()
+                .Select(v => ParentTransform.ConvertToReferenceFrame(v)).ToList();
+            List<Vector2> vertices2 = rectCollider.ColliderTransform.GetRectangleVertices()
+                .Select(v => rectCollider.ParentTransform.ConvertToReferenceFrame(v)).ToList();
 
             // Check that the vertex list has been correctly created
             if (vertices1?.Count == 0 || vertices2?.Count == 0)
