@@ -14,7 +14,7 @@ namespace AntEngine.Utils.Maths
         /// Associates each weight of the list to a vector going all around a circle, equally spaced.
         /// </summary>
         /// <param name="weights">List of weights</param>
-        /// <param name="angleOffset"></param>
+        /// <param name="angleOffset">Offset to be applied to the angle</param>
         public PerceptionMap(IReadOnlyList<float> weights, float angleOffset = MathF.PI/2)
         {
             Weights = new Dictionary<Vector2, float>(weights.Count);
