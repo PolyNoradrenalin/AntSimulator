@@ -72,10 +72,11 @@ namespace AntEngine.Utils.Maths
         /// </returns>
         public Vector2 GetDirectorVector()
         {
-            Vector2 director = Vector2.One;
-
-            director.X = director.X * MathF.Cos(Rotation) - director.Y * MathF.Sin(Rotation);
-            director.Y = director.X * MathF.Sin(Rotation) + director.Y * MathF.Cos(Rotation);
+            Vector2 director = new()
+            {
+                X = MathF.Cos(Rotation + MathF.PI / 2),
+                Y = MathF.Sin(Rotation + MathF.PI / 2)
+            };
 
             return director;
         }
