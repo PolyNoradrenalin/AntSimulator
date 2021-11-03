@@ -76,7 +76,7 @@ namespace AntEngine.Entities.Ants
         /// <param name="dir"></param>
         public void Move(Vector2 dir)
         {
-            Transform.Position += dir;
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
