@@ -94,18 +94,16 @@ namespace AntEngine.Utils.Maths
             List<Vector2> verts = new();
             
             Vector2[] rotationCoefficients = {new(1, 1), new(-1, 1), new(-1, -1), new(1, -1)};
-            float rotation = Rotation;
-            Vector2 v = new(Position.X, Position.Y);
 
             // Calculating each vertex
             for (int index = 0; index < rotationCoefficients.Length; index++)
             {
                 Vector2 vertex = new()
                 {
-                    X = v.X + Scale.X / 2 * rotationCoefficients[index].X * MathF.Cos(rotation) -
-                        rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Sin(rotation),
-                    Y = v.Y + Scale.X / 2 * rotationCoefficients[index].X * MathF.Sin(rotation) +
-                        rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Cos(rotation)
+                    X = Position.X + Scale.X / 2 * rotationCoefficients[index].X * MathF.Cos(Rotation) -
+                        rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Sin(Rotation),
+                    Y = Position.Y + Scale.X / 2 * rotationCoefficients[index].X * MathF.Sin(Rotation) +
+                        rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Cos(Rotation)
                 };
 
                 verts.Add(vertex);
@@ -131,12 +129,12 @@ namespace AntEngine.Utils.Maths
         /// <returns>New vector converted to this reference frame.</returns>
         public Vector2 ConvertToReferenceFrame(Vector2 local)
         {
-            Vector2 rotated = new(local.X * MathF.Cos(Rotation) - local.Y * MathF.Sin(Rotation),
-                local.X * MathF.Sin(Rotation) + local.Y * MathF.Cos(Rotation));
+            Vector2 scaled = new(local.X * Scale.X, local.Y * Scale.Y);
+            
+            Vector2 rotated = new(scaled.X * MathF.Cos(Rotation) - scaled.Y * MathF.Sin(Rotation),
+                scaled.X * MathF.Sin(Rotation) + scaled.Y * MathF.Cos(Rotation));
 
-            Vector2 scaled = new(rotated.X * Scale.X, rotated.Y * Scale.Y);
-
-            Vector2 translated = new(scaled.X + Position.X, scaled.Y + Position.Y);
+            Vector2 translated = new(rotated.X + Position.X, rotated.Y + Position.Y);
 
             return translated;
         }
