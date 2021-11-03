@@ -123,5 +123,22 @@ namespace AntEngine.Utils.Maths
         {
             return Vector2.Distance(Position, a.Position);
         }
+
+        /// <summary>
+        /// Converts a vector to this transform's reference frame.
+        /// </summary>
+        /// <param name="local">Vector to be transformed from its local frame to this reference frame.</param>
+        /// <returns>New vector converted to this reference frame.</returns>
+        public Vector2 ConvertToReferenceFrame(Vector2 local)
+        {
+            Vector2 rotated = new(local.X * MathF.Cos(Rotation) - local.Y * MathF.Sin(Rotation),
+                local.X * MathF.Sin(Rotation) + local.Y * MathF.Cos(Rotation));
+
+            Vector2 scaled = new(rotated.X * Scale.X, rotated.Y * Scale.Y);
+
+            Vector2 translated = new(scaled.X + Position.X, scaled.Y + Position.Y);
+
+            return translated;
+        }
     }
 }
