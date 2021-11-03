@@ -6,7 +6,7 @@ using AntEngine.Entities.Pheromones;
 using AntEngine.Entities.States;
 using AntEngine.Entities.States.Living;
 using AntEngine.Entities.Strategies.Movement;
-using AntEngine.Maths;
+using AntEngine.Utils.Maths;
 using AntEngine.Resources;
 
 namespace AntEngine.Entities.Ants
@@ -58,7 +58,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// Represents the ant's inventory.
         /// </summary>
-        public ResourceDeposit ResourceInventory { get; protected set; }
+        public ResourceInventory ResourceInventory { get; protected set; }
 
         /// <summary>
         /// The distance in which the ant can perceive another entity.
