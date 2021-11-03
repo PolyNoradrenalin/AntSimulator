@@ -46,7 +46,12 @@ namespace AntEngine.Colliders
 
             List<Vector2> axes = new() {direct1, direct2, normal1, normal2};
 
+            //TODO : Remove duplicate axes.
+            
             // Gets the rectangles' vertices list.
+            //TODO : Check this
+            
+            
             List<Vector2> vertices1 = ColliderTransform.GetRectangleVertices().Zip(ParentTransform.GetRectangleVertices(), (v1, v2) => v1 + v2).ToList();
             List<Vector2> vertices2 = rectCollider.ColliderTransform.GetRectangleVertices().Zip(rectCollider.ParentTransform.GetRectangleVertices(), (v1, v2) => v1 + v2).ToList();
 
@@ -100,8 +105,8 @@ namespace AntEngine.Colliders
                 for (int y = MinIndex.y; y < MaxIndex.y; y++)
                 {
                     (int x, int y) rotatedPixels = (
-                        (int)((x - origin.x) * MathF.Cos(ColliderTransform.Rotation) - (y - origin.y) * MathF.Sin(ColliderTransform.Rotation)), 
-                        (int)((x - origin.x) * MathF.Sin(ColliderTransform.Rotation) + (y - origin.y) * MathF.Cos(ColliderTransform.Rotation)));
+                        (int) ((x - origin.x) * MathF.Cos(ColliderTransform.Rotation) - (y - origin.y) * MathF.Sin(ColliderTransform.Rotation)), 
+                        (int) ((x - origin.x) * MathF.Sin(ColliderTransform.Rotation) + (y - origin.y) * MathF.Cos(ColliderTransform.Rotation)));
 
                     if (worldCollider.IsOutOfBounds(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
                     if (worldCollider.GetPixel(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
