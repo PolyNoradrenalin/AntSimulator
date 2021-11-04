@@ -49,7 +49,14 @@ namespace AntEngine.Colliders
 
             // We normalize the axis found to simplify the following calculations.
             circleAxis = Vector2.Normalize(closestDelta);
-            Vector2 directorVector = ColliderTransform.GetDirectorVector();
+
+            Transform t = new()
+            {
+                Rotation = ParentTransform.Rotation + ColliderTransform.Rotation
+            };
+
+            Vector2 directorVector = t.GetDirectorVector();
+            
             Vector2 normalVector = new(-directorVector.Y, directorVector.X);
 
             List<Vector2> axes = new() {directorVector, normalVector, circleAxis};
@@ -90,8 +97,16 @@ namespace AntEngine.Colliders
         public override bool checkCollision(RectangleCollider rectCollider)
         {
             // Get the rectangles' initial director vector, normal vector and vertices.
-            Vector2 direct1 = ColliderTransform.GetDirectorVector();
-            Vector2 direct2 = rectCollider.ColliderTransform.GetDirectorVector();
+            Transform t = new()
+            {
+                Rotation = ParentTransform.Rotation + ColliderTransform.Rotation
+            };
+            
+            Vector2 direct1 = t.GetDirectorVector();
+
+            t.Rotation = rectCollider.ColliderTransform.Rotation + rectCollider.ParentTransform.Rotation;
+            
+            Vector2 direct2 = t.GetDirectorVector();
 
             Vector2 normal1 = new(-direct1.Y, direct1.X);
             Vector2 normal2 = new(-direct2.Y, direct2.X);
