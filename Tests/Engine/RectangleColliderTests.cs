@@ -175,5 +175,83 @@ namespace Tests.Engine
             
             Assert.True(col1.checkCollision(worldCollider));
         }
+
+        [Fact]
+        public void CheckCollision_Circle_ShouldAlwaysCollide()
+        {
+            RectangleCollider rect = new(new Transform(), new Transform());
+            rect.ParentTransform.Position = Vector2.Zero;
+            rect.ParentTransform.Scale = 4 * Vector2.One;
+
+            CircleCollider circ = new(new Transform(), new Transform());
+            circ.ColliderTransform.Scale = 10 * Vector2.One; 
+
+            Assert.True(rect.checkCollision(circ));
+        }
+        
+        [Fact]
+        public void CheckCollision_CircleDifferentCenter_ShouldAlwaysCollide()
+        {
+            RectangleCollider rect = new(new Transform(), new Transform());
+            rect.ParentTransform.Position = new(-12, 0);
+            rect.ParentTransform.Scale = 5 * Vector2.One;
+            rect.ColliderTransform.Scale = Vector2.One;
+
+            CircleCollider circ = new(new Transform(), new Transform());
+            circ.ColliderTransform.Scale = 10 * Vector2.One; 
+
+            Assert.True(rect.checkCollision(circ));
+        }
+        
+        [Fact]
+        public void CheckCollision_CircleDifferentCenter_ShouldCollideOnRotation()
+        {
+            RectangleCollider rect = new(new Transform(), new Transform());
+            rect.ParentTransform.Position = new(-13, 0);
+            rect.ParentTransform.Scale = 5 * Vector2.One;
+            rect.ColliderTransform.Scale = Vector2.One;
+
+            CircleCollider circ = new(new Transform(), new Transform());
+            circ.ColliderTransform.Scale = 10 * Vector2.One; 
+
+            Assert.False(rect.checkCollision(circ));
+
+            rect.ParentTransform.Rotation = -MathF.PI / 4;
+            
+            Assert.True(rect.checkCollision(circ));
+        }
+        
+        [Fact]
+        public void CheckCollision_CircleEdgeTouchingRectEdge_ShouldCollide()
+        {
+            RectangleCollider rect = new(new Transform(), new Transform());
+            rect.ParentTransform.Position = new(-12.5f, 0);
+            rect.ParentTransform.Scale = 5 * Vector2.One;
+            rect.ColliderTransform.Scale = Vector2.One;
+
+            CircleCollider circ = new(new Transform(), new Transform());
+            circ.ColliderTransform.Scale = 10 * Vector2.One;
+
+            Assert.True(rect.checkCollision(circ));
+        }
+        
+        [Fact]
+        public void CheckCollision_CircleDifferentCenter_ShouldCollideWithoutRotationAndNotCollideWithRotation()
+        {
+            RectangleCollider rect = new(new Transform(), new Transform());
+            rect.ParentTransform.Position = new(-13.5f, 0);
+            rect.ParentTransform.Scale = 5 * Vector2.One;
+            rect.ColliderTransform.Scale = Vector2.One;
+
+            CircleCollider circ = new(new Transform(), new Transform());
+            circ.ColliderTransform.Scale = Vector2.One;
+            circ.ColliderTransform.Position = new(-10.5f, 2.5f);
+
+            Assert.True(rect.checkCollision(circ));
+
+            rect.ParentTransform.Rotation = MathF.PI / 4;
+            
+            Assert.False(rect.checkCollision(circ));
+        }
     }
 }
