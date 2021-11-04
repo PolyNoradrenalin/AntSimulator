@@ -1,6 +1,6 @@
 using System;
 using AntEngine.Colliders;
-using AntEngine.Maths;
+using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities
 {

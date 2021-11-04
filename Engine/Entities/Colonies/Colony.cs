@@ -5,8 +5,8 @@ using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
 using AntEngine.Entities.States;
 using AntEngine.Entities.States.Living;
-using AntEngine.Maths;
 using AntEngine.Resources;
+using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities.Colonies
 {

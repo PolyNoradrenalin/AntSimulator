@@ -1,6 +1,6 @@
 using AntEngine.Entities.States;
 using AntEngine.Entities.States.Living;
-using AntEngine.Maths;
+using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities
 {

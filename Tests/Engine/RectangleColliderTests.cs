@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using AntEngine.Colliders;
-using AntEngine.Maths;
+using AntEngine.Utils.Maths;
 using Xunit;
 
 namespace Tests.Engine
@@ -72,19 +72,19 @@ namespace Tests.Engine
         }
         
         [Fact]
-        public void CheckCollision_ParentRotated_ShouldCollide()
+        public void CheckCollision_ParentRotated_ShouldCollideOnlyOnRotation()
         {
             RectangleCollider col1 = new(new Transform(), new Transform());
             RectangleCollider col2 = new(new Transform(), new Transform());
 
             col1.ParentTransform.Position = new Vector2(-1, 0);
-            col1.ParentTransform.Rotation = MathF.PI * 0.5f;
+            col2.ParentTransform.Position = new Vector2(-1, -2);
             col1.ParentTransform.Scale = new Vector2(10, 1);
-
-            col2.ParentTransform.Position = new Vector2(1, 0);
-
-
+            Assert.False(col1.checkCollision(col2));
+            
+            col1.ParentTransform.Rotation = MathF.PI * 0.5f;
             Assert.True(col1.checkCollision(col2));
+            
         }
         
         [Fact]

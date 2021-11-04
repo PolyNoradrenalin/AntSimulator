@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
-using AntEngine.Maths;
+using AntEngine.Utils.Maths;
 using Xunit;
 
 namespace Tests.Engine
@@ -30,12 +30,12 @@ namespace Tests.Engine
         }
 
         [Theory]
-        [InlineData(new[] { 1 })]
-        [InlineData(new[] { 1, 1 })]
-        [InlineData(new[] { 1, 1, 1 })]
-        [InlineData(new[] { 1, 1, 1, 1 })]
-        [InlineData(new[] { 1, 1, 1, 1, 1 })]
-        public void MapCreation_SeveralDirections_AnglesEquallySpaced(int[] weights)
+        [InlineData(new[] { 1f })]
+        [InlineData(new[] { 1f, 1 })]
+        [InlineData(new[] { 1f, 1, 1 })]
+        [InlineData(new[] { 1f, 1, 1, 1 })]
+        [InlineData(new[] { 1f, 1, 1, 1, 1 })]
+        public void MapCreation_SeveralDirections_AnglesEquallySpaced(float[] weights)
         {
             PerceptionMap perceptionMap = new(weights);
             float angleStep = 2F * MathF.PI / weights.Length;
@@ -48,11 +48,11 @@ namespace Tests.Engine
         }
 
         [Theory]
-        [InlineData(new[] { 1, 1 })]
-        [InlineData(new[] { 1, 1, 1 })]
-        [InlineData(new[] { 1, 1, 1, 1 })]
-        [InlineData(new[] { 1, 1, 1, 1, 1 })]
-        public void Mean_MoreThanOneEqualWeights_VectorZero(int[] weights)
+        [InlineData(new[] { 1f, 1 })]
+        [InlineData(new[] { 1f, 1, 1 })]
+        [InlineData(new[] { 1f, 1, 1, 1 })]
+        [InlineData(new[] { 1f, 1, 1, 1, 1 })]
+        public void Mean_MoreThanOneEqualWeights_VectorZero(float[] weights)
         {
             PerceptionMap perceptionMap = new(weights);
             Assert.Equal(Vector2.Zero, perceptionMap.Mean, new Vector2Comparer(6));

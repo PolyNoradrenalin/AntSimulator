@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using AntEngine.Colliders;
 using AntEngine.Entities;
-using AntEngine.Maths;
+using AntEngine.Utils.Maths;
 
 namespace AntEngine
 {

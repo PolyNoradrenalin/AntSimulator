@@ -1,6 +1,6 @@
 using System.Numerics;
 using AntEngine.Colliders;
-using AntEngine.Maths;
+using AntEngine.Utils.Maths;
 using Xunit;
 
 namespace Tests.Engine

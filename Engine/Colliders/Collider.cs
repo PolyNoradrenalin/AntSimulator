@@ -1,4 +1,4 @@
-﻿using AntEngine.Maths;
+﻿using AntEngine.Utils.Maths;
 
 namespace AntEngine.Colliders
 {

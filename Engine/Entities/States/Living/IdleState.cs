@@ -24,10 +24,10 @@ namespace AntEngine.Entities.States.Living
 
         public void OnStateUpdate(StateEntity stateEntity)
         {
-            LivingEntity living = (LivingEntity)stateEntity;
+            LivingEntity living = (LivingEntity) stateEntity;
             if (living.Health <= 0)
             {
-                living.ChangeState(Next(stateEntity));
+                living.State = Next(stateEntity);
             }
         }
 

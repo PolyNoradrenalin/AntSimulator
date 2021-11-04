@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace AntEngine.Maths
+namespace AntEngine.Utils.Maths
 {
     /// <summary>
     /// Contains the data needed for spatial manipulation of entities.
@@ -73,10 +72,11 @@ namespace AntEngine.Maths
         /// </returns>
         public Vector2 GetDirectorVector()
         {
-            Vector2 director = Vector2.One;
-
-            director.X = director.X * MathF.Cos(Rotation) - director.Y * MathF.Sin(Rotation);
-            director.Y = director.X * MathF.Sin(Rotation) + director.Y * MathF.Cos(Rotation);
+            Vector2 director = new()
+            {
+                X = MathF.Cos(Rotation + MathF.PI / 2),
+                Y = MathF.Sin(Rotation + MathF.PI / 2)
+            };
 
             return director;
         }
@@ -94,24 +94,49 @@ namespace AntEngine.Maths
             List<Vector2> verts = new();
             
             Vector2[] rotationCoefficients = {new(1, 1), new(-1, 1), new(-1, -1), new(1, -1)};
-            float rotation = Rotation;
-            Vector2 v = new(Position.X, Position.Y);
 
             // Calculating each vertex
             for (int index = 0; index < rotationCoefficients.Length; index++)
             {
                 Vector2 vertex = new()
                 {
-                    X = v.X + Scale.X / 2 * rotationCoefficients[index].X * MathF.Cos(rotation) -
-                        rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Sin(rotation),
-                    Y = v.Y + Scale.X / 2 * rotationCoefficients[index].X * MathF.Sin(rotation) +
-                        rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Cos(rotation)
+                    X = Position.X + Scale.X / 2 * rotationCoefficients[index].X * MathF.Cos(Rotation) -
+                        rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Sin(Rotation),
+                    Y = Position.Y + Scale.X / 2 * rotationCoefficients[index].X * MathF.Sin(Rotation) +
+                        rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Cos(Rotation)
                 };
 
                 verts.Add(vertex);
             }
 
             return verts;
+        }
+
+        /// <summary>
+        /// Gets the distance between two transforms (this and a).
+        /// </summary>
+        /// <param name="a">Other transform</param>
+        /// <returns>Distance between the centers of both transforms.</returns>
+        public float GetDistance(Transform a)
+        {
+            return Vector2.Distance(Position, a.Position);
+        }
+
+        /// <summary>
+        /// Converts a vector to this transform's reference frame.
+        /// </summary>
+        /// <param name="local">Vector to be transformed from its local frame to this reference frame.</param>
+        /// <returns>New vector converted to this reference frame.</returns>
+        public Vector2 ConvertToReferenceFrame(Vector2 local)
+        {
+            Vector2 scaled = new(local.X * Scale.X, local.Y * Scale.Y);
+            
+            Vector2 rotated = new(scaled.X * MathF.Cos(Rotation) - scaled.Y * MathF.Sin(Rotation),
+                scaled.X * MathF.Sin(Rotation) + scaled.Y * MathF.Cos(Rotation));
+
+            Vector2 translated = new(rotated.X + Position.X, rotated.Y + Position.Y);
+
+            return translated;
         }
     }
 }

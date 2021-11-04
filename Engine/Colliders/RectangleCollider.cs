@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using AntEngine.Maths;
+using AntEngine.Utils.Maths;
 
 namespace AntEngine.Colliders
 {
@@ -46,9 +46,13 @@ namespace AntEngine.Colliders
 
             List<Vector2> axes = new() {direct1, direct2, normal1, normal2};
 
+            //TODO : Remove duplicate axes.
+            
             // Gets the rectangles' vertices list.
-            List<Vector2> vertices1 = ColliderTransform.GetRectangleVertices().Zip(ParentTransform.GetRectangleVertices(), (v1, v2) => v1 + v2).ToList();
-            List<Vector2> vertices2 = rectCollider.ColliderTransform.GetRectangleVertices().Zip(rectCollider.ParentTransform.GetRectangleVertices(), (v1, v2) => v1 + v2).ToList();
+            List<Vector2> vertices1 = ColliderTransform.GetRectangleVertices()
+                .Select(v => ParentTransform.ConvertToReferenceFrame(v)).ToList();
+            List<Vector2> vertices2 = rectCollider.ColliderTransform.GetRectangleVertices()
+                .Select(v => rectCollider.ParentTransform.ConvertToReferenceFrame(v)).ToList();
 
             // Check that the vertex list has been correctly created
             if (vertices1?.Count == 0 || vertices2?.Count == 0)
@@ -100,8 +104,8 @@ namespace AntEngine.Colliders
                 for (int y = MinIndex.y; y < MaxIndex.y; y++)
                 {
                     (int x, int y) rotatedPixels = (
-                        (int)((x - origin.x) * MathF.Cos(ColliderTransform.Rotation) - (y - origin.y) * MathF.Sin(ColliderTransform.Rotation)), 
-                        (int)((x - origin.x) * MathF.Sin(ColliderTransform.Rotation) + (y - origin.y) * MathF.Cos(ColliderTransform.Rotation)));
+                        (int) ((x - origin.x) * MathF.Cos(ColliderTransform.Rotation) - (y - origin.y) * MathF.Sin(ColliderTransform.Rotation)), 
+                        (int) ((x - origin.x) * MathF.Sin(ColliderTransform.Rotation) + (y - origin.y) * MathF.Cos(ColliderTransform.Rotation)));
 
                     if (worldCollider.IsOutOfBounds(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
                     if (worldCollider.GetPixel(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;

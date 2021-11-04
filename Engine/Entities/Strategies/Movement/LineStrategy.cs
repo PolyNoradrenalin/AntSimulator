@@ -1,5 +1,5 @@
 using System.Numerics;
-using AntEngine.Maths;
+using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities.Strategies.Movement
 {
