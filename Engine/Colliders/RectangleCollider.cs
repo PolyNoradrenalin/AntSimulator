@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Numerics;
 using AntEngine.Utils.Maths;
 
@@ -17,10 +18,61 @@ namespace AntEngine.Colliders
         {
         }
 
+        /// <summary>
+        /// Checks if this collider is in collision with a circleCollider using separating axis theorem.
+        /// </summary>
+        /// <param name="circleCollider">Circle collider to check collision with this collider.</param>
+        /// <returns>True if the colliders are in collision and false if not.</returns>
         public override bool checkCollision(CircleCollider circleCollider)
         {
-            //TODO : Implement
-            throw new System.NotImplementedException();
+            List<Vector2> vertices = ColliderTransform.GetRectangleVertices()
+                .Select(v => ParentTransform.ConvertToReferenceFrame(v)).ToList();
+
+            Vector2 circlePos = circleCollider.ColliderTransform.Position + circleCollider.ParentTransform.Position;
+            
+            // First we want to compute the closest point on the circle to a vertex of the rectangle
+            
+            float minDist = float.MaxValue;
+            Vector2 closestDelta = new();
+            Vector2 circleAxis = new();
+
+            foreach (Vector2 vert in vertices)
+            {
+                Vector2 delta = new(vert.X - circlePos.X, vert.Y - circlePos.Y);
+
+                float distance = MathF.Pow(delta.X, 2) + MathF.Pow(delta.Y, 2);
+                
+                if (!(distance < minDist)) continue;
+                minDist = distance;
+                closestDelta = delta;
+            }
+
+            // We normalize the axis found to simplify the following calculations.
+            circleAxis = Vector2.Normalize(closestDelta);
+            Vector2 directorVector = ColliderTransform.GetDirectorVector();
+            Vector2 normalVector = new(-directorVector.Y, directorVector.X);
+
+            List<Vector2> axes = new() {directorVector, normalVector, circleAxis};
+
+            // Iterate through the axis, projecting each time all the rectangle's vertices and the circle's center +/- its width
+            foreach (Vector2 axis in axes)
+            {
+                (float rectProjMin, float rectProjMax) = ProjectVertsOnAxis(axis, vertices);
+                
+                float temp = Vector2.Dot(axis, circlePos);
+                (float circleProjMin, float circleProjMax) =
+                    (temp - circleCollider.Radius, temp + circleCollider.Radius);
+                
+                // Check if the projected vertices overlap.
+                // If they do then according to Separating Axis Theorem, the rectangles cannot be in collision.
+                if (rectProjMin - circleProjMax > 0 || circleProjMin - rectProjMax > 0)
+                {
+                    return false;
+                }
+            }
+
+            // If all vertices have been checked, then the two colliders are in collision
+            return true;
         }
 
         /// <summary>
