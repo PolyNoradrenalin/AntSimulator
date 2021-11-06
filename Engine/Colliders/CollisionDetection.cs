@@ -6,7 +6,7 @@ using AntEngine.Utils.Maths;
 
 namespace AntEngine.Colliders
 {
-    public class CollisionDetection
+    public static class CollisionDetection
     {
         /// <summary>
         /// Checks if two CircleColliders collide.

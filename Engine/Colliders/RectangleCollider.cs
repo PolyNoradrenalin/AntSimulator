@@ -38,20 +38,5 @@ namespace AntEngine.Colliders
         {
             return CollisionDetection.RectangleAndWorld(this, worldCollider);
         }
-
-        private Vector2 GetScale()
-        {
-            return ParentTransform.Scale + ColliderTransform.Scale;
-        }
-
-        private Vector2 GetPosition()
-        {
-            return ParentTransform.Position + ColliderTransform.Position;
-        }
-
-        private float GetRotation()
-        {
-            return ParentTransform.Rotation + ColliderTransform.Rotation;
-        }
     }
 }
