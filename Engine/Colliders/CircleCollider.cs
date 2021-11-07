@@ -19,17 +19,17 @@ namespace AntEngine.Colliders
         /// </summary>
         public float Radius => MathF.Max(ColliderTransform.Scale.X, ColliderTransform.Scale.Y);
 
-        public override bool checkCollision(CircleCollider circleCollider)
+        public override bool CheckCollision(CircleCollider circleCollider)
         {
             return CollisionDetection.CircleAndCircle(this, circleCollider);
         }
 
-        public override bool checkCollision(RectangleCollider rectCollider)
+        public override bool CheckCollision(RectangleCollider rectCollider)
         {
             return CollisionDetection.CircleAndRectangle(this, rectCollider);
         }
 
-        public override bool checkCollision(WorldCollider worldCollider)
+        public override bool CheckCollision(WorldCollider worldCollider)
         {
             return CollisionDetection.CircleAndWorld(this, worldCollider);
         }

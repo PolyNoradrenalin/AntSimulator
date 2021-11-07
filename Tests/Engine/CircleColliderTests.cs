@@ -23,7 +23,7 @@ namespace Tests.Engine
             CircleCollider circle = new CircleCollider(new Transform(new Vector2(posX, posY), 0, Vector2.One * radius),
                 new Transform());
             
-            Assert.False(circle.checkCollision(WorldCollider));
+            Assert.False(circle.CheckCollision(WorldCollider));
         }
         
         [Theory]
@@ -37,7 +37,7 @@ namespace Tests.Engine
             CircleCollider circle = new(new Transform(new Vector2(posX, posY), 0, Vector2.One * radius),
                 new Transform());
             
-            Assert.True(circle.checkCollision(WorldCollider));
+            Assert.True(circle.CheckCollision(WorldCollider));
         }
         
         [Theory]
@@ -53,7 +53,7 @@ namespace Tests.Engine
          
             WorldCollider.SetPixel(500, 500, true);
             
-            Assert.False(circle.checkCollision(WorldCollider));
+            Assert.False(circle.CheckCollision(WorldCollider));
         }
         
         [Theory]
@@ -67,7 +67,7 @@ namespace Tests.Engine
          
             WorldCollider.SetPixel(500, 500, true);
             
-            Assert.True(circle.checkCollision(WorldCollider));
+            Assert.True(circle.CheckCollision(WorldCollider));
         }
     }
 }

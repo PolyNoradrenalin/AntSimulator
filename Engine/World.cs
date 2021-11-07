@@ -78,7 +78,7 @@ namespace AntEngine
         public IList<Collider> CircleCast(Vector2 position, float radius)
         {
             CircleCollider cast = new(new Transform(position, 0, Vector2.One * radius), new Transform());
-            return _colliders.Where(collider => collider.checkCollision(cast)).ToList();
+            return _colliders.Where(collider => collider.CheckCollision(cast)).ToList();
         }
     }
 }

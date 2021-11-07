@@ -89,17 +89,17 @@ namespace AntEngine.Colliders
                 (int)(position.Y / Size.Y * Subdivision));
         }
         
-        public override bool checkCollision(CircleCollider circleCollider)
+        public override bool CheckCollision(CircleCollider circleCollider)
         {
             return CollisionDetection.CircleAndWorld(circleCollider, this);
         }
 
-        public override bool checkCollision(RectangleCollider rectCollider)
+        public override bool CheckCollision(RectangleCollider rectCollider)
         {
             return CollisionDetection.RectangleAndWorld(rectCollider, this);
         }
 
-        public override bool checkCollision(WorldCollider worldCollider)
+        public override bool CheckCollision(WorldCollider worldCollider)
         {
             return CollisionDetection.WorldAndWorld(this, worldCollider);
         }

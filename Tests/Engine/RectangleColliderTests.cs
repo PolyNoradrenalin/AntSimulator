@@ -26,7 +26,7 @@ namespace Tests.Engine
             col1.ParentTransform.Position = new Vector2(-100, 0);
             col2.ParentTransform.Position = new Vector2(100, 0);
 
-            Assert.False(col1.checkCollision(col2));
+            Assert.False(col1.CheckCollision(col2));
         }
         
         [Fact]
@@ -40,7 +40,7 @@ namespace Tests.Engine
             
             col2.ParentTransform.Position = new Vector2(100, 0);
 
-            Assert.False(col1.checkCollision(col2));
+            Assert.False(col1.CheckCollision(col2));
         }       
         
         [Fact]
@@ -54,7 +54,7 @@ namespace Tests.Engine
             
             col2.ParentTransform.Position = new Vector2(100, 0);
 
-            Assert.False(col1.checkCollision(col2));
+            Assert.False(col1.CheckCollision(col2));
         }
         
         [Fact]
@@ -68,7 +68,7 @@ namespace Tests.Engine
             
             col2.ParentTransform.Position = new Vector2(1, 0);
             
-            Assert.True(col1.checkCollision(col2));
+            Assert.True(col1.CheckCollision(col2));
         }
         
         [Fact]
@@ -80,10 +80,10 @@ namespace Tests.Engine
             col1.ParentTransform.Position = new Vector2(-1, 0);
             col2.ParentTransform.Position = new Vector2(-1, -2);
             col1.ParentTransform.Scale = new Vector2(10, 1);
-            Assert.False(col1.checkCollision(col2));
+            Assert.False(col1.CheckCollision(col2));
             
             col1.ParentTransform.Rotation = MathF.PI * 0.5f;
-            Assert.True(col1.checkCollision(col2));
+            Assert.True(col1.CheckCollision(col2));
             
         }
         
@@ -100,7 +100,7 @@ namespace Tests.Engine
             col2.ParentTransform.Position = new Vector2(1, 0);
 
 
-            Assert.True(col1.checkCollision(col2));
+            Assert.True(col1.CheckCollision(col2));
         }
 
         [Theory]
@@ -112,7 +112,7 @@ namespace Tests.Engine
             col1.ColliderTransform.Position = new Vector2(500, 500);
             col1.ColliderTransform.Scale = new Vector2(width, height);
 
-            Assert.False(col1.checkCollision(worldCollider));
+            Assert.False(col1.CheckCollision(worldCollider));
         }
         
         [Theory]
@@ -125,7 +125,7 @@ namespace Tests.Engine
             col1.ColliderTransform.Scale = new Vector2(width, height);
             col1.ColliderTransform.Rotation = MathF.PI / 2f;
             
-            Assert.False(col1.checkCollision(worldCollider));
+            Assert.False(col1.CheckCollision(worldCollider));
         }
         
         [Theory]
@@ -136,11 +136,11 @@ namespace Tests.Engine
             col1.ColliderTransform.Position = new Vector2(500, 500);
             col1.ColliderTransform.Scale = new Vector2(width, height);
             
-            Assert.False(col1.checkCollision(worldCollider));
+            Assert.False(col1.CheckCollision(worldCollider));
             
             col1.ColliderTransform.Rotation = angle;
             
-            Assert.True(col1.checkCollision(worldCollider));
+            Assert.True(col1.CheckCollision(worldCollider));
         }
         
         [Theory]
@@ -155,7 +155,7 @@ namespace Tests.Engine
             col1.ColliderTransform.Position = new Vector2(500, 500);
             col1.ColliderTransform.Scale = new Vector2(width, height);
             
-            Assert.True(col1.checkCollision(worldCollider));
+            Assert.True(col1.CheckCollision(worldCollider));
         }
         
         [Theory]
@@ -169,11 +169,11 @@ namespace Tests.Engine
             col1.ColliderTransform.Position = new Vector2(500, 500);
             col1.ColliderTransform.Scale = new Vector2(width, height);
             
-            Assert.False(col1.checkCollision(worldCollider));
+            Assert.False(col1.CheckCollision(worldCollider));
             
             col1.ColliderTransform.Rotation = angle;
             
-            Assert.True(col1.checkCollision(worldCollider));
+            Assert.True(col1.CheckCollision(worldCollider));
         }
 
         [Fact]
@@ -186,7 +186,7 @@ namespace Tests.Engine
             CircleCollider circ = new(new Transform(), new Transform());
             circ.ColliderTransform.Scale = 10 * Vector2.One; 
 
-            Assert.True(rect.checkCollision(circ));
+            Assert.True(rect.CheckCollision(circ));
         }
         
         [Fact]
@@ -200,7 +200,7 @@ namespace Tests.Engine
             CircleCollider circ = new(new Transform(), new Transform());
             circ.ColliderTransform.Scale = 10 * Vector2.One; 
 
-            Assert.True(rect.checkCollision(circ));
+            Assert.True(rect.CheckCollision(circ));
         }
         
         [Fact]
@@ -214,11 +214,11 @@ namespace Tests.Engine
             CircleCollider circ = new(new Transform(), new Transform());
             circ.ColliderTransform.Scale = 10 * Vector2.One; 
 
-            Assert.False(rect.checkCollision(circ));
+            Assert.False(rect.CheckCollision(circ));
 
             rect.ParentTransform.Rotation = -MathF.PI / 4;
             
-            Assert.True(rect.checkCollision(circ));
+            Assert.True(rect.CheckCollision(circ));
         }
         
         [Fact]
@@ -232,7 +232,7 @@ namespace Tests.Engine
             CircleCollider circ = new(new Transform(), new Transform());
             circ.ColliderTransform.Scale = 10 * Vector2.One;
 
-            Assert.True(rect.checkCollision(circ));
+            Assert.True(rect.CheckCollision(circ));
         }
         
         [Fact]
@@ -247,11 +247,11 @@ namespace Tests.Engine
             circ.ColliderTransform.Scale = Vector2.One;
             circ.ColliderTransform.Position = new(-10.5f, 2.5f);
 
-            Assert.True(rect.checkCollision(circ));
+            Assert.True(rect.CheckCollision(circ));
 
             rect.ParentTransform.Rotation = MathF.PI / 4;
             
-            Assert.False(rect.checkCollision(circ));
+            Assert.False(rect.CheckCollision(circ));
         }
     }
 }

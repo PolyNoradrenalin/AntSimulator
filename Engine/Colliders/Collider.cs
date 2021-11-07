@@ -45,20 +45,20 @@ namespace AntEngine.Colliders
         /// </summary>
         /// <param name="circleCollider"></param>
         /// <returns></returns>
-        public abstract bool checkCollision(CircleCollider circleCollider);
+        public abstract bool CheckCollision(CircleCollider circleCollider);
 
         /// <summary>
         /// Checks for a collision between this and a rectangleCollider.
         /// </summary>
         /// <param name="rectCollider"></param>
         /// <returns></returns>
-        public abstract bool checkCollision(RectangleCollider rectCollider);
+        public abstract bool CheckCollision(RectangleCollider rectCollider);
 
         /// <summary>
         /// Checks for a collision between this and a worldCollider.
         /// </summary>
         /// <param name="worldCollider"></param>
         /// <returns></returns>
-        public abstract bool checkCollision(WorldCollider worldCollider);
+        public abstract bool CheckCollision(WorldCollider worldCollider);
     }
 }
