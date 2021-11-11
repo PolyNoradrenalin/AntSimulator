@@ -44,8 +44,6 @@ namespace App
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             
             EntityRenderer.entityCharset = Content.Load<Texture2D>("Entities/EntityDefault");
-
-            // TODO: use this.Content to load your game content here
         }
 
         protected override void Update(GameTime gameTime)
@@ -54,7 +52,7 @@ namespace App
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            world.Update();
 
             base.Update(gameTime);
         }
