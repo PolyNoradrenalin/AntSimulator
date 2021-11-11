@@ -34,7 +34,7 @@ namespace App
             
             renderers.Add(mainSimFrame);
             
-            mainSimFrame.AddRenderer(new EntityRenderer(new Ant("DefaultEntity", new Transform(new Vector2(50, 50), 0, new Vector2(100, 100)), world)));
+            mainSimFrame.AddRenderer(new EntityRenderer(new Ant("Entities/DefaultEntity", new Transform(new Vector2(50, 50), 0, new Vector2(100, 100)), world)));
 
             base.Initialize();
         }
