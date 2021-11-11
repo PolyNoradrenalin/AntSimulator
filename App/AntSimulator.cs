@@ -43,7 +43,7 @@ namespace App
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             
-            EntityRenderer.entityCharset = Content.Load<Texture2D>("EntityDefault");
+            EntityRenderer.entityCharset = Content.Load<Texture2D>("Entities/EntityDefault");
 
             // TODO: use this.Content to load your game content here
         }
