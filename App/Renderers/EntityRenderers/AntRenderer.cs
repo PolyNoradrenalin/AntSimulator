@@ -10,7 +10,7 @@ namespace App.Renderers
     /// </summary>
     public class AntRenderer : EntityRenderer
     {
-        public new static Texture2D entityCharset; 
+        public new static Texture2D entityCharset;
         
         public AntRenderer(Ant e) : base(e)
         {
@@ -18,7 +18,10 @@ namespace App.Renderers
 
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm)
         {
-            base.Render(spriteBatch, gdm);
+            Rectangle spritePos = new Rectangle((int) entity.Transform.Position.X, (int) entity.Transform.Position.Y,
+                (int) entity.Transform.Scale.X, (int) entity.Transform.Scale.Y);
+            
+            spriteBatch.Draw(entityCharset, spritePos, Color.White);
         }
     }
 }

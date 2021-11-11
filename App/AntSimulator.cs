@@ -34,7 +34,8 @@ namespace App
             
             renderers.Add(mainSimFrame);
             
-            mainSimFrame.AddRenderer(new EntityRenderer(new Ant("Entities/DefaultEntity", new Transform(new Vector2(50, 50), 0, new Vector2(20, 20)), world)));
+            mainSimFrame.AddRenderer(new EntityRenderer(new Ant("EntityTest", new Transform(new Vector2(50, 50), 0, new Vector2(30, 30)), world)));
+            mainSimFrame.AddRenderer(new AntRenderer(new Ant("AntTest", new Transform(new Vector2(150, 150), 0, new Vector2(20, 20)), world)));
 
             base.Initialize();
         }
@@ -43,8 +44,8 @@ namespace App
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             
-            EntityRenderer.entityCharset = Content.Load<Texture2D>("Entities/EntityDefault");
-            AntRenderer.entityCharset = Content.Load<Texture2D>("Entities/EntityDefault");
+            EntityRenderer.entityCharset = Content.Load<Texture2D>("Entities/Entity");
+            AntRenderer.entityCharset = Content.Load<Texture2D>("Entities/Ant");
         }
 
         protected override void Update(GameTime gameTime)
