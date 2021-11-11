@@ -23,5 +23,15 @@ namespace App.Renderers
                 r.Render(spriteBatch, gdm);
             }
         }
+
+        public void AddRenderer(IRenderer r)
+        {
+            renderers.Add(r);
+        }
+        
+        public void RemoveRenderer(IRenderer r)
+        {
+            renderers.Remove(r);
+        }
     }
 }
