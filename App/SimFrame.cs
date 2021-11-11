@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace App.Renderers
 {
+    /// <summary>
+    /// Represents the frame in which a simulation will occur.
+    /// </summary>
     public class SimFrame : IRenderer
     {
         private List<IRenderer> renderers;
