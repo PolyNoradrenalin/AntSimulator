@@ -10,13 +10,15 @@ namespace App.Renderers
     /// </summary>
     public class AntRenderer : EntityRenderer
     {
+        public new static Texture2D entityCharset; 
+        
         public AntRenderer(Ant e) : base(e)
         {
         }
 
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm)
         {
-            // TODO: Implement
+            base.Render(spriteBatch, gdm);
         }
     }
 }
