@@ -1,4 +1,8 @@
-﻿using AntEngine;
+﻿using System.Collections.Generic;
+using AntEngine;
+using AntEngine.Entities.Ants;
+using AntEngine.Utils.Maths;
+using App.Renderers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -13,6 +17,7 @@ namespace App
         private SpriteBatch _spriteBatch;
 
         private World world;
+        private List<IRenderer> renderers;
         
         public AntSimulator()
         {
@@ -20,11 +25,16 @@ namespace App
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             world = new World(Vector2.One * 500);
+            renderers = new List<IRenderer>();
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            SimFrame mainSimFrame = new SimFrame();
+            
+            renderers.Add(mainSimFrame);
+            
+            mainSimFrame.AddRenderer(new EntityRenderer(new Ant("DefaultEntity", new Transform(new Vector2(50, 50), 0, new Vector2(100, 100)), world)));
 
             base.Initialize();
         }
@@ -32,6 +42,8 @@ namespace App
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            
+            EntityRenderer.entityCharset = Content.Load<Texture2D>("EntityDefault");
 
             // TODO: use this.Content to load your game content here
         }
@@ -51,9 +63,16 @@ namespace App
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            _spriteBatch.Begin();
+            
+            foreach (IRenderer r in renderers)
+            {
+                r.Render(_spriteBatch, _graphics);
+            }
 
             base.Draw(gameTime);
+            
+            _spriteBatch.End();
         }
     }
 }
