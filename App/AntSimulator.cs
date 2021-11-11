@@ -1,20 +1,25 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AntEngine;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Vector2 = System.Numerics.Vector2;
 
 
 namespace App
 {
-    public class Game1 : Game
+    public class AntSimulator : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        public Game1()
+        private World world;
+        
+        public AntSimulator()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            world = new World(Vector2.One * 500);
         }
 
         protected override void Initialize()
