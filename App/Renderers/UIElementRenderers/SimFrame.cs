@@ -7,7 +7,7 @@ namespace App.Renderers
     /// <summary>
     /// Represents the frame in which a simulation will occur.
     /// </summary>
-    public class SimFrame : IRenderer
+    public class SimFrame : UIElement
     {
         private List<IRenderer> renderers;
 
@@ -16,7 +16,7 @@ namespace App.Renderers
             renderers = new List<IRenderer>();
         }
         
-        public void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm)
+        public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm)
         {
             foreach (IRenderer r in renderers)
             {
