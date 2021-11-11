@@ -89,30 +89,19 @@ namespace AntEngine.Colliders
                 (int)(position.Y / Size.Y * Subdivision));
         }
         
-        public override bool checkCollision(CircleCollider circleCollider)
+        public override bool CheckCollision(CircleCollider circleCollider)
         {
-            return circleCollider.checkCollision(this);
+            return CollisionDetection.CircleAndWorld(circleCollider, this);
         }
 
-        public override bool checkCollision(RectangleCollider rectCollider)
+        public override bool CheckCollision(RectangleCollider rectCollider)
         {
-            //TODO : Implement
-            throw new System.NotImplementedException();
+            return CollisionDetection.RectangleAndWorld(rectCollider, this);
         }
 
-        public override bool checkCollision(WorldCollider worldCollider)
+        public override bool CheckCollision(WorldCollider worldCollider)
         {
-            int minDiv = Math.Min(Subdivision, worldCollider.Subdivision);
-            
-            for (int y = 0; y < minDiv; y++)
-            {
-                for (int x = 0; x < minDiv; x++)
-                {
-                    if (GetPixel(x, y) && worldCollider.GetPixel(x, y)) return true;
-                }
-            }
-
-            return false;
+            return CollisionDetection.WorldAndWorld(this, worldCollider);
         }
     }
 }

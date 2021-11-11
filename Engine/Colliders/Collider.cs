@@ -1,4 +1,5 @@
-﻿using AntEngine.Utils.Maths;
+﻿using System.Numerics;
+using AntEngine.Utils.Maths;
 
 namespace AntEngine.Colliders
 {
@@ -25,24 +26,39 @@ namespace AntEngine.Colliders
         public Transform ParentTransform { get; private set; }
 
         /// <summary>
+        /// Returns the position of the collider in the reference frame of its parent.
+        /// </summary>
+        public Vector2 Position => ParentTransform.ConvertToReferenceFrame(ColliderTransform.Position);
+
+        /// <summary>
+        /// Returns the total rotation applied on the collider (parent and local).
+        /// </summary>
+        public float Rotation => ParentTransform.Rotation + ColliderTransform.Rotation;
+
+        /// <summary>
+        /// Returns the total scale of the collider.
+        /// </summary>
+        public Vector2 Scale => ParentTransform.Scale * ColliderTransform.Scale;
+        
+        /// <summary>
         /// Checks for a collision between this and a circleCollider.
         /// </summary>
         /// <param name="circleCollider"></param>
         /// <returns></returns>
-        public abstract bool checkCollision(CircleCollider circleCollider);
+        public abstract bool CheckCollision(CircleCollider circleCollider);
 
         /// <summary>
         /// Checks for a collision between this and a rectangleCollider.
         /// </summary>
         /// <param name="rectCollider"></param>
         /// <returns></returns>
-        public abstract bool checkCollision(RectangleCollider rectCollider);
+        public abstract bool CheckCollision(RectangleCollider rectCollider);
 
         /// <summary>
         /// Checks for a collision between this and a worldCollider.
         /// </summary>
         /// <param name="worldCollider"></param>
         /// <returns></returns>
-        public abstract bool checkCollision(WorldCollider worldCollider);
+        public abstract bool CheckCollision(WorldCollider worldCollider);
     }
 }
