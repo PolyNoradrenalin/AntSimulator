@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Color = Microsoft.Xna.Framework.Color;
 
-namespace App.Renderers
+namespace App.Renderers.EntityRenderers
 {
     /// <summary>
     /// Represents the renderer for an abstract Entity class.

@@ -3,6 +3,8 @@ using AntEngine;
 using AntEngine.Entities.Ants;
 using AntEngine.Utils.Maths;
 using App.Renderers;
+using App.Renderers.EntityRenderers;
+using App.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

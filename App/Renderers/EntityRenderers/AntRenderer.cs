@@ -1,9 +1,8 @@
-﻿using AntEngine.Entities;
-using AntEngine.Entities.Ants;
+﻿using AntEngine.Entities.Ants;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace App.Renderers
+namespace App.Renderers.EntityRenderers
 {
     /// <summary>
     /// Renderer for an Ant Entity.

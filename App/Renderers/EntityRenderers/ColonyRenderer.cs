@@ -1,9 +1,8 @@
-﻿using AntEngine.Entities;
-using AntEngine.Entities.Colonies;
+﻿using AntEngine.Entities.Colonies;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace App.Renderers
+namespace App.Renderers.EntityRenderers
 {
     /// <summary>
     /// Renderer for a Colony Entity.

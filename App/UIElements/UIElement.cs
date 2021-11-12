@@ -1,7 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using App.Renderers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace App.Renderers
+namespace App.UIElements
 {
     /// <summary>
     /// Represents a UIElement that can be rendered.

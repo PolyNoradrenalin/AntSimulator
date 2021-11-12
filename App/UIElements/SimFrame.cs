@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using App.Renderers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace App.Renderers
+namespace App.UIElements
 {
     /// <summary>
     /// Represents the frame in which a simulation will occur.

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace App.Renderers
+namespace App.UIElements
 {
     /// <summary>
     /// Represents a renderable and clickable button.
