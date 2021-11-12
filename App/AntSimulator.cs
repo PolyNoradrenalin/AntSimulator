@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AntEngine;
 using AntEngine.Entities.Ants;
+using AntEngine.Entities.Colonies;
 using AntEngine.Utils.Maths;
 using App.Renderers;
 using App.Renderers.EntityRenderers;
@@ -35,9 +36,12 @@ namespace App
             SimFrame mainSimFrame = new SimFrame();
             
             renderers.Add(mainSimFrame);
-            
-            mainSimFrame.AddRenderer(new EntityRenderer(new Ant("EntityTest", new Transform(new Vector2(50, 50), 0, new Vector2(30, 30)), world)));
-            mainSimFrame.AddRenderer(new AntRenderer(new Ant("AntTest", new Transform(new Vector2(150, 150), 0, new Vector2(20, 20)), world)));
+            mainSimFrame.AddRenderer(new EntityRenderer(new Ant("EntityTest",
+                new Transform(new Vector2(50, 50), 0, new Vector2(30, 30)), world)));
+            mainSimFrame.AddRenderer(new AntRenderer(new Ant("AntTest",
+                new Transform(new Vector2(150, 150), 0, new Vector2(20, 20)), world)));
+            mainSimFrame.AddRenderer(new ColonyRenderer(new Colony("ColonyTest",
+                new Transform(new Vector2(300, 170), 0, new Vector2(64, 64)), world, (s, t , w, c) => new Ant(world))));
 
             base.Initialize();
         }
@@ -48,6 +52,7 @@ namespace App
             
             EntityRenderer.entityCharset = Content.Load<Texture2D>("Entities/Entity");
             AntRenderer.entityCharset = Content.Load<Texture2D>("Entities/Ant");
+            ColonyRenderer.entityCharset = Content.Load<Texture2D>("Entities/Colony");
         }
 
         protected override void Update(GameTime gameTime)
