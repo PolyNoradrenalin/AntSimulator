@@ -28,11 +28,15 @@ namespace AntEngine.Entities.Ants
         {
         }
 
+        //TODO: Some attributes/properties are not initialised with the constructor. Example : MovementStrategy.
+        
         public Ant(string name, Transform transform, World world, IState initialState) : base(name, transform, world,
             initialState)
         {
             
         }
+        
+        //TODO: Make these movement related properties not belong to only Ants.
 
         /// <summary>
         /// Current speed of the ant.
@@ -47,7 +51,7 @@ namespace AntEngine.Entities.Ants
         /// Maximum speed of the ant.
         /// </summary>
         public float MaxSpeed { get; protected set; }
-
+        
         /// <summary>
         /// Directional velocity of the ant.
         /// </summary>
@@ -111,6 +115,8 @@ namespace AntEngine.Entities.Ants
             return new PerceptionMap(weights);
         }
 
+        //TODO: Could be added to a higher level of entity. The only problem is that it depends on PerceptionDistance so maybe in LivingEntity?
+        
         /// <summary>
         /// Generates a list of the entities that are in this Ant's perceptionDistance. 
         /// </summary>
