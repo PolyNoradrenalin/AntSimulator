@@ -47,6 +47,8 @@ namespace AntEngine.Entities.States.Living
             {
                 Next(stateEntity);
             }
+            
+            ant.EmitHomePheromone();
         }
 
         public void OnStateEnd(StateEntity stateEntity)

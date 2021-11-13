@@ -77,6 +77,8 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public int PerceptionMapPrecision { get; } = 24;
 
+        public TimeSpan PheromoneTimeSpan { get; protected set; } = new TimeSpan((long) 10e7);
+
         /// <summary>
         /// Applies movement to ant's coordinates.
         /// </summary>
@@ -151,6 +153,22 @@ namespace AntEngine.Entities.Ants
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// The Ant emits a home pheromone.
+        /// </summary>
+        public void EmitHomePheromone()
+        {
+            World.AddEntity(new HomePheromone(Name, Transform, World, PheromoneTimeSpan));
+        }
+        
+        /// <summary>
+        /// The Ant emits a food pheromone.
+        /// </summary>
+        public void EmitFoodPheromone()
+        {
+            World.AddEntity(new FoodPheromone(Name, Transform, World, PheromoneTimeSpan));
         }
 
         public Colony Home { get; set; }
