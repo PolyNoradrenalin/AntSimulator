@@ -31,6 +31,7 @@ namespace AntEngine.Entities.Ants
         public Ant(string name, Transform transform, World world, IState initialState) : base(name, transform, world,
             initialState)
         {
+            
         }
 
         /// <summary>
@@ -50,17 +51,17 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// Directional velocity of the ant.
         /// </summary>
-        public Vector2 Velocity { get; protected set; }
+        public Vector2 Velocity { get; protected set; } = Vector2.Zero;
 
         /// <summary>
         /// The ant's current movement strategy.
         /// </summary>
-        public IMovementStrategy MovementStrategy { get; protected set; }
+        public IMovementStrategy MovementStrategy { get; protected set; } = new LineStrategy();
 
         /// <summary>
         /// Represents the ant's inventory.
         /// </summary>
-        public ResourceInventory ResourceInventory { get; protected set; }
+        public ResourceInventory ResourceInventory { get; protected set; } = new ResourceInventory();
 
         /// <summary>
         /// The distance in which the ant can perceive another entity.
