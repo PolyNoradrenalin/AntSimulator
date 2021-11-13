@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AntEngine;
 using App.Renderers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -33,11 +34,6 @@ namespace App.UIElements
         public void RemoveRenderer(IRenderer r)
         {
             renderers.Remove(r);
-        }
-
-        public IRenderer GetRenderer(int i)
-        {
-            return renderers[i];
         }
     }
 }
