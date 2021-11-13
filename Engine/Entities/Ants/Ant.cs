@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Numerics;
+using AntEngine.Colliders;
 using AntEngine.Entities.Colonies;
 using AntEngine.Entities.Pheromones;
 using AntEngine.Entities.States;
@@ -88,11 +90,10 @@ namespace AntEngine.Entities.Ants
         {
             List<float> weights = new(new float[PerceptionMapPrecision]);
 
-            foreach (Entity e in World.Entities)
+            List <Entity> entities = GetSurroundingEntities<T>();
+            
+            foreach (Entity e in entities)
             {
-                if (e is not T) continue;
-                if (!(e.Transform.GetDistance(Transform) <= PerceptionDistance)) continue;
-
                 Vector2 antDirection = Transform.GetDirectorVector();
                 Vector2 pheromoneDirection = e.Transform.Position - Transform.Position;
                 
@@ -107,6 +108,42 @@ namespace AntEngine.Entities.Ants
             }
 
             return new PerceptionMap(weights);
+        }
+
+        /// <summary>
+        /// Generates a list of the entities that are in this Ant's perceptionDistance. 
+        /// </summary>
+        /// <returns>List of the entities in the perception range of this Ant</returns>
+        public List<Entity> GetSurroundingEntities<T>() where T : Entity
+        {
+            List<Entity> list = new();
+            
+            foreach (Entity e in World.Entities)
+            {
+                if (e is not T) continue;
+                if (!(e.Transform.GetDistance(Transform) <= PerceptionDistance)) continue;
+                list.Add(e);
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        /// Allows for the Ant to pick up another Entity.
+        /// </summary>
+        /// <param name="e">Entity we want to pick up</param>
+        public bool PickUp(ResourceEntity e)
+        {
+            if (Collider.CheckCollision(e.Collider))
+            {
+                ResourceInventory.AddResource(e.Type, e.Quantity);
+
+                World.RemoveEntity(e);
+
+                return true;
+            }
+
+            return false;
         }
 
         public Colony Home { get; set; }
