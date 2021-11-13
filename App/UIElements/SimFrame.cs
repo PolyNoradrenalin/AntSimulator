@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using AntEngine;
+using AntEngine.Entities;
+using AntEngine.Entities.Ants;
+using AntEngine.Entities.Colonies;
 using App.Renderers;
+using App.Renderers.EntityRenderers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,16 +15,27 @@ namespace App.UIElements
     /// </summary>
     public class SimFrame : UIElement
     {
-        private List<IRenderer> renderers;
+        public static Texture2D EntityTexture;
+        public static Texture2D AntTexture;
+        public static Texture2D ColonyTexture;
+        
+        private List<IRenderer> _renderers;
 
-        public SimFrame()
+        public SimFrame(World world)
         {
-            renderers = new List<IRenderer>();
+            _renderers = new List<IRenderer>();
+            SimWorld = world;
+            world.EntityAdded += OnEntityAdded;
+            world.EntityRemoved += OnEntityRemoved;
+            
+            // TODO: Unsubscribe to allow GC.
         }
+
+        public World SimWorld { get; private set; }
         
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm)
         {
-            foreach (IRenderer r in renderers)
+            foreach (IRenderer r in _renderers)
             {
                 r.Render(spriteBatch, gdm);
             }
@@ -28,12 +43,37 @@ namespace App.UIElements
 
         public void AddRenderer(IRenderer r)
         {
-            renderers.Add(r);
+            _renderers.Add(r);
         }
         
         public void RemoveRenderer(IRenderer r)
         {
-            renderers.Remove(r);
+            _renderers.Remove(r);
+        }
+
+        private void OnEntityAdded(Entity entity)
+        {
+            IRenderer renderer = entity switch
+            {
+                Ant ant => new AntRenderer(ant, AntTexture),
+                Colony colony => new ColonyRenderer(colony, ColonyTexture),
+                _ => new EntityRenderer(entity, EntityTexture)
+            };
+
+            AddRenderer(renderer);
+        }
+        
+        private void OnEntityRemoved(Entity entity)
+        {
+            foreach (IRenderer renderer in _renderers)
+            {
+                if (!(renderer is EntityRenderer entityRenderer)) continue;
+                
+                if (entityRenderer.Entity.Equals(entity))
+                {
+                    RemoveRenderer(renderer);
+                }
+            }
         }
     }
 }
