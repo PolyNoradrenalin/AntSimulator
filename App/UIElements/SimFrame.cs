@@ -34,5 +34,10 @@ namespace App.UIElements
         {
             renderers.Remove(r);
         }
+
+        public IRenderer GetRenderer(int i)
+        {
+            return renderers[i];
+        }
     }
 }

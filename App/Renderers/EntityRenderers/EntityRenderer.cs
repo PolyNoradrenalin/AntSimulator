@@ -10,21 +10,23 @@ namespace App.Renderers.EntityRenderers
     /// </summary>
     public class EntityRenderer : IRenderer
     {
-        public static Texture2D entityCharset; 
-        
         protected readonly Entity entity;
         
-        public EntityRenderer(Entity e)
+        public EntityRenderer(Entity e, Texture2D entityCharset)
         {
             entity = e;
+            EntityCharset = entityCharset;
         }
         
         public virtual void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm)
         {
+            if (EntityCharset == null) return;
             Rectangle spritePos = new Rectangle((int) entity.Transform.Position.X, (int) entity.Transform.Position.Y,
                 (int) entity.Transform.Scale.X, (int) entity.Transform.Scale.Y);
             
-            spriteBatch.Draw(entityCharset, spritePos, Color.White);
+            spriteBatch.Draw(EntityCharset, spritePos, Color.White);
         }
+        
+        public Texture2D EntityCharset { get; set; } 
     }
 }
