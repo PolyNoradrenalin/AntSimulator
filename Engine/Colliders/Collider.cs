@@ -60,5 +60,12 @@ namespace AntEngine.Colliders
         /// <param name="worldCollider"></param>
         /// <returns></returns>
         public abstract bool CheckCollision(WorldCollider worldCollider);
+
+        /// <summary>
+        /// Checks for a collision between this and a collider.
+        /// </summary>
+        /// <param name="collider"></param>
+        /// <returns></returns>
+        public abstract bool CheckCollision(Collider collider);
     }
 }
