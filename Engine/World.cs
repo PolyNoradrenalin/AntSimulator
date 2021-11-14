@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -23,6 +24,15 @@ namespace AntEngine
             _colliders = new List<Collider>();
         }
 
+        /// <summary>
+        /// Called when an entity is spawned in the world.
+        /// </summary>
+        public event Action<Entity> EntityAdded;
+        /// <summary>
+        /// Called when an entity is removed from the world.
+        /// </summary>
+        public event Action<Entity> EntityRemoved;
+        
         /// <summary>
         /// List of the entities present on the map.
         /// </summary>
@@ -57,6 +67,7 @@ namespace AntEngine
             {
                 _entities.Add(entity);
                 _colliders.Add(entity.Collider);
+                EntityAdded?.Invoke(entity);
             }
         }
 
@@ -65,8 +76,12 @@ namespace AntEngine
         /// </summary>
         public void RemoveEntity(Entity entity)
         {
-            _entities.Remove(entity);
-            _colliders.Remove(entity.Collider);
+            bool removed = _entities.Remove(entity);
+            if (removed)
+            {
+                _colliders.Remove(entity.Collider);
+                EntityRemoved?.Invoke(entity);
+            }
         }
 
         /// <summary>

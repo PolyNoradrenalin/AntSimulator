@@ -22,10 +22,6 @@ namespace App
         private World world;
         private List<IRenderer> renderers;
 
-        private Texture2D entityTexture;
-        private Texture2D antTexture;
-        private Texture2D colonyTexture;
-        
         public AntSimulator()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -37,37 +33,25 @@ namespace App
 
         protected override void Initialize()
         {
-            SimFrame mainSimFrame = new SimFrame();
+            base.Initialize();
+            
+            SimFrame mainSimFrame = new SimFrame(world);
             
             renderers.Add(mainSimFrame);
 
             Ant a = new Ant("EntityTest", new Transform(new Vector2(50, 50), 0, new Vector2(30, 30)), world);
-
-            mainSimFrame.AddRenderer(new EntityRenderer(a, entityTexture));
-
             Ant b = new Ant("AntTest", new Transform(new Vector2(150, 150), 0, new Vector2(20, 20)), world);
-
-            mainSimFrame.AddRenderer(new AntRenderer(b, antTexture));
-
             Colony c = new Colony("ColonyTest", new Transform(new Vector2(300, 170), 0, new Vector2(64, 64)), world,
                 (s, t, w, c) => new Ant(world));
-
-            mainSimFrame.AddRenderer(new ColonyRenderer(c, colonyTexture));
-
-            base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             
-            entityTexture = Content.Load<Texture2D>("Entities/Entity");
-            antTexture = Content.Load<Texture2D>("Entities/Ant");
-            colonyTexture = Content.Load<Texture2D>("Entities/Colony");
-
-            ((EntityRenderer) ((SimFrame) renderers[0]).GetRenderer(0)).EntityCharset = entityTexture;
-            ((EntityRenderer) ((SimFrame) renderers[0]).GetRenderer(1)).EntityCharset = antTexture;
-            ((EntityRenderer) ((SimFrame) renderers[0]).GetRenderer(2)).EntityCharset = colonyTexture;
+            SimFrame.EntityTexture = Content.Load<Texture2D>("Entities/Entity");
+            SimFrame.AntTexture = Content.Load<Texture2D>("Entities/Ant");
+            SimFrame.ColonyTexture = Content.Load<Texture2D>("Entities/Colony");
         }
 
         protected override void Update(GameTime gameTime)
