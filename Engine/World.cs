@@ -14,6 +14,8 @@ namespace AntEngine
     /// </summary>
     public class World
     {
+        public const int WorldDivision = 1024;
+        
         private readonly IList<Entity> _entities;
         private readonly IList<Collider> _colliders;
         
@@ -22,6 +24,9 @@ namespace AntEngine
             Entities = new List<Entity>();
             Size = size;
             _colliders = new List<Collider>();
+
+           Collider = new WorldCollider(new Transform(), new Transform(), size, WorldDivision);
+            _colliders.Add(Collider);
         }
 
         /// <summary>
@@ -47,6 +52,11 @@ namespace AntEngine
         /// </summary>
         public Vector2 Size { get; private set; }
 
+        /// <summary>
+        /// Collider of the world (the walls).
+        /// </summary>
+        public WorldCollider Collider { get; private set; }
+        
         /// <summary>
         /// Updates all entities in the world.
         /// </summary>
