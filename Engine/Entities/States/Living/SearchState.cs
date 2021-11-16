@@ -43,9 +43,16 @@ namespace AntEngine.Entities.States.Living
 
             List<Entity> list = ant.GetSurroundingEntities<ResourceEntity>();
 
-            foreach (Entity e in list.Where(e => ant.PickUp((ResourceEntity) e)))
+            foreach (Entity e in list)
             {
-                Next(stateEntity);
+                if (e is ResourceEntity resourceEntity)
+                {
+                    ant.PickUp(resourceEntity);
+
+                    stateEntity.State = Next(stateEntity);
+
+                    break;
+                }
             }
             
             ant.EmitHomePheromone();
