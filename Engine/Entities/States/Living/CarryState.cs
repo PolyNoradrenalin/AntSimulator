@@ -1,4 +1,11 @@
-﻿namespace AntEngine.Entities.States.Living
+﻿using System.Collections.Generic;
+using AntEngine.Entities.Ants;
+using AntEngine.Entities.Colonies;
+using AntEngine.Entities.Pheromones;
+using AntEngine.Resources;
+using AntEngine.Utils.Maths;
+
+namespace AntEngine.Entities.States.Living
 {
     public class CarryState : LivingState
     {
@@ -15,7 +22,32 @@
 
         public override void OnStateUpdate(StateEntity stateEntity)
         {
-            throw new System.NotImplementedException();
+            base.OnStateUpdate(stateEntity);
+            
+            Ant ant = (Ant) stateEntity;
+            PerceptionMap perceptionMap = ant.GetPerceptionMap<FoodPheromone>();
+
+            ant.Move(ant.MovementStrategy.Move(perceptionMap));
+
+            List<Entity> list = ant.GetSurroundingEntities<ResourceEntity>();
+
+            foreach (Entity e in list)
+            {
+                if (e is Colony colony)
+                {
+                    foreach ((Resource resource, int cost) in ant.ResourceInventory.All)
+                    {
+                        colony.Stockpile.AddResource(resource, cost);
+                        ant.ResourceInventory.RemoveResource(resource, cost);
+                    }
+                    
+                    stateEntity.State = Next(stateEntity);
+
+                    break;
+                }
+            }
+            
+            ant.EmitFoodPheromone();
         }
 
         public new IState Next(StateEntity stateEntity)
