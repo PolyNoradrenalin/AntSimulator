@@ -1,6 +1,6 @@
 ﻿namespace AntEngine.Entities.States.Living
 {
-    public class CarryState : IState
+    public class CarryState : LivingState
     {
         private static CarryState _instance;
 
@@ -12,25 +12,15 @@
                 return _instance;
             }
         }
-        
-        public void OnStateStart(StateEntity stateEntity)
+
+        public override void OnStateUpdate(StateEntity stateEntity)
         {
             throw new System.NotImplementedException();
         }
 
-        public void OnStateUpdate(StateEntity stateEntity)
+        public new IState Next(StateEntity stateEntity)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnStateEnd(StateEntity stateEntity)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IState Next(StateEntity stateEntity)
-        {
-            throw new System.NotImplementedException();
+            return SearchState.Instance;
         }
     }
 }
