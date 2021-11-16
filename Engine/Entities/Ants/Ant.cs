@@ -70,14 +70,14 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// The distance in which the ant can perceive another entity.
         /// </summary>
-        public float PerceptionDistance { get; protected set; } = 5;
+        public float PerceptionDistance { get; protected set; } = 5F;
 
         /// <summary>
         /// Precision that will determine the size of the weights list.
         /// </summary>
         public int PerceptionMapPrecision { get; } = 24;
 
-        public TimeSpan PheromoneTimeSpan { get; protected set; } = new TimeSpan((long) 10e7);
+        public TimeSpan PheromoneTimeSpan { get; protected set; } = TimeSpan.FromSeconds(10);
 
         /// <summary>
         /// Applies movement to ant's coordinates.
