@@ -49,7 +49,7 @@ namespace AntEngine.Utils.Maths
                     totalWeight += Weights[dir];
                 }
 
-                return totalVector / totalWeight;
+                return (totalWeight > 0) ? totalVector / totalWeight : Vector2.Zero;
             }
         }
     }

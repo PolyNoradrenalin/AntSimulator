@@ -33,5 +33,10 @@ namespace AntEngine.Colliders
         {
             return CollisionDetection.CircleAndWorld(this, worldCollider);
         }
+        
+        public override bool CheckCollision(Collider collider)
+        {
+            return collider.CheckCollision(this);
+        }
     }
 }

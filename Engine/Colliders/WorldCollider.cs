@@ -103,5 +103,10 @@ namespace AntEngine.Colliders
         {
             return CollisionDetection.WorldAndWorld(this, worldCollider);
         }
+        
+        public override bool CheckCollision(Collider collider)
+        {
+            return collider.CheckCollision(this);
+        }
     }
 }
