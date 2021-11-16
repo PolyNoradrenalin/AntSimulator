@@ -15,7 +15,7 @@ namespace AntEngine.Utils.Maths
         /// </summary>
         /// <param name="weights">List of weights</param>
         /// <param name="angleOffset">Offset to be applied to the angle</param>
-        public PerceptionMap(IReadOnlyList<float> weights, float angleOffset = MathF.PI/2)
+        public PerceptionMap(IReadOnlyList<float> weights, float angleOffset = 0F)
         {
             Weights = new Dictionary<Vector2, float>(weights.Count);
             float stepAngle = 2F * MathF.PI / weights.Count;

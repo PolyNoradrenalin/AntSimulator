@@ -42,7 +42,7 @@ namespace Tests.Engine
             
             for (int i = 0; i < weights.Length; i++)
             {
-                float angle = i * angleStep + MathF.PI / 2F;
+                float angle = i * angleStep;
                 Assert.Contains(new Vector2(MathF.Cos(angle), MathF.Sin(angle)), perceptionMap.Weights.Keys);
             }
         }

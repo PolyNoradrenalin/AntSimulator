@@ -49,14 +49,14 @@ namespace Tests.Engine
 
             List<float> wList = new(new float[24])
             {
-                [3] = 1 / MathF.Pow(MathF.PI / 4, 2) + 1 / MathF.Pow(MathF.Sqrt(2), 2)
+                [2] = 1 / MathF.Pow(MathF.PI / 4, 2) + 1 / MathF.Pow(MathF.Sqrt(2), 2)
             };
 
             PerceptionMap perception = ant.GetPerceptionMap<FoodPheromone>();
             
             for (int i = 0; i < perception.Weights.Count; i++)
             {
-                Assert.Equal(perception.Weights.Values.ToList()[i], wList[i]);
+                Assert.Equal(perception.Weights.Values.ToList()[i], wList[i], 4);
             }
         }
     }
