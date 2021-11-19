@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using AntEngine;
 using AntEngine.Entities.Ants;
-using AntEngine.Entities.Colonies;
 using AntEngine.Utils.Maths;
 using App.Renderers;
-using App.Renderers.EntityRenderers;
 using App.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -40,11 +38,10 @@ namespace App
             
             renderers.Add(mainSimFrame);
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 Ant a = new Ant("EntityTest", new Transform(new Vector2(new Random().Next(10, 490), new Random().Next(10, 490)), 0, new Vector2(30, 30)), world);
             }
-            
         }
 
         protected override void LoadContent()

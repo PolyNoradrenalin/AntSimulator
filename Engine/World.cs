@@ -14,7 +14,7 @@ namespace AntEngine
     /// </summary>
     public class World
     {
-        public const int WorldDivision = 1024;
+        public const int WorldDivision = 512;
         
         private readonly IList<Entity> _entities;
 
@@ -24,7 +24,7 @@ namespace AntEngine
             Size = size;
             Colliders = new List<Collider>();
 
-           Collider = new WorldCollider(new Transform(), size, WorldDivision);
+            Collider = new WorldCollider(new Transform(), size, WorldDivision);
             Colliders.Add(Collider);
         }
 

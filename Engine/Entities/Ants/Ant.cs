@@ -204,10 +204,5 @@ namespace AntEngine.Entities.Ants
         {
             return MathF.Pow(rotationDelta, 2) != 0 ? 1 / MathF.Pow(rotationDelta, 2) : 0;
         }
-
-        public override void Update()
-        {
-            Move(new Vector2(1, 0.025f));
-        }
     }
 }
