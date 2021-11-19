@@ -15,7 +15,7 @@ namespace AntEngine.Entities
         {
         }
 
-        public LivingEntity(string name, Transform transform, World world) : this(name, transform, world, new IdleState())
+        public LivingEntity(string name, Transform transform, World world) : this(name, transform, world, new LivingState())
         {
         }
 

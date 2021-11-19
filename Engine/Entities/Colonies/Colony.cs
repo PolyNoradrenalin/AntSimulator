@@ -27,7 +27,7 @@ namespace AntEngine.Entities.Colonies
         {
         }
 
-        public Colony(string name, Transform transform, World world, ColonySpawnMethod spawnMethod) : base(name, transform, world, new IdleState())
+        public Colony(string name, Transform transform, World world, ColonySpawnMethod spawnMethod) : base(name, transform, world, new LivingState())
         {
             _population = new List<IColonyMember>();
             _stockpile = new ResourceInventory();

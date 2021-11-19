@@ -1,10 +1,17 @@
-﻿namespace AntEngine.Entities.States.Living
+﻿using System.Collections.Generic;
+using AntEngine.Entities.Ants;
+using AntEngine.Entities.Colonies;
+using AntEngine.Entities.Pheromones;
+using AntEngine.Resources;
+using AntEngine.Utils.Maths;
+
+namespace AntEngine.Entities.States.Living
 {
-    public class CarryState : IState
+    public class CarryState : LivingState
     {
         private static CarryState _instance;
 
-        public static CarryState Instance
+        public new static CarryState Instance
         {
             get
             {
@@ -12,25 +19,40 @@
                 return _instance;
             }
         }
-        
-        public void OnStateStart(StateEntity stateEntity)
+
+        public override void OnStateUpdate(StateEntity stateEntity)
         {
-            throw new System.NotImplementedException();
+            base.OnStateUpdate(stateEntity);
+            
+            Ant ant = (Ant) stateEntity;
+            PerceptionMap perceptionMap = ant.GetPerceptionMap<FoodPheromone>();
+
+            ant.Move(ant.MovementStrategy.Move(perceptionMap));
+
+            List<Entity> list = ant.GetSurroundingEntities<ResourceEntity>();
+
+            foreach (Entity e in list)
+            {
+                if (e is Colony colony)
+                {
+                    foreach ((Resource resource, int cost) in ant.ResourceInventory.All)
+                    {
+                        colony.Stockpile.AddResource(resource, cost);
+                        ant.ResourceInventory.RemoveResource(resource, cost);
+                    }
+                    
+                    stateEntity.State = Next(stateEntity);
+
+                    break;
+                }
+            }
+            
+            ant.EmitFoodPheromone();
         }
 
-        public void OnStateUpdate(StateEntity stateEntity)
+        public new IState Next(StateEntity stateEntity)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnStateEnd(StateEntity stateEntity)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IState Next(StateEntity stateEntity)
-        {
-            throw new System.NotImplementedException();
+            return SearchState.Instance;
         }
     }
 }

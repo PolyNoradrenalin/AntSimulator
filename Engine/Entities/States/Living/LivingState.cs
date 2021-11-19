@@ -3,26 +3,26 @@ namespace AntEngine.Entities.States.Living
     /// <summary>
     /// Starting state of a Living Entity.
     /// </summary>
-    public class IdleState : IState
+    public class LivingState : IState
     {
-        private static IdleState _instance;
+        private static LivingState _instance;
 
-        public static IdleState Instance
+        public static LivingState Instance
         {
             get
             {
-                _instance ??= new IdleState();
+                _instance ??= new LivingState();
                 return _instance;
             }
         }
 
-        public void OnStateStart(StateEntity stateEntity)
+        public virtual void OnStateStart(StateEntity stateEntity)
         {
             if (stateEntity is not LivingEntity) 
                 throw new System.ArgumentException("LivingState is only defined for Living entities.");
         }
 
-        public void OnStateUpdate(StateEntity stateEntity)
+        public virtual void OnStateUpdate(StateEntity stateEntity)
         {
             LivingEntity living = (LivingEntity) stateEntity;
             if (living.Health <= 0)
@@ -31,7 +31,7 @@ namespace AntEngine.Entities.States.Living
             }
         }
 
-        public void OnStateEnd(StateEntity stateEntity)
+        public virtual void OnStateEnd(StateEntity stateEntity)
         {
         }
 

@@ -26,7 +26,7 @@ namespace AntEngine.Entities.Ants
         {
         }
 
-        public Ant(string name, Transform transform, World world) : this(name, transform, world, new IdleState())
+        public Ant(string name, Transform transform, World world) : this(name, transform, world, new LivingState())
         {
         }
 
