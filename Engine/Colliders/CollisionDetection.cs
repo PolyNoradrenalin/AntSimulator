@@ -115,7 +115,7 @@ namespace AntEngine.Colliders
                     float distFromOrigin = Vector2.Distance(pixelPos, circle.ParentTransform.Position);
 
                     if (!(distFromOrigin <= circle.Radius)) continue;
-                    if (world.GetPixel(x, y)) return true;
+                    if (world.Matrix[y][x]) return true;
                 }
             }
 
@@ -214,7 +214,7 @@ namespace AntEngine.Colliders
                         (int) ((x - origin.x) * MathF.Sin(rect.ParentTransform.Rotation) + (y - origin.y) * MathF.Cos(rect.ParentTransform.Rotation)));
 
                     if (world.IsOutOfBounds(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
-                    if (world.GetPixel(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
+                    if (world.Matrix[rotatedPixels.y + origin.y][rotatedPixels.x + origin.x]) return true;
                 }
             }
 
@@ -234,7 +234,7 @@ namespace AntEngine.Colliders
             {
                 for (int x = 0; x < minDiv; x++)
                 {
-                    if (worldA.GetPixel(x, y) && worldB.GetPixel(x, y)) return true;
+                    if (worldA.Matrix[y][x] && worldB.Matrix[x][y]) return true;
                 }
             }
 

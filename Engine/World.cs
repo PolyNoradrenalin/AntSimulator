@@ -14,7 +14,7 @@ namespace AntEngine
     /// </summary>
     public class World
     {
-        public const int WorldDivision = 512;
+        public const int WorldDivision = 64;
         
         private readonly IList<Entity> _entities;
 

@@ -16,7 +16,8 @@ namespace AntEngine.Colliders
         {
             ParentTransform = parent;
         }
-        public Transform ParentTransform { get; private set; }
+
+        public Transform ParentTransform;
 
         /// <summary>
         /// Checks for a collision between this and a circleCollider.

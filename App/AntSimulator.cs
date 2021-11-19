@@ -18,29 +18,31 @@ namespace App
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private World world;
-        private List<IRenderer> renderers;
-
+        private World _world;
+        private List<IRenderer> _renderers;
+        private DateTime _lastTimeTick;
+        private int _targetTps = 60;
+        
         public AntSimulator()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            world = new World(Vector2.One * 500);
-            renderers = new List<IRenderer>();
+            _world = new World(Vector2.One * 500);
+            _renderers = new List<IRenderer>();
         }
 
         protected override void Initialize()
         {
             base.Initialize();
             
-            SimFrame mainSimFrame = new SimFrame(world);
+            SimFrame mainSimFrame = new SimFrame(_world);
             
-            renderers.Add(mainSimFrame);
+            _renderers.Add(mainSimFrame);
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 8000; i++)
             {
-                Ant a = new Ant("EntityTest", new Transform(new Vector2(new Random().Next(10, 490), new Random().Next(10, 490)), 0, new Vector2(30, 30)), world);
+                Ant a = new Ant("EntityTest", new Transform(new Vector2(new Random().Next(10, 490), new Random().Next(10, 490)), 0, new Vector2(5, 5)), _world);
             }
         }
 
@@ -53,14 +55,20 @@ namespace App
             SimFrame.ColonyTexture = Content.Load<Texture2D>("Entities/Colony");
         }
 
+        
+        
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            world.Update();
-
+            if (DateTime.Now.Subtract(_lastTimeTick).TotalSeconds >= 1f / _targetTps)
+            {
+                _lastTimeTick = DateTime.Now;
+                _world.Update();
+            }
+            
             base.Update(gameTime);
         }
 
@@ -70,7 +78,7 @@ namespace App
 
             _spriteBatch.Begin();
             
-            foreach (IRenderer r in renderers)
+            foreach (IRenderer r in _renderers)
             {
                 r.Render(_spriteBatch, _graphics);
             }

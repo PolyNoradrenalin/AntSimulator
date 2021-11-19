@@ -36,7 +36,7 @@ namespace AntEngine.Utils.Maths
         /// Values can be real numbers.
         /// Default value is 0.
         /// </summary>
-        public Vector2 Position { get; set; }
+        public Vector2 Position;
 
         /// <summary>
         /// Stores a rotation value.
@@ -62,7 +62,7 @@ namespace AntEngine.Utils.Maths
         /// Stores a scale value in two dimensions (x and y).
         /// Default value is (1,1).
         /// </summary>
-        public Vector2 Scale { get; set; }
+        public Vector2 Scale;
 
         /// <summary>
         /// Generates the transform's director vector.

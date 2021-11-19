@@ -20,7 +20,7 @@ namespace AntEngine.Colliders
         /// <summary>
         /// Radius of the circle. This is the maximum component of the scale vector. (we're not handling ellipses)
         /// </summary>
-        public float Radius { get; set; }
+        public float Radius;
 
         public override bool CheckCollision(CircleCollider circleCollider)
         {
