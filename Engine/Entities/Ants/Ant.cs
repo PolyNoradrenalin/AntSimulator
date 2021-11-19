@@ -18,7 +18,7 @@ namespace AntEngine.Entities.Ants
     /// </summary>
     public class Ant : LivingEntity, IColonyMember
     {
-        private const float DefaultMaxSpeed = 5F;
+        private const float DefaultMaxSpeed = 0.5F;
         
         private float _speed;
 
