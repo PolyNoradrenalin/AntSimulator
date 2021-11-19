@@ -11,7 +11,7 @@ namespace AntEngine.Entities.States.Living
     {
         private static CarryState _instance;
 
-        public static CarryState Instance
+        public new static CarryState Instance
         {
             get
             {

@@ -14,7 +14,7 @@ namespace AntEngine.Entities.States.Living
     {
         private static SearchState _instance;
 
-        public static SearchState Instance
+        public new static SearchState Instance
         {
             get
             {
