@@ -33,7 +33,8 @@ namespace AntEngine.Entities.Ants
         public Ant(string name, Transform transform, World world, IState initialState) : base(name, transform, world,
             initialState)
         {
-            
+            Collider = new CircleCollider(new Transform(), Transform);
+            World.Colliders.Add(Collider);
         }
         
         //TODO: Make these movement related properties not belong to only Ants.
@@ -85,7 +86,15 @@ namespace AntEngine.Entities.Ants
         /// <param name="dir"></param>
         public void Move(Vector2 dir)
         {
-            throw new System.NotImplementedException();
+            Vector2 globalDir = Vector2.Normalize(new Vector2(
+                dir.X * MathF.Cos(Transform.Rotation) - dir.Y * MathF.Sin(Transform.Rotation),
+                dir.X * MathF.Sin(Transform.Rotation) + dir.Y * MathF.Cos(Transform.Rotation)));
+
+            Transform.Rotation = MathF.Atan2(globalDir.Y, Vector2.Dot(globalDir, Vector2.UnitX));
+
+            Vector2 lastPos = Transform.Position;
+            Collider.ParentTransform.Position += globalDir * Speed;
+            if (Collider.CheckCollision(World.Collider)) Collider.ParentTransform.Position = lastPos;
         }
 
         /// <summary>
