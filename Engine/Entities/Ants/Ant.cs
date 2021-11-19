@@ -18,6 +18,8 @@ namespace AntEngine.Entities.Ants
     /// </summary>
     public class Ant : LivingEntity, IColonyMember
     {
+        private const float DefaultMaxSpeed = 5F;
+        
         private float _speed;
 
         public Ant(World world) : this("Ant", new Transform(), world)
@@ -35,6 +37,7 @@ namespace AntEngine.Entities.Ants
         {
             Collider = new CircleCollider(new Transform(), Transform);
             World.Colliders.Add(Collider);
+            Speed = DefaultMaxSpeed;
         }
         
         //TODO: Make these movement related properties not belong to only Ants.
@@ -51,7 +54,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// Maximum speed of the ant.
         /// </summary>
-        public float MaxSpeed { get; protected set; }
+        public float MaxSpeed { get; protected set; } = DefaultMaxSpeed;
         
         /// <summary>
         /// Directional velocity of the ant.
