@@ -42,7 +42,15 @@ namespace App
 
             for (int i = 0; i < 8000; i++)
             {
-                Ant a = new Ant("EntityTest", new Transform(new Vector2(new Random().Next(10, 490), new Random().Next(10, 490)), 0, new Vector2(5, 5)), _world);
+                Ant a = new Ant("EntityTest",
+                    new Transform(new Vector2(new Random().Next(10,
+                                490),
+                            new Random().Next(10,
+                                490)),
+                        0,
+                        new Vector2(15,
+                            10)),
+                    _world);
             }
         }
 
