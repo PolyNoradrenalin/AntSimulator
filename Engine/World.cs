@@ -17,17 +17,18 @@ namespace AntEngine
         public const int WorldDivision = 1024;
         
         private readonly IList<Entity> _entities;
-        private readonly IList<Collider> _colliders;
-        
+
         public World(Vector2 size)
         {
             Entities = new List<Entity>();
             Size = size;
-            _colliders = new List<Collider>();
+            Colliders = new List<Collider>();
 
            Collider = new WorldCollider(new Transform(), new Transform(), size, WorldDivision);
-            _colliders.Add(Collider);
+            Colliders.Add(Collider);
         }
+
+        public IList<Collider> Colliders { get; }
 
         /// <summary>
         /// Called when an entity is spawned in the world.
@@ -76,7 +77,7 @@ namespace AntEngine
             if (!Entities.Contains(entity))
             {
                 _entities.Add(entity);
-                _colliders.Add(entity.Collider);
+                if (entity.Collider != null) Colliders.Add(entity.Collider);
                 EntityAdded?.Invoke(entity);
             }
         }
@@ -89,7 +90,7 @@ namespace AntEngine
             bool removed = _entities.Remove(entity);
             if (removed)
             {
-                _colliders.Remove(entity.Collider);
+                if (entity.Collider == null) Colliders.Remove(entity.Collider);
                 EntityRemoved?.Invoke(entity);
             }
         }
@@ -103,7 +104,7 @@ namespace AntEngine
         public IList<Collider> CircleCast(Vector2 position, float radius)
         {
             CircleCollider cast = new(new Transform(position, 0, Vector2.One * radius), new Transform());
-            return _colliders.Where(collider => collider.CheckCollision(cast)).ToList();
+            return Colliders.Where(collider => collider.CheckCollision(cast)).ToList();
         }
     }
 }

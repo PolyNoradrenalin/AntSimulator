@@ -74,8 +74,8 @@ namespace AntEngine.Utils.Maths
         {
             Vector2 director = new()
             {
-                X = MathF.Cos(Rotation + MathF.PI / 2),
-                Y = MathF.Sin(Rotation + MathF.PI / 2)
+                X = MathF.Cos(Rotation),
+                Y = MathF.Sin(Rotation)
             };
 
             return director;
