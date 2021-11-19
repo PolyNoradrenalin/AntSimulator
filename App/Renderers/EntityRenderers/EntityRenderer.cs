@@ -24,7 +24,7 @@ namespace App.Renderers.EntityRenderers
             Rectangle spritePos = new Rectangle((int) Entity.Transform.Position.X, (int) Entity.Transform.Position.Y,
                 (int) Entity.Transform.Scale.X, (int) Entity.Transform.Scale.Y);
             
-            spriteBatch.Draw(EntityCharset, spritePos, Color.White);
+            spriteBatch.Draw(EntityCharset, spritePos, null, Color.White, Entity.Transform.Rotation, new Vector2(EntityCharset.Width, EntityCharset.Height)/2f, SpriteEffects.None,1);
         }
         
         public Texture2D EntityCharset { get; set; } 
