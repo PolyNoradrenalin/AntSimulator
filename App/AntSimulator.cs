@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AntEngine;
 using AntEngine.Entities.Ants;
 using AntEngine.Entities.Colonies;
@@ -39,10 +40,11 @@ namespace App
             
             renderers.Add(mainSimFrame);
 
-            Ant a = new Ant("EntityTest", new Transform(new Vector2(50, 50), 0, new Vector2(30, 30)), world);
-            Ant b = new Ant("AntTest", new Transform(new Vector2(150, 150), 0, new Vector2(20, 20)), world);
-            Colony c = new Colony("ColonyTest", new Transform(new Vector2(300, 170), 0, new Vector2(64, 64)), world,
-                (s, t, w, c) => new Ant(world));
+            for (int i = 0; i < 100; i++)
+            {
+                Ant a = new Ant("EntityTest", new Transform(new Vector2(new Random().Next(10, 490), new Random().Next(10, 490)), 0, new Vector2(30, 30)), world);
+            }
+            
         }
 
         protected override void LoadContent()

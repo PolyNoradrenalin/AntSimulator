@@ -12,12 +12,12 @@ namespace AntEngine.Colliders
     /// </summary>
     public class CircleCollider : Collider
     {
-        public CircleCollider(Transform transform, Transform parentTransform) : base(transform, parentTransform) {}
+        public CircleCollider(Transform parentTransform) : base(parentTransform) {}
 
         /// <summary>
         /// Radius of the circle. This is the maximum component of the scale vector. (we're not handling ellipses)
         /// </summary>
-        public float Radius => MathF.Max(ColliderTransform.Scale.X, ColliderTransform.Scale.Y);
+        public float Radius => MathF.Max(ParentTransform.Scale.X, ParentTransform.Scale.Y);
 
         public override bool CheckCollision(CircleCollider circleCollider)
         {

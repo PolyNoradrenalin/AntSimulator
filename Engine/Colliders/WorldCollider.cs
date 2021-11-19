@@ -9,7 +9,7 @@ namespace AntEngine.Colliders
     /// </summary>
     public class WorldCollider : Collider
     {
-        public WorldCollider(Transform transform, Transform parentTransform, Vector2 size, int div) :  base(transform, parentTransform)
+        public WorldCollider(Transform parentTransform, Vector2 size, int div) :  base(parentTransform)
         {
             Size = size;
             Subdivision = div;

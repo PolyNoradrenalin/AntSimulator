@@ -24,7 +24,7 @@ namespace AntEngine
             Size = size;
             Colliders = new List<Collider>();
 
-           Collider = new WorldCollider(new Transform(), new Transform(), size, WorldDivision);
+           Collider = new WorldCollider(new Transform(), size, WorldDivision);
             Colliders.Add(Collider);
         }
 
@@ -103,7 +103,7 @@ namespace AntEngine
         /// <returns>List of the colliders</returns>
         public IList<Collider> CircleCast(Vector2 position, float radius)
         {
-            CircleCollider cast = new(new Transform(position, 0, Vector2.One * radius), new Transform());
+            CircleCollider cast = new(new Transform());
             return Colliders.Where(collider => collider.CheckCollision(cast)).ToList();
         }
     }

@@ -35,7 +35,7 @@ namespace AntEngine.Entities.Ants
         public Ant(string name, Transform transform, World world, IState initialState) : base(name, transform, world,
             initialState)
         {
-            Collider = new CircleCollider(new Transform(), Transform);
+            Collider = new CircleCollider(Transform);
             World.Colliders.Add(Collider);
             Speed = DefaultMaxSpeed;
         }
@@ -203,6 +203,11 @@ namespace AntEngine.Entities.Ants
         private float GetWeightFactorFromRotation(float rotationDelta)
         {
             return MathF.Pow(rotationDelta, 2) != 0 ? 1 / MathF.Pow(rotationDelta, 2) : 0;
+        }
+
+        public override void Update()
+        {
+            Move(new Vector2(1, 0.025f));
         }
     }
 }
