@@ -33,7 +33,7 @@ namespace App.UIElements
 
         public World SimWorld { get; private set; }
         
-        public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm)
+        public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             foreach (IRenderer r in _renderers)
             {

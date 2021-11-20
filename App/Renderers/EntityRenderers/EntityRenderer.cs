@@ -1,4 +1,7 @@
-﻿using AntEngine.Entities;
+﻿using System;
+using System.Reflection.Metadata;
+using AntEngine.Entities;
+using AntEngine.Utils.Maths;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Color = Microsoft.Xna.Framework.Color;
@@ -18,7 +21,7 @@ namespace App.Renderers.EntityRenderers
 
         public Entity Entity { get; }
 
-        public virtual void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm)
+        public virtual void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             if (EntityCharset == null) return;
             Rectangle spritePos = new Rectangle((int) Entity.Transform.Position.X, (int) Entity.Transform.Position.Y,

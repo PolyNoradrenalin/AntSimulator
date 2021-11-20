@@ -8,6 +8,6 @@ namespace App.Renderers
     /// </summary>
     public interface IRenderer
     {
-        void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm);
+        void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset);
     }
 }

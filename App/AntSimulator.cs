@@ -73,7 +73,7 @@ namespace App
             
             foreach (IRenderer r in renderers)
             {
-                r.Render(_spriteBatch, _graphics);
+                r.Render(_spriteBatch, _graphics, new Rectangle(0, 0, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height));
             }
 
             base.Draw(gameTime);

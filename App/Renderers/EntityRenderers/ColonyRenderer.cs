@@ -13,9 +13,9 @@ namespace App.Renderers.EntityRenderers
         {
         }
 
-        public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm)
+        public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
-            base.Render(spriteBatch, gdm);
+            base.Render(spriteBatch, gdm, canvasOffset);
         }
     }
 }
