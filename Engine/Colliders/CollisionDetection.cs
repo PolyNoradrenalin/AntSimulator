@@ -14,7 +14,7 @@ namespace AntEngine.Colliders
         /// <returns>true if collision, false otherwise</returns>
         public static bool CircleAndCircle(CircleCollider circleA, CircleCollider circleB)
         {
-            float distance = Vector2.Distance(circleA.Position, circleB.Position);
+            float distance = Vector2.Distance(circleA.ParentTransform.Position, circleB.ParentTransform.Position);
             return distance < circleA.Radius + circleB.Radius;
         }
         
@@ -24,10 +24,9 @@ namespace AntEngine.Colliders
         /// <returns>true if collision, false otherwise</returns>
         public static bool CircleAndRectangle(CircleCollider circle, RectangleCollider rect)
         {
-            List<Vector2> vertices = rect.ColliderTransform.GetRectangleVertices()
-                .Select(v => rect.ParentTransform.ConvertToReferenceFrame(v)).ToList();
+            List<Vector2> vertices = rect.ParentTransform.GetRectangleVertices();
 
-            Vector2 circlePos = circle.Position;
+            Vector2 circlePos = circle.ParentTransform.Position;
             
             // First we want to compute the closest point on the circle to a vertex of the rectangle
             
@@ -50,7 +49,7 @@ namespace AntEngine.Colliders
 
             Transform t = new()
             {
-                Rotation = rect.Rotation
+                Rotation = rect.ParentTransform.Rotation
             };
 
             Vector2 directorVector = t.GetDirectorVector();
@@ -88,9 +87,9 @@ namespace AntEngine.Colliders
         {
             // Get bounding rectangle pixels to check only in the appropriate sub-matrix of WorldCollider
             Transform rectTransform = new(
-                circle.Position,
+                circle.ParentTransform.Position,
                 0,
-                circle.Scale);
+                circle.ParentTransform.Scale);
             
             IList<Vector2> rectVertices = rectTransform.GetRectangleVertices();
 
@@ -101,22 +100,22 @@ namespace AntEngine.Colliders
             if (world.IsOutOfBounds(XPos, YPos)) return true;
             
             // Convert the bounds into indexes to iterate through the world collider pixels
-            (int x, int y) MinIndex = world.ConvertCoordsToIndex(new Vector2(XPos.min, YPos.min));
-            (int x, int y) MaxIndex = world.ConvertCoordsToIndex(new Vector2(XPos.max, YPos.max));
+            (int x, int y) minIndex = world.ConvertCoordsToIndex(new Vector2(XPos.min, YPos.min));
+            (int x, int y) maxIndex = world.ConvertCoordsToIndex(new Vector2(XPos.max, YPos.max));
             
             // Check if any of the pixel inside the circle collide with the world
-            for (int x = MinIndex.x; x <= MaxIndex.x; x++)
+            for (int x = minIndex.x; x <= maxIndex.x; x++)
             {
-                for (int y = MinIndex.y; y <= MaxIndex.y; y++)
+                for (int y = minIndex.y; y <= maxIndex.y; y++)
                 {
                     Vector2 pixelPos = new(
                         (float) x / world.Subdivision * world.Size.X, 
                         (float) y / world.Subdivision * world.Size.Y);
 
-                    float distFromOrigin = Vector2.Distance(pixelPos, circle.Position);
+                    float distFromOrigin = Vector2.Distance(pixelPos, circle.ParentTransform.Position);
 
                     if (!(distFromOrigin <= circle.Radius)) continue;
-                    if (world.GetPixel(x, y)) return true;
+                    if (world.Matrix[y][x]) return true;
                 }
             }
 
@@ -137,12 +136,12 @@ namespace AntEngine.Colliders
             // Get the rectangles' initial director vector, normal vector and vertices.
             Transform t = new()
             {
-                Rotation = rectA.Rotation
+                Rotation = rectA.ParentTransform.Rotation
             };
             
             Vector2 direct1 = t.GetDirectorVector();
 
-            t.Rotation = rectB.Rotation;
+            t.Rotation = rectB.ParentTransform.Rotation;
             
             Vector2 direct2 = t.GetDirectorVector();
 
@@ -154,10 +153,8 @@ namespace AntEngine.Colliders
             //TODO : Remove duplicate axes.
             
             // Gets the rectangles' vertices list.
-            List<Vector2> vertices1 = rectA.ColliderTransform.GetRectangleVertices()
-                .Select(v => rectA.ParentTransform.ConvertToReferenceFrame(v)).ToList();
-            List<Vector2> vertices2 = rectB.ColliderTransform.GetRectangleVertices()
-                .Select(v => rectB.ParentTransform.ConvertToReferenceFrame(v)).ToList();
+            List<Vector2> vertices1 = rectA.ParentTransform.GetRectangleVertices();
+            List<Vector2> vertices2 = rectB.ParentTransform.GetRectangleVertices();
 
             // Check that the vertex list has been correctly created
             if (vertices1?.Count == 0 || vertices2?.Count == 0)
@@ -192,7 +189,7 @@ namespace AntEngine.Colliders
         public static bool RectangleAndWorld(RectangleCollider rect, WorldCollider world)
         {
             // Get the pixels of the world collider beneath the rectangle.
-            Transform rectTransform = new(rect.Position, 0, rect.Scale);
+            Transform rectTransform = new(rect.ParentTransform.Position, 0, rect.ParentTransform.Scale);
             IList<Vector2> rectVertices = rectTransform.GetRectangleVertices();
 
             (float min, float max) XPos = (rectVertices[2].X, rectVertices[0].X);
@@ -206,18 +203,18 @@ namespace AntEngine.Colliders
             (int x, int y) MaxIndex = world.ConvertCoordsToIndex(new Vector2(XPos.max, YPos.max));
 
             (int x, int y) origin =
-                world.ConvertCoordsToIndex(rect.Position);
+                world.ConvertCoordsToIndex(rect.ParentTransform.Position);
             
             for (int x = MinIndex.x; x < MaxIndex.x; x++)
             {
                 for (int y = MinIndex.y; y < MaxIndex.y; y++)
                 {
                     (int x, int y) rotatedPixels = (
-                        (int) ((x - origin.x) * MathF.Cos(rect.Rotation) - (y - origin.y) * MathF.Sin(rect.Rotation)), 
-                        (int) ((x - origin.x) * MathF.Sin(rect.Rotation) + (y - origin.y) * MathF.Cos(rect.Rotation)));
+                        (int) ((x - origin.x) * MathF.Cos(rect.ParentTransform.Rotation) - (y - origin.y) * MathF.Sin(rect.ParentTransform.Rotation)), 
+                        (int) ((x - origin.x) * MathF.Sin(rect.ParentTransform.Rotation) + (y - origin.y) * MathF.Cos(rect.ParentTransform.Rotation)));
 
                     if (world.IsOutOfBounds(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
-                    if (world.GetPixel(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
+                    if (world.Matrix[rotatedPixels.y + origin.y][rotatedPixels.x + origin.x]) return true;
                 }
             }
 
@@ -237,7 +234,7 @@ namespace AntEngine.Colliders
             {
                 for (int x = 0; x < minDiv; x++)
                 {
-                    if (worldA.GetPixel(x, y) && worldB.GetPixel(x, y)) return true;
+                    if (worldA.Matrix[y][x] && worldB.Matrix[x][y]) return true;
                 }
             }
 

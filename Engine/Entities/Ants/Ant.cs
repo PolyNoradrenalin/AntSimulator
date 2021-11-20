@@ -18,7 +18,7 @@ namespace AntEngine.Entities.Ants
     /// </summary>
     public class Ant : LivingEntity, IColonyMember
     {
-        private const float DefaultMaxSpeed = 5F;
+        private const float DefaultMaxSpeed = 0.5F;
         
         private float _speed;
 
@@ -35,7 +35,7 @@ namespace AntEngine.Entities.Ants
         public Ant(string name, Transform transform, World world, IState initialState) : base(name, transform, world,
             initialState)
         {
-            Collider = new CircleCollider(new Transform(), Transform);
+            Collider = new CircleCollider(Transform);
             World.Colliders.Add(Collider);
             Speed = DefaultMaxSpeed;
         }

@@ -9,7 +9,7 @@ namespace Tests.Engine
     {
         public CircleColliderTests()
         {
-            WorldCollider = new WorldCollider(new Transform(), new Transform(), Vector2.One * 1000, 1000);
+            WorldCollider = new WorldCollider(new Transform(), Vector2.One * 1000, 1000);
         }
 
         private WorldCollider WorldCollider { get; set; }
@@ -20,8 +20,7 @@ namespace Tests.Engine
         [InlineData(5.5, 5.5, 10)]
         private void CircleWorld_EmptyWorldAndCircleInBounds_ShouldNotCollide(float posX, float posY, float radius)
         {
-            CircleCollider circle = new CircleCollider(new Transform(new Vector2(posX, posY), 0, Vector2.One * radius),
-                new Transform());
+            CircleCollider circle = new CircleCollider(new Transform(new Vector2(posX, posY), 0, Vector2.One * radius));
             
             Assert.False(circle.CheckCollision(WorldCollider));
         }
@@ -34,8 +33,7 @@ namespace Tests.Engine
         [InlineData(500, 10, 20)]
         private void CircleWorld_EmptyWorldAndCircleOutOfBounds_ShouldCollide(float posX, float posY, float radius)
         {
-            CircleCollider circle = new(new Transform(new Vector2(posX, posY), 0, Vector2.One * radius),
-                new Transform());
+            CircleCollider circle = new(new Transform(new Vector2(posX, posY), 0, Vector2.One * radius));
             
             Assert.True(circle.CheckCollision(WorldCollider));
         }
@@ -48,10 +46,9 @@ namespace Tests.Engine
         [InlineData(500, 500+399, 100)]
         private void CircleWorld_OnePixelWorldAndCircleDontTouch_ShouldNotCollide(float posX, float posY, float radius)
         {
-            CircleCollider circle = new(new Transform(new Vector2(posX, posY), 0, Vector2.One * radius),
-                new Transform());
+            CircleCollider circle = new(new Transform(new Vector2(posX, posY), 0, Vector2.One * radius));
          
-            WorldCollider.SetPixel(500, 500, true);
+            WorldCollider.Matrix[500][500] = true;
             
             Assert.False(circle.CheckCollision(WorldCollider));
         }
@@ -62,10 +59,9 @@ namespace Tests.Engine
         [InlineData(500, 500, 100)]
         private void CircleWorld_OnePixelWorldAndCircleTouch_ShouldCollide(float posX, float posY, float radius)
         {
-            CircleCollider circle = new(new Transform(new Vector2(posX, posY), 0, Vector2.One * radius),
-                new Transform());
+            CircleCollider circle = new(new Transform(new Vector2(posX, posY), 0, Vector2.One * radius));
          
-            WorldCollider.SetPixel(500, 500, true);
+            WorldCollider.Matrix[500][500] = true;
             
             Assert.True(circle.CheckCollision(WorldCollider));
         }

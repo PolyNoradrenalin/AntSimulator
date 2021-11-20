@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AntEngine;
 using AntEngine.Entities.Ants;
-using AntEngine.Entities.Colonies;
 using AntEngine.Utils.Maths;
 using App.Renderers;
-using App.Renderers.EntityRenderers;
 using App.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,33 +18,43 @@ namespace App
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private World world;
-        private List<IRenderer> renderers;
-
+        private World _world;
+        private List<IRenderer> _renderers;
+        private DateTime _lastTimeTick;
+        private int _targetTps = 60;
+        
         public AntSimulator()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            world = new World(Vector2.One * 500);
-            renderers = new List<IRenderer>();
+            _world = new World(Vector2.One * 500);
+            _renderers = new List<IRenderer>();
         }
 
         protected override void Initialize()
         {
             base.Initialize();
             
-            SimFrame mainSimFrame = new SimFrame(world);
+            SimFrame mainSimFrame = new SimFrame(_world);
 
             mainSimFrame.Position = (0, 0);
             mainSimFrame.Size = (800, 500);
             
-            renderers.Add(mainSimFrame);
+            _renderers.Add(mainSimFrame);
 
-            Ant a = new Ant("EntityTest", new Transform(new Vector2(50, 50), 0, new Vector2(30, 30)), world);
-            Ant b = new Ant("AntTest", new Transform(new Vector2(150, 150), 0, new Vector2(20, 20)), world);
-            Colony c = new Colony("ColonyTest", new Transform(new Vector2(300, 170), 0, new Vector2(64, 64)), world,
-                (s, t, w, c) => new Ant(world));
+            for (int i = 0; i < 8000; i++)
+            {
+                Ant a = new Ant("EntityTest",
+                    new Transform(new Vector2(new Random().Next(10,
+                                490),
+                            new Random().Next(10,
+                                490)),
+                        0,
+                        new Vector2(15,
+                            10)),
+                    _world);
+            }
         }
 
         protected override void LoadContent()
@@ -63,8 +72,12 @@ namespace App
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            world.Update();
-
+            if (DateTime.Now.Subtract(_lastTimeTick).TotalSeconds >= 1f / _targetTps)
+            {
+                _lastTimeTick = DateTime.Now;
+                _world.Update();
+            }
+            
             base.Update(gameTime);
         }
 
@@ -74,7 +87,7 @@ namespace App
 
             _spriteBatch.Begin();
             
-            foreach (IRenderer r in renderers)
+            foreach (IRenderer r in _renderers)
             {
                 r.Render(_spriteBatch, _graphics, new Rectangle(0, 0, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height));
             }
