@@ -64,7 +64,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// The ant's current movement strategy.
         /// </summary>
-        public IMovementStrategy MovementStrategy { get; protected set; } = new WandererStrategy(1);
+        public IMovementStrategy MovementStrategy { get; protected set; } = new WandererStrategy(0.5f);
 
         /// <summary>
         /// Represents the ant's inventory.
@@ -174,7 +174,7 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public void EmitHomePheromone()
         {
-            Transform homeTransform = new Transform(Transform.Position, 0, Vector2.One);
+            Transform homeTransform = new(Transform.Position, 0, Vector2.One);
             World.AddEntity(new HomePheromone(Name, homeTransform, World, PheromoneTimeSpan));
         }
         
@@ -183,7 +183,7 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public void EmitFoodPheromone()
         {
-            Transform foodTransform = new Transform(Transform.Position, 0, Vector2.One);
+            Transform foodTransform = new(Transform.Position, 0, Vector2.One);
             World.AddEntity(new FoodPheromone(Name, foodTransform, World, PheromoneTimeSpan));
         }
 

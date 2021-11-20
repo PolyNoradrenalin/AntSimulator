@@ -11,9 +11,11 @@ namespace AntEngine.Entities.Strategies.Movement
     /// </summary>
     public class WandererStrategy : IMovementStrategy
     {
+        private const float RandomAngleRange = 0.1F;
+        
         private float _random;
         private Vector2 _dir;
-        
+
         /// <summary>
         /// Creates a wanderer strategy with a random factor between 0 (inclusive) and 1 (inclusive).
         /// 0 means that the direction will only be defined by the perception map and 1 only by the random direction.
@@ -26,9 +28,13 @@ namespace AntEngine.Entities.Strategies.Movement
 
         public Vector2 Move(PerceptionMap map)
         {
+            float randomAngle = (float)new Random().NextDouble() * RandomAngleRange;
+            float centeredAngle = randomAngle - RandomAngleRange / 2;
+            
+            Vector2 randomDir = new(MathF.Cos(centeredAngle), MathF.Sin(centeredAngle));
             Vector2 targetDir = map.Mean;
-            Vector2 randomDir = new((float)new Random().NextDouble(), (float)new Random().NextDouble() * 0.2f - 0.1f);
-            _dir = (_dir + 0.5f * ((1 - _random) * targetDir + _random * randomDir)) / 2;
+
+            _dir = (1 - _random) * targetDir + _random * randomDir;
             return _dir;
         }
     }
