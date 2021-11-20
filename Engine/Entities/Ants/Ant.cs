@@ -18,7 +18,7 @@ namespace AntEngine.Entities.Ants
     /// </summary>
     public class Ant : LivingEntity, IColonyMember
     {
-        private const float DefaultMaxSpeed = 5F;
+        private const float DefaultMaxSpeed = 0.1F;
         
         private float _speed;
 
@@ -26,7 +26,7 @@ namespace AntEngine.Entities.Ants
         {
         }
 
-        public Ant(string name, Transform transform, World world) : this(name, transform, world, new LivingState())
+        public Ant(string name, Transform transform, World world) : this(name, transform, world, new SearchState())
         {
         }
 
@@ -64,7 +64,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// The ant's current movement strategy.
         /// </summary>
-        public IMovementStrategy MovementStrategy { get; protected set; } = new LineStrategy();
+        public IMovementStrategy MovementStrategy { get; protected set; } = new WandererStrategy(1);
 
         /// <summary>
         /// Represents the ant's inventory.
@@ -174,7 +174,8 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public void EmitHomePheromone()
         {
-            World.AddEntity(new HomePheromone(Name, Transform, World, PheromoneTimeSpan));
+            Transform homeTransform = new Transform(Transform.Position, 0, Vector2.One);
+            World.AddEntity(new HomePheromone(Name, homeTransform, World, PheromoneTimeSpan));
         }
         
         /// <summary>
@@ -182,7 +183,8 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public void EmitFoodPheromone()
         {
-            World.AddEntity(new FoodPheromone(Name, Transform, World, PheromoneTimeSpan));
+            Transform foodTransform = new Transform(Transform.Position, 0, Vector2.One);
+            World.AddEntity(new FoodPheromone(Name, foodTransform, World, PheromoneTimeSpan));
         }
 
         public Colony Home { get; set; }
