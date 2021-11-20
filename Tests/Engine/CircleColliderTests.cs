@@ -54,7 +54,7 @@ namespace Tests.Engine
         }
         
         [Theory]
-        [InlineData(450, 450, 100)]
+        [InlineData(475, 475, 100)]
         [InlineData(450, 500, 100)]
         [InlineData(500, 500, 100)]
         private void CircleWorld_OnePixelWorldAndCircleTouch_ShouldCollide(float posX, float posY, float radius)
