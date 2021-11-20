@@ -198,7 +198,7 @@ namespace Tests.Engine
             rect.ParentTransform.Scale = 5 * Vector2.One;
 
             CircleCollider circ = new(new Transform());
-            circ.ParentTransform.Scale = 10 * Vector2.One; 
+            circ.Radius = 10; 
 
             Assert.True(rect.CheckCollision(circ));
         }
@@ -211,7 +211,7 @@ namespace Tests.Engine
             rect.ParentTransform.Scale = 5 * Vector2.One;
 
             CircleCollider circ = new(new Transform());
-            circ.ParentTransform.Scale = 10 * Vector2.One; 
+            circ.Radius = 10; 
 
             Assert.False(rect.CheckCollision(circ));
 
@@ -228,7 +228,7 @@ namespace Tests.Engine
             rect.ParentTransform.Scale = 5 * Vector2.One;
 
             CircleCollider circ = new(new Transform());
-            circ.ParentTransform.Scale = 10 * Vector2.One;
+            circ.Radius = 10;
 
             Assert.True(rect.CheckCollision(circ));
         }
