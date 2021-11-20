@@ -150,7 +150,7 @@ namespace Tests.Engine
         [InlineData(998, 3)]
         private void CheckCollision_NotEmptyWorld_ShouldCollide(float width, float height)
         {
-            worldCollider.SetPixel(500, 500, true);
+            worldCollider.Matrix[500][500] = true;
             
             RectangleCollider col1 = new(new Transform());
             col1.ParentTransform.Position = new Vector2(500, 500);
@@ -164,7 +164,7 @@ namespace Tests.Engine
         [InlineData(800, 10, MathF.PI / 2F)]
         private void CheckCollision_NotEmptyWorld_ShouldCollideOnlyRotated(float width, float height, float angle)
         {
-            worldCollider.SetPixel(500, 755, true);
+            worldCollider.Matrix[755][500] = true;
             
             RectangleCollider col1 = new(new Transform());
             col1.ParentTransform.Position = new Vector2(500, 500);
