@@ -36,6 +36,9 @@ namespace App
             base.Initialize();
             
             SimFrame mainSimFrame = new SimFrame(world);
+
+            mainSimFrame.Position = (0, 0);
+            mainSimFrame.Size = (800, 500);
             
             renderers.Add(mainSimFrame);
 

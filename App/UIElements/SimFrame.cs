@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AntEngine;
 using AntEngine.Entities;
 using AntEngine.Entities.Ants;
@@ -37,7 +38,7 @@ namespace App.UIElements
         {
             foreach (IRenderer r in _renderers)
             {
-                r.Render(spriteBatch, gdm);
+                r.Render(spriteBatch, gdm, new Rectangle(Position.X + canvasOffset.Left, Position.Y + canvasOffset.Top, Size.Width, Size.Height));
             }
         }
 
