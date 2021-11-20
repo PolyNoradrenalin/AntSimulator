@@ -89,9 +89,11 @@ namespace AntEngine.Entities.Ants
         /// <param name="dir"></param>
         public void Move(Vector2 dir)
         {
-            Vector2 globalDir = Vector2.Normalize(new Vector2(
-                dir.X * MathF.Cos(Transform.Rotation) - dir.Y * MathF.Sin(Transform.Rotation),
-                dir.X * MathF.Sin(Transform.Rotation) + dir.Y * MathF.Cos(Transform.Rotation)));
+            Vector2 globalDir = dir.Length() > 0
+                ? Vector2.Normalize(new Vector2(
+                    dir.X * MathF.Cos(Transform.Rotation) - dir.Y * MathF.Sin(Transform.Rotation),
+                    dir.X * MathF.Sin(Transform.Rotation) + dir.Y * MathF.Cos(Transform.Rotation)))
+                : Vector2.Zero;
 
             Transform.Rotation = MathF.Atan2(globalDir.Y, Vector2.Dot(globalDir, Vector2.UnitX));
 
