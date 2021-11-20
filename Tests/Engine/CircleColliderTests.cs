@@ -65,5 +65,44 @@ namespace Tests.Engine
             
             Assert.True(circle.CheckCollision(WorldCollider));
         }
+
+        [Fact]
+        private void CircleCircle_FarFromEachOther_ShouldNotCollide()
+        {
+            CircleCollider circle1 = new(new Transform());
+            CircleCollider circle2 = new(new Transform());
+            circle2.ParentTransform.Position = Vector2.One * 100f;
+            
+            Assert.False(circle1.CheckCollision(circle2));
+        }
+        
+        [Fact]
+        private void CircleCircle_SamePosition_ShouldCollide()
+        {
+            CircleCollider circle1 = new(new Transform());
+            CircleCollider circle2 = new(new Transform());
+            
+            Assert.True(circle1.CheckCollision(circle2));
+        }
+        
+        [Fact]
+        private void CircleCircle_Overlapping_ShouldCollide()
+        {
+            CircleCollider circle1 = new(new Transform());
+            CircleCollider circle2 = new(new Transform());
+            circle1.ParentTransform.Position = Vector2.UnitX * 0.5f;
+            
+            Assert.True(circle1.CheckCollision(circle2));
+        }
+        
+        [Fact]
+        private void CircleCircle_RadiusOverlapPosition_ShouldCollide()
+        {
+            CircleCollider circle1 = new(new Transform());
+            CircleCollider circle2 = new(new Transform());
+            circle1.ParentTransform.Position = Vector2.UnitX * 0.0001F;
+            
+            Assert.True(circle1.CheckCollision(circle2));
+        }
     }
 }
