@@ -26,7 +26,7 @@ namespace Tests.Engine
             TestEntity testEntity = new(world);
             Assert.Contains(testEntity, world.Entities);
             world.AddEntity(testEntity);
-            Assert.NotEqual(2, world.Entities.Count);
+            Assert.NotEqual(2, world.EntityCount);
         }
     }
 }

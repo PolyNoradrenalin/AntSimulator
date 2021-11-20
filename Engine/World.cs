@@ -17,13 +17,18 @@ namespace AntEngine
         public const int WorldDivision = 64;
         
         private readonly IList<Entity> _entities;
-
+        private IList<Entity> _entitiesAddedBuffer;
+        private IList<Entity> _entitiesRemovedBuffer;
+        
         public World(Vector2 size)
         {
-            Entities = new List<Entity>();
             Size = size;
+            Entities = new List<Entity>();
             Colliders = new List<Collider>();
 
+            _entitiesAddedBuffer = new List<Entity>();
+            _entitiesRemovedBuffer = new List<Entity>();
+            
             Collider = new WorldCollider(new Transform(), size, WorldDivision);
             Colliders.Add(Collider);
         }
@@ -42,12 +47,14 @@ namespace AntEngine
         /// <summary>
         /// List of the entities present on the map.
         /// </summary>
-        public IList<Entity> Entities
+        public IEnumerable<Entity> Entities
         {
-            get => _entities.ToImmutableList();
-            private init => _entities = value;
+            get => _entities;
+            private init => _entities = value as List<Entity>;
         }
-        
+
+        public int EntityCount => _entities.Count;
+
         /// <summary>
         /// Size of the world.
         /// </summary>
@@ -67,6 +74,9 @@ namespace AntEngine
             {
                 entity.Update();
             }
+            
+            ApplyAddEntity();
+            ApplyRemoveEntity();
         }
 
         /// <summary>
@@ -74,12 +84,7 @@ namespace AntEngine
         /// </summary>
         public void AddEntity(Entity entity)
         {
-            if (!Entities.Contains(entity))
-            {
-                _entities.Add(entity);
-                if (entity.Collider != null) Colliders.Add(entity.Collider);
-                EntityAdded?.Invoke(entity);
-            }
+            _entitiesAddedBuffer.Add(entity);
         }
 
         /// <summary>
@@ -87,12 +92,7 @@ namespace AntEngine
         /// </summary>
         public void RemoveEntity(Entity entity)
         {
-            bool removed = _entities.Remove(entity);
-            if (removed)
-            {
-                if (entity.Collider == null) Colliders.Remove(entity.Collider);
-                EntityRemoved?.Invoke(entity);
-            }
+            _entitiesRemovedBuffer.Add(entity);
         }
 
         /// <summary>
@@ -105,6 +105,36 @@ namespace AntEngine
         {
             CircleCollider cast = new(new Transform());
             return Colliders.Where(collider => collider.CheckCollision(cast)).ToList();
+        }
+
+        private void ApplyAddEntity()
+        {
+            foreach (Entity entity in _entitiesAddedBuffer)
+            {
+                if (!Entities.Contains(entity))
+                {
+                    _entities.Add(entity);
+                    if (entity.Collider != null) Colliders.Add(entity.Collider);
+                    EntityAdded?.Invoke(entity);
+                }
+            }
+            
+            _entitiesRemovedBuffer.Clear();
+        }
+
+        private void ApplyRemoveEntity()
+        {
+            foreach (Entity entity in _entitiesRemovedBuffer)
+            {
+                bool removed = _entities.Remove(entity);
+                if (removed)
+                {
+                    if (entity.Collider == null) Colliders.Remove(entity.Collider);
+                    EntityRemoved?.Invoke(entity);
+                }
+            }
+            
+            _entitiesRemovedBuffer.Clear();
         }
     }
 }

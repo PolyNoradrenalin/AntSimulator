@@ -29,7 +29,7 @@ namespace Tests.Engine
             
             colony.Spawn(10);
             
-            Assert.Equal(11, world.Entities.Count);
+            Assert.Equal(11, world.EntityCount);
         }
         
         [Fact]
@@ -43,7 +43,7 @@ namespace Tests.Engine
             
             colony.Spawn(10);
             
-            Assert.Equal(6, world.Entities.Count);
+            Assert.Equal(6, world.EntityCount);
         }
         
         [Fact]
@@ -57,7 +57,7 @@ namespace Tests.Engine
             
             colony.Spawn(10);
             
-            Assert.Equal(1, world.Entities.Count);
+            Assert.Equal(1, world.EntityCount);
         } 
         
         [Fact]
@@ -74,7 +74,7 @@ namespace Tests.Engine
             
             colony.Spawn(10);
             
-            Assert.Equal(11, world.Entities.Count);
+            Assert.Equal(11, world.EntityCount);
         }
         
         [Fact]
@@ -91,7 +91,7 @@ namespace Tests.Engine
             
             colony.Spawn(10);
             
-            Assert.Equal(3, world.Entities.Count);
+            Assert.Equal(3, world.EntityCount);
         }
         
     }
