@@ -64,7 +64,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// The ant's current movement strategy.
         /// </summary>
-        public IMovementStrategy MovementStrategy { get; protected set; } = new WandererStrategy(0.5f);
+        public IMovementStrategy MovementStrategy { get; protected set; } = new WandererStrategy(0.5f, 0.9f);
 
         /// <summary>
         /// Represents the ant's inventory.
