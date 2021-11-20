@@ -20,8 +20,6 @@ namespace AntEngine.Entities.Ants
     {
         private const float DefaultMaxSpeed = 0.5F;
         
-        private float _speed;
-
         public Ant(World world) : this("Ant", new Transform(), world)
         {
         }
@@ -37,29 +35,13 @@ namespace AntEngine.Entities.Ants
         {
             Collider = new CircleCollider(Transform);
             World.Colliders.Add(Collider);
-            Speed = DefaultMaxSpeed;
+            MaxSpeed = DefaultMaxSpeed;
+            Speed = MaxSpeed;
         }
         
         //TODO: Make these movement related properties not belong to only Ants.
 
-        /// <summary>
-        /// Current speed of the ant.
-        /// </summary>
-        public float Speed
-        {
-            get => _speed;
-            protected set => _speed = value > MaxSpeed ? MaxSpeed : value;
-        }
-
-        /// <summary>
-        /// Maximum speed of the ant.
-        /// </summary>
-        public float MaxSpeed { get; protected set; } = DefaultMaxSpeed;
-        
-        /// <summary>
-        /// Directional velocity of the ant.
-        /// </summary>
-        public Vector2 Velocity { get; protected set; } = Vector2.Zero;
+        public Colony Home { get; set; }
 
         /// <summary>
         /// The ant's current movement strategy.
@@ -82,26 +64,7 @@ namespace AntEngine.Entities.Ants
         public int PerceptionMapPrecision { get; } = 24;
 
         public TimeSpan PheromoneTimeSpan { get; protected set; } = TimeSpan.FromSeconds(10);
-
-        /// <summary>
-        /// Applies movement to ant's coordinates.
-        /// </summary>
-        /// <param name="dir"></param>
-        public void Move(Vector2 dir)
-        {
-            Vector2 globalDir = dir.Length() > 0
-                ? Vector2.Normalize(new Vector2(
-                    dir.X * MathF.Cos(Transform.Rotation) - dir.Y * MathF.Sin(Transform.Rotation),
-                    dir.X * MathF.Sin(Transform.Rotation) + dir.Y * MathF.Cos(Transform.Rotation)))
-                : Vector2.Zero;
-
-            Transform.Rotation = MathF.Atan2(globalDir.Y, Vector2.Dot(globalDir, Vector2.UnitX));
-
-            Vector2 lastPos = Transform.Position;
-            Collider.ParentTransform.Position += globalDir * Speed;
-            if (Collider.CheckCollision(World.Collider)) Collider.ParentTransform.Position = lastPos;
-        }
-
+        
         /// <summary>
         /// Creates the ant's perception map.
         /// A perception map is used to represent which directions are attractive for the ant.
@@ -186,9 +149,7 @@ namespace AntEngine.Entities.Ants
             Transform foodTransform = new(Transform.Position, 0, Vector2.One);
             World.AddEntity(new FoodPheromone(Name, foodTransform, World, PheromoneTimeSpan));
         }
-
-        public Colony Home { get; set; }
-
+        
         /// <summary>
         /// Returns the weight factor associated to the distance between an ant and another entity.
         /// </summary>
