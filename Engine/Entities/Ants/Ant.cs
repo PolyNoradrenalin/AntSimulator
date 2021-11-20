@@ -85,7 +85,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// Delay between each emission of a pheromone.
         /// </summary>
-        public float PheromoneEmissionDelay { get; protected set; } = 6F;
+        public float PheromoneEmissionDelay { get; protected set; } = 2F;
 
         /// <summary>
         /// Applies movement to ant's coordinates.

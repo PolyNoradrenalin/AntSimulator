@@ -24,7 +24,7 @@ namespace AntEngine.Entities.States.Living
             }
         }
 
-        private DateTime _lastEmit = DateTime.Now;
+        private DateTime _lastEmit;
 
         public override void OnStateUpdate(StateEntity stateEntity)
         {
@@ -52,6 +52,7 @@ namespace AntEngine.Entities.States.Living
             if (DateTime.Now.Subtract(_lastEmit).TotalSeconds > ant.PheromoneEmissionDelay)
             {
                 ant.EmitHomePheromone();
+                _lastEmit = DateTime.Now;
             }
         }
 
