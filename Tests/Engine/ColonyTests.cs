@@ -26,8 +26,10 @@ namespace Tests.Engine
             Colony colony = new(world, (_, _, _, _) => new TestEntity(world));
             colony.Stockpile.AddResource(resource, 100);
             colony.SpawnCost.AddResource(resource, 10);
-            
+
             colony.Spawn(10);
+            
+            world.ApplyEntityBuffers();
             
             Assert.Equal(11, world.EntityCount);
         }
@@ -43,6 +45,8 @@ namespace Tests.Engine
             
             colony.Spawn(10);
             
+            world.ApplyEntityBuffers();
+            
             Assert.Equal(6, world.EntityCount);
         }
         
@@ -56,6 +60,8 @@ namespace Tests.Engine
             colony.SpawnCost.AddResource(resource, 100);
             
             colony.Spawn(10);
+            
+            world.ApplyEntityBuffers();
             
             Assert.Equal(1, world.EntityCount);
         } 
@@ -74,6 +80,8 @@ namespace Tests.Engine
             
             colony.Spawn(10);
             
+            world.ApplyEntityBuffers();
+            
             Assert.Equal(11, world.EntityCount);
         }
         
@@ -90,6 +98,8 @@ namespace Tests.Engine
             colony.SpawnCost.AddResource(oysters, 50);
             
             colony.Spawn(10);
+            
+            world.ApplyEntityBuffers();
             
             Assert.Equal(3, world.EntityCount);
         }

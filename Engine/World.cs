@@ -75,12 +75,12 @@ namespace AntEngine
                 entity.Update();
             }
             
-            ApplyAddEntity();
-            ApplyRemoveEntity();
+            ApplyEntityBuffers();
         }
 
         /// <summary>
         /// Registers an entity in the world.
+        /// This adds the entity in a buffer so that the entity can be added when needed.
         /// </summary>
         public void AddEntity(Entity entity)
         {
@@ -89,6 +89,7 @@ namespace AntEngine
 
         /// <summary>
         /// Removes an entity from the world.
+        /// This add the entity in a buffer so that the entity can be removed from the registry when needed.
         /// </summary>
         public void RemoveEntity(Entity entity)
         {
@@ -105,6 +106,18 @@ namespace AntEngine
         {
             CircleCollider cast = new(new Transform());
             return Colliders.Where(collider => collider.CheckCollision(cast)).ToList();
+        }
+
+        /// <summary>
+        /// Adds or removes the entities currently in the buffers.
+        ///
+        /// This method is called after a tick of the world.
+        /// You should call it if you need to have Entities updated without Update.
+        /// </summary>
+        public void ApplyEntityBuffers()
+        {
+            ApplyAddEntity();
+            ApplyRemoveEntity();
         }
 
         private void ApplyAddEntity()
