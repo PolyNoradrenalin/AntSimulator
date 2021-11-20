@@ -41,20 +41,7 @@ namespace AntEngine.Entities.Ants
         
         //TODO: Make these movement related properties not belong to only Ants.
 
-        /// <summary>
-        /// Current speed of the ant.
-        /// </summary>
-        public float Speed
-        {
-            get => _speed;
-            protected set => _speed = value > MaxSpeed ? MaxSpeed : value;
-        }
-
-        
-        /// <summary>
-        /// Directional velocity of the ant.
-        /// </summary>
-        public Vector2 Velocity { get; protected set; } = Vector2.Zero;
+        public Colony Home { get; set; }
 
         /// <summary>
         /// The ant's current movement strategy.
@@ -162,9 +149,7 @@ namespace AntEngine.Entities.Ants
             Transform foodTransform = new(Transform.Position, 0, Vector2.One);
             World.AddEntity(new FoodPheromone(Name, foodTransform, World, PheromoneTimeSpan));
         }
-
-        public Colony Home { get; set; }
-
+        
         /// <summary>
         /// Returns the weight factor associated to the distance between an ant and another entity.
         /// </summary>
