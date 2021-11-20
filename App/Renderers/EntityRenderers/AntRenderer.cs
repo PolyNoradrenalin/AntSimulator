@@ -9,7 +9,9 @@ namespace App.Renderers.EntityRenderers
     /// </summary>
     public class AntRenderer : EntityRenderer
     {
-        public AntRenderer(Ant e, Texture2D antCharset) : base(e, antCharset)
+        private const float AntDepthBuffer = 1F;
+        
+        public AntRenderer(Ant e, Texture2D antCharset) : base(e, antCharset, AntDepthBuffer)
         {
         }
 

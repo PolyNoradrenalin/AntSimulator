@@ -72,7 +72,7 @@ namespace App
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(SpriteSortMode.FrontToBack);
             
             foreach (IRenderer r in renderers)
             {
