@@ -82,6 +82,10 @@ namespace AntEngine.Entities.Ants
         public int PerceptionMapPrecision { get; } = 24;
 
         public TimeSpan PheromoneTimeSpan { get; protected set; } = TimeSpan.FromSeconds(10);
+        /// <summary>
+        /// Delay between each emission of a pheromone.
+        /// </summary>
+        public float PheromoneEmissionDelay { get; protected set; } = 6F;
 
         /// <summary>
         /// Applies movement to ant's coordinates.
