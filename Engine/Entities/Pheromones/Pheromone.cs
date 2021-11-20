@@ -35,7 +35,7 @@ namespace AntEngine.Entities.Pheromones
 
         protected virtual void OnDecay(object sender, EventArgs e)
         {
-            World.Entities.Remove(this);
+            World.RemoveEntity(this);
         }
     }
 }

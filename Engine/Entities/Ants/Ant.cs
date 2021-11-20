@@ -66,6 +66,11 @@ namespace AntEngine.Entities.Ants
         public TimeSpan PheromoneTimeSpan { get; protected set; } = TimeSpan.FromSeconds(10);
         
         /// <summary>
+        /// Delay between each emission of a pheromone.
+        /// </summary>
+        public float PheromoneEmissionDelay { get; protected set; } = 2F;
+
+        /// <summary>
         /// Creates the ant's perception map.
         /// A perception map is used to represent which directions are attractive for the ant.
         /// </summary>

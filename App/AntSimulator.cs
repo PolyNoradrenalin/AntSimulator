@@ -43,7 +43,7 @@ namespace App
             
             _renderers.Add(mainSimFrame);
 
-            for (int i = 0; i < 8000; i++)
+            for (int i = 0; i < 50; i++)
             {
                 Ant a = new Ant("EntityTest",
                     new Transform(new Vector2(new Random().Next(10,

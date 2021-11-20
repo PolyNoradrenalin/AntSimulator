@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AntEngine.Entities.Ants;
 using AntEngine.Entities.Pheromones;
@@ -23,6 +24,8 @@ namespace AntEngine.Entities.States.Living
             }
         }
 
+        private DateTime _lastEmit;
+
         public override void OnStateUpdate(StateEntity stateEntity)
         {
             base.OnStateUpdate(stateEntity);
@@ -45,8 +48,12 @@ namespace AntEngine.Entities.States.Living
                     break;
                 }
             }
-            
-            ant.EmitHomePheromone();
+
+            if (DateTime.Now.Subtract(_lastEmit).TotalSeconds > ant.PheromoneEmissionDelay)
+            {
+                ant.EmitHomePheromone();
+                _lastEmit = DateTime.Now;
+            }
         }
 
         public new IState Next(StateEntity stateEntity)

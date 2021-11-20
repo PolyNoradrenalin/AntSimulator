@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AntEngine;
 using AntEngine.Entities;
 using AntEngine.Entities.Ants;
@@ -20,7 +22,7 @@ namespace App.UIElements
         public static Texture2D AntTexture;
         public static Texture2D ColonyTexture;
         
-        private List<IRenderer> _renderers;
+        private IList<IRenderer> _renderers;
 
         public SimFrame(World world)
         {
@@ -66,7 +68,7 @@ namespace App.UIElements
         
         private void OnEntityRemoved(Entity entity)
         {
-            foreach (IRenderer renderer in _renderers)
+            foreach (IRenderer renderer in _renderers.ToList())
             {
                 if (!(renderer is EntityRenderer entityRenderer)) continue;
                 

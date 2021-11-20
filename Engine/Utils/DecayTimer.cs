@@ -37,7 +37,7 @@ namespace AntEngine.Utils
 
          public void Update()
          {
-             LifeSpan = creationTime - DateTime.Now;
+             LifeSpan = DateTime.Now - creationTime;
              if (LifeSpan >= MaxLifeSpan)
              {
                  OnDecay(EventArgs.Empty);
