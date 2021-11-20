@@ -26,7 +26,7 @@ namespace AntEngine.Entities.Ants
         {
         }
 
-        public Ant(string name, Transform transform, World world) : this(name, transform, world, new LivingState())
+        public Ant(string name, Transform transform, World world) : this(name, transform, world, new SearchState())
         {
         }
 
@@ -64,7 +64,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// The ant's current movement strategy.
         /// </summary>
-        public IMovementStrategy MovementStrategy { get; protected set; } = new LineStrategy();
+        public IMovementStrategy MovementStrategy { get; protected set; } = new WandererStrategy(0.5f, 0.9f);
 
         /// <summary>
         /// Represents the ant's inventory.
@@ -89,9 +89,11 @@ namespace AntEngine.Entities.Ants
         /// <param name="dir"></param>
         public void Move(Vector2 dir)
         {
-            Vector2 globalDir = Vector2.Normalize(new Vector2(
-                dir.X * MathF.Cos(Transform.Rotation) - dir.Y * MathF.Sin(Transform.Rotation),
-                dir.X * MathF.Sin(Transform.Rotation) + dir.Y * MathF.Cos(Transform.Rotation)));
+            Vector2 globalDir = dir.Length() > 0
+                ? Vector2.Normalize(new Vector2(
+                    dir.X * MathF.Cos(Transform.Rotation) - dir.Y * MathF.Sin(Transform.Rotation),
+                    dir.X * MathF.Sin(Transform.Rotation) + dir.Y * MathF.Cos(Transform.Rotation)))
+                : Vector2.Zero;
 
             Transform.Rotation = MathF.Atan2(globalDir.Y, Vector2.Dot(globalDir, Vector2.UnitX));
 
@@ -172,7 +174,8 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public void EmitHomePheromone()
         {
-            World.AddEntity(new HomePheromone(Name, Transform, World, PheromoneTimeSpan));
+            Transform homeTransform = new(Transform.Position, 0, Vector2.One);
+            World.AddEntity(new HomePheromone(Name, homeTransform, World, PheromoneTimeSpan));
         }
         
         /// <summary>
@@ -180,7 +183,8 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public void EmitFoodPheromone()
         {
-            World.AddEntity(new FoodPheromone(Name, Transform, World, PheromoneTimeSpan));
+            Transform foodTransform = new(Transform.Position, 0, Vector2.One);
+            World.AddEntity(new FoodPheromone(Name, foodTransform, World, PheromoneTimeSpan));
         }
 
         public Colony Home { get; set; }

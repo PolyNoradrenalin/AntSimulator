@@ -13,10 +13,15 @@ namespace App.Renderers.EntityRenderers
     /// </summary>
     public class EntityRenderer : IRenderer
     {
-        public EntityRenderer(Entity e, Texture2D entityCharset)
+        private const float DefaultDepthBuffer = 0F;
+        
+        private float _depthBuffer;
+        
+        public EntityRenderer(Entity e, Texture2D entityCharset, float depthBuffer = DefaultDepthBuffer)
         {
             Entity = e;
             EntityCharset = entityCharset;
+            _depthBuffer = depthBuffer;
         }
 
         public Entity Entity { get; }
@@ -49,9 +54,20 @@ namespace App.Renderers.EntityRenderers
             int scaleX = (int) MathF.Round(Entity.Transform.Scale.X * scale);
             int scaleY = (int) MathF.Round(Entity.Transform.Scale.Y * scale);
 
-            Rectangle spritePos = new Rectangle(canvasOffset.Left + posX, canvasOffset.Top + canvasOffset.Height - posY - scaleY, scaleX, scaleY);
-            
-            spriteBatch.Draw(EntityCharset, spritePos, null, Color.White, Entity.Transform.Rotation, new Vector2(EntityCharset.Width, EntityCharset.Height)/2f, SpriteEffects.None,1);
+            Rectangle spritePos = new Rectangle(
+                canvasOffset.Left + posX, 
+                canvasOffset.Top + canvasOffset.Height - posY,
+                scaleX,
+                scaleY);
+
+            spriteBatch.Draw(EntityCharset,
+                spritePos,
+                null,
+                Color.White,
+                -Entity.Transform.Rotation,
+                new Vector2(EntityCharset.Width, EntityCharset.Height) / 2f,
+                SpriteEffects.None,
+                _depthBuffer);
         }
         
         public Texture2D EntityCharset { get; set; } 
