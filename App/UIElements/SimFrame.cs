@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AntEngine;
 using AntEngine.Entities;
 using AntEngine.Entities.Ants;
@@ -33,11 +34,11 @@ namespace App.UIElements
 
         public World SimWorld { get; private set; }
         
-        public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm)
+        public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             foreach (IRenderer r in _renderers)
             {
-                r.Render(spriteBatch, gdm);
+                r.Render(spriteBatch, gdm, new Rectangle(Position.X + canvasOffset.Left, Position.Y + canvasOffset.Top, Size.Width, Size.Height));
             }
         }
 

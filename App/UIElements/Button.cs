@@ -8,7 +8,7 @@ namespace App.UIElements
     /// </summary>
     public class Button : UIElement
     {
-        public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm)
+        public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             // TODO: Implement
         }
