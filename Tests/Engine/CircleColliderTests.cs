@@ -54,7 +54,7 @@ namespace Tests.Engine
         }
         
         [Theory]
-        [InlineData(450, 450, 100)]
+        [InlineData(475, 475, 100)]
         [InlineData(450, 500, 100)]
         [InlineData(500, 500, 100)]
         private void CircleWorld_OnePixelWorldAndCircleTouch_ShouldCollide(float posX, float posY, float radius)
@@ -64,6 +64,45 @@ namespace Tests.Engine
             WorldCollider.Matrix[500][500] = true;
             
             Assert.True(circle.CheckCollision(WorldCollider));
+        }
+
+        [Fact]
+        private void CircleCircle_FarFromEachOther_ShouldNotCollide()
+        {
+            CircleCollider circle1 = new(new Transform());
+            CircleCollider circle2 = new(new Transform());
+            circle2.ParentTransform.Position = Vector2.One * 100f;
+            
+            Assert.False(circle1.CheckCollision(circle2));
+        }
+        
+        [Fact]
+        private void CircleCircle_SamePosition_ShouldCollide()
+        {
+            CircleCollider circle1 = new(new Transform());
+            CircleCollider circle2 = new(new Transform());
+            
+            Assert.True(circle1.CheckCollision(circle2));
+        }
+        
+        [Fact]
+        private void CircleCircle_Overlapping_ShouldCollide()
+        {
+            CircleCollider circle1 = new(new Transform());
+            CircleCollider circle2 = new(new Transform());
+            circle1.ParentTransform.Position = Vector2.UnitX * 0.5f;
+            
+            Assert.True(circle1.CheckCollision(circle2));
+        }
+        
+        [Fact]
+        private void CircleCircle_RadiusOverlapPosition_ShouldCollide()
+        {
+            CircleCollider circle1 = new(new Transform());
+            CircleCollider circle2 = new(new Transform());
+            circle1.ParentTransform.Position = Vector2.UnitX * 0.0001F;
+            
+            Assert.True(circle1.CheckCollision(circle2));
         }
     }
 }

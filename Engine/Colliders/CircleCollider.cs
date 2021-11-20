@@ -14,7 +14,7 @@ namespace AntEngine.Colliders
     {
         public CircleCollider(Transform parentTransform) : base(parentTransform)
         {
-            Radius = MathF.Max(parentTransform.Scale.X, parentTransform.Scale.Y);
+            Radius = MathF.Max(parentTransform.Scale.X, parentTransform.Scale.Y) / 2F;
         }
 
         /// <summary>
