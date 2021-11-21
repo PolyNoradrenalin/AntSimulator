@@ -102,7 +102,7 @@ namespace AntEngine
         /// <param name="position">Origin of the detection range</param>
         /// <param name="radius">Radius of the range</param>
         /// <returns>List of the colliders</returns>
-        public IList<Collider> CircleCast(Vector2 position, float radius)
+        public IEnumerable<Collider> CircleCast(Vector2 position, float radius)
         {
             CircleCollider cast = new(new Transform(position, 0, Vector2.One * radius));
             return Colliders.Where(collider => collider.CheckCollision(cast));
