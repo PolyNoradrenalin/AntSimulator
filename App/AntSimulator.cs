@@ -22,7 +22,8 @@ namespace App
         private List<IRenderer> _renderers;
         private DateTime _lastTimeTick;
         private int _targetTps = 60;
-        
+        private bool _initialized;
+
         public AntSimulator()
         {
             _graphics = new GraphicsDeviceManager(this);

@@ -19,7 +19,8 @@ namespace Tests.Engine
             World w = new(Vector2.One * 100);
             Ant ant = new(w);
             FoodPheromone foodPheromone = new(w);
-
+            w.ApplyEntityBuffers();
+            
             ant.Transform.Position = Vector2.One;
             foodPheromone.Transform.Position = Vector2.One * 2;
 
@@ -42,7 +43,7 @@ namespace Tests.Engine
             World w = new(Vector2.One * 100);
             Ant ant = new(w);
             FoodPheromone foodPheromone = new(w);
-
+            w.ApplyEntityBuffers();
             ant.Transform.Position = -1 * Vector2.One;
             ant.Transform.Rotation = MathF.PI;
             foodPheromone.Transform.Position = Vector2.One * -2;
