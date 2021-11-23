@@ -15,8 +15,7 @@ namespace AntEngine.Entities.States.Living
     /// </summary>
     public class SearchState : LivingState
     {
-        private const float ObstacleDetectRadius = 10F;
-        private const int ObstacleIndexDivisor = 5;
+        private const int ObstacleIndexDivisor = 4;
         
         private static SearchState _instance;
 
@@ -34,9 +33,11 @@ namespace AntEngine.Entities.States.Living
         public override void OnStateUpdate(StateEntity stateEntity)
         {
             base.OnStateUpdate(stateEntity);
-            
+
             Ant ant = (Ant) stateEntity;
             PerceptionMap perceptionMap = ant.GetPerceptionMap<FoodPheromone>();
+            
+            float obstacleDetectRadius = ant.Transform.Scale.Length() / 2F;
             int maxDirIndex = ant.PerceptionMapPrecision;
 
             List<Vector2> dirs = new();
@@ -53,8 +54,8 @@ namespace AntEngine.Entities.States.Living
                 
                 IList<Collider> collisions = new List<Collider>(
                     stateEntity.World.CircleCast(
-                    stateEntity.Transform.Position + globalDir * ObstacleDetectRadius,
-                    ObstacleDetectRadius));
+                    stateEntity.Transform.Position + globalDir * obstacleDetectRadius,
+                    obstacleDetectRadius));
                 
                 collisions = collisions.Where(collider => collider is not CircleCollider).ToList();
                 if (collisions.Count > 0)
@@ -81,7 +82,7 @@ namespace AntEngine.Entities.States.Living
 
             if (DateTime.Now.Subtract(_lastEmit).TotalSeconds > ant.PheromoneEmissionDelay)
             {
-                ant.EmitHomePheromone();
+                //ant.EmitHomePheromone();
                 _lastEmit = DateTime.Now;
             }
         }
