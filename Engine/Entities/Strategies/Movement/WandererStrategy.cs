@@ -38,7 +38,21 @@ namespace AntEngine.Entities.Strategies.Movement
             Vector2 randomDir = new(MathF.Cos(centeredAngle), MathF.Sin(centeredAngle));
             Vector2 targetDir = map.Mean;
 
-            _dir = _oldDirFactor * _dir + (1 - _oldDirFactor) * ((1 - _random) * targetDir + _random * randomDir);
+            if (targetDir.X < -0.5f)
+            {
+                _dir = targetDir;
+            }
+            else
+            {
+                if (_dir.X < 0)
+                {
+                    _dir = (1 - _random) * targetDir + _random * randomDir;
+                }
+                else
+                {
+                    _dir = _oldDirFactor * _dir + (1 - _oldDirFactor) * ((1 - _random) * targetDir + _random * randomDir);
+                }
+            }
             return _dir;
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Numerics;
 
 namespace AntEngine.Utils.Maths
@@ -45,11 +46,11 @@ namespace AntEngine.Utils.Maths
 
                 foreach (Vector2 dir in Weights.Keys)
                 {
-                    totalVector += dir;
+                    totalVector += dir * Weights[dir];
                     totalWeight += Weights[dir];
                 }
 
-                return (totalWeight > 0) ? totalVector / totalWeight : Vector2.Zero;
+                return (totalWeight != 0) ? totalVector / MathF.Abs(totalWeight) : Vector2.Zero;
             }
         }
     }
