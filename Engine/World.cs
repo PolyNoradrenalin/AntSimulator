@@ -130,6 +130,19 @@ namespace AntEngine
         }
 
         /// <summary>
+        /// Updates the region of an entity.
+        /// </summary>
+        /// <param name="entity">Entity to be updated</param>
+        public void UpdateEntityRegion(Entity entity)
+        {
+            if (Entities.Contains(entity))
+            {
+                RemoveEntity(entity);
+            }
+            AddEntity(entity);
+        }
+
+        /// <summary>
         /// Returns all colliders in a range of a specific position.
         /// </summary>
         /// <param name="position">Origin of the detection range</param>
