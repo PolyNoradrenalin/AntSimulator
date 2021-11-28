@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -15,15 +16,26 @@ namespace AntEngine
     public class World
     {
         public const int WorldDivision = 64;
+
+        private readonly List<Entity>[][] _regions;
         
-        private readonly IList<Entity> _entities;
         private IList<Entity> _entitiesAddedBuffer;
         private IList<Entity> _entitiesRemovedBuffer;
         
         public World(Vector2 size)
         {
             Size = size;
-            Entities = new List<Entity>();
+            Regions = new List<Entity>[WorldDivision][];
+
+            for (int i = 0; i < WorldDivision; i++)
+            {
+                Regions[i] = new List<Entity>[WorldDivision];
+                for (int j = 0; j < WorldDivision; j++)
+                {
+                    Regions[i][j] = new List<Entity>();
+                }
+            }
+            
             Colliders = new List<Collider>();
 
             _entitiesAddedBuffer = new List<Entity>();
@@ -49,11 +61,23 @@ namespace AntEngine
         /// </summary>
         public IEnumerable<Entity> Entities
         {
-            get => _entities;
-            private init => _entities = value as List<Entity>;
+            get
+            {
+                List<Entity> retList = new List<Entity>();
+                
+                for (int i = 0; i < WorldDivision; i++)
+                {
+                    for (int j = 0; j < WorldDivision; j++)
+                    {
+                        retList.AddRange(Regions[i][j]);
+                    } 
+                }
+
+                return retList;
+            }
         }
 
-        public int EntityCount => _entities.Count;
+        public int EntityCount => Regions.Length;
 
         /// <summary>
         /// Size of the world.
@@ -64,7 +88,16 @@ namespace AntEngine
         /// Collider of the world (the walls).
         /// </summary>
         public WorldCollider Collider { get; private set; }
-        
+
+        /// <summary>
+        /// Stores entities into a region with all other entities in the same region.
+        /// </summary>
+        public List<Entity>[][] Regions
+        {
+            get => _regions;
+            private init => _regions = value;
+        }
+
         /// <summary>
         /// Updates all entities in the world.
         /// </summary>
@@ -120,13 +153,27 @@ namespace AntEngine
             ApplyRemoveEntity();
         }
 
+        /// <summary>
+        /// Calculates the region that a transform belongs to and returns it in the form of a pair.
+        /// </summary>
+        /// <param name="t">Transform that we want to check.</param>
+        /// <returns>Coordinates of the region in which the Transform belongs.</returns>
+        public (int, int) GetRegionFromTransform(Transform t)
+        {
+            int xVal = (int) MathF.Floor(t.Position.X / WorldDivision);
+            int yVal = (int) MathF.Floor(t.Position.Y / WorldDivision);
+
+            return (xVal, yVal);
+        }
+
         private void ApplyAddEntity()
         {
             foreach (Entity entity in _entitiesAddedBuffer)
             {
                 if (!Entities.Contains(entity))
                 {
-                    _entities.Add(entity);
+                    (int x, int y) = GetRegionFromTransform(entity.Transform);
+                    _regions[x][y].Add(entity);
                     if (entity.Collider != null) Colliders.Add(entity.Collider);
                     EntityAdded?.Invoke(entity);
                 }
@@ -139,7 +186,8 @@ namespace AntEngine
         {
             foreach (Entity entity in _entitiesRemovedBuffer)
             {
-                bool removed = _entities.Remove(entity);
+                (int x, int y) = GetRegionFromTransform(entity.Transform);
+                bool removed = _regions[x][y].Remove(entity);
                 if (removed)
                 {
                     if (entity.Collider == null) Colliders.Remove(entity.Collider);
