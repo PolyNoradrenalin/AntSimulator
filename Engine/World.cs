@@ -170,12 +170,12 @@ namespace AntEngine
         /// <summary>
         /// Calculates the region that a transform belongs to and returns it in the form of a pair.
         /// </summary>
-        /// <param name="e">Entity that we want to check.</param>
-        /// <returns>Coordinates of the region in which the Entity belongs.</returns>
-        public (int, int) GetRegionFromEntityPosition(Entity e)
+        /// <param name="t"></param>
+        /// <returns>Coordinates of the region in which the Transform belongs.</returns>
+        public (int, int) GetRegionFromTransform(Transform t)
         {
-            int xVal = (int) MathF.Floor(e.Transform.Position.X / WorldDivision);
-            int yVal = (int) MathF.Floor(e.Transform.Position.Y / WorldDivision);
+            int xVal = (int) MathF.Floor(t.Position.X / WorldDivision);
+            int yVal = (int) MathF.Floor(t.Position.Y / WorldDivision);
 
             return (xVal, yVal);
         }
@@ -186,7 +186,7 @@ namespace AntEngine
             {
                 if (!Entities.Contains(entity))
                 {
-                    (int x, int y) = GetRegionFromEntityPosition(entity);
+                    (int x, int y) = GetRegionFromTransform(entity.Transform);
                     _regions[x][y].Add(entity);
                     if (entity.Collider != null) Colliders.Add(entity.Collider);
                     EntityAdded?.Invoke(entity);
@@ -200,7 +200,7 @@ namespace AntEngine
         {
             foreach (Entity entity in _entitiesRemovedBuffer)
             {
-                (int x, int y) = GetRegionFromEntityPosition(entity);
+                (int x, int y) = GetRegionFromTransform(entity.Transform);
                 bool removed = _regions[x][y].Remove(entity);
                 if (removed)
                 {

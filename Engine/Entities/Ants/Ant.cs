@@ -123,7 +123,7 @@ namespace AntEngine.Entities.Ants
         {
             List<Entity> list = new();
 
-            (int x, int y) = World.GetRegionFromEntityPosition(this);
+            (int x, int y) = World.GetRegionFromTransform(Transform);
 
             // TODO: Check neighbouring regions for detection in order to manage edge cases.
             
