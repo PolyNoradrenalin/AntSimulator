@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
@@ -121,13 +122,12 @@ namespace AntEngine.Entities.Ants
         public List<Entity> GetSurroundingEntities<T>() where T : Entity
         {
             List<Entity> list = new();
+
+            (int x, int y) = World.GetRegionFromEntityPosition(this);
+
+            // TODO: Check neighbouring regions for detection in order to manage edge cases.
             
-            foreach (Entity e in World.Entities)
-            {
-                if (e is not T) continue;
-                if (!(e.Transform.GetDistance(Transform) <= PerceptionDistance)) continue;
-                list.Add(e);
-            }
+            CheckEntitiesInRegion<T>(x, y, list);
 
             return list;
         }
@@ -164,6 +164,16 @@ namespace AntEngine.Entities.Ants
         {
             Transform foodTransform = new(Transform.Position, 0, Vector2.One);
             FoodPheromone unused = new(Name, foodTransform, World, PheromoneTimeSpan);
+        }
+
+        private void CheckEntitiesInRegion<T>(int x, int y, IList list)
+        {
+            foreach (Entity e in World.Regions[x][y])
+            {
+                if (e is not T) continue;
+                if (!(e.Transform.GetDistance(Transform) <= PerceptionDistance)) continue;
+                list.Add(e);
+            }
         }
         
         /// <summary>
