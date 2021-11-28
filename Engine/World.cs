@@ -77,7 +77,21 @@ namespace AntEngine
             }
         }
 
-        public int EntityCount => Regions.Length;
+        public int EntityCount
+        {
+            get
+            {
+                int count = 0;
+                for (int i = 0; i < WorldDivision; i++)
+                {
+                    for (int j = 0; j < WorldDivision; j++)
+                    {
+                        count += Regions[i][j].Count;
+                    }
+                }
+                return count;
+            }
+        }
 
         /// <summary>
         /// Size of the world.
@@ -165,7 +179,7 @@ namespace AntEngine
 
             return (xVal, yVal);
         }
-
+        
         private void ApplyAddEntity()
         {
             foreach (Entity entity in _entitiesAddedBuffer)
