@@ -123,7 +123,7 @@ namespace AntEngine.Entities.Ants
         {
             (uint x, uint y) = World.GetRegionFromTransform(Transform);
 
-            int radius = Math.Max((int) MathF.Round(PerceptionDistance / World.WorldDivision), 1);
+            int radius = Math.Max((int) MathF.Ceiling(PerceptionDistance / World.WorldDivision), 1);
 
             return World.CheckEntitiesInRegion<T>(x, y, radius);
         }
