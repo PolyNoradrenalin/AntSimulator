@@ -121,15 +121,11 @@ namespace AntEngine.Entities.Ants
         /// <returns>List of the entities in the perception range of this Ant</returns>
         public List<Entity> GetSurroundingEntities<T>() where T : Entity
         {
-            List<Entity> list = new();
-
             (int x, int y) = World.GetRegionFromTransform(Transform);
 
-            // TODO: Check neighbouring regions for detection in order to manage edge cases.
-            
-            CheckEntitiesInRegion<T>(x, y, list);
+            int radius = Math.Max((int) MathF.Round(PerceptionDistance / World.WorldDivision), 1);
 
-            return list;
+            return World.CheckEntitiesInRegion<T>(x, y, radius);
         }
 
         /// <summary>
@@ -166,15 +162,7 @@ namespace AntEngine.Entities.Ants
             FoodPheromone unused = new(Name, foodTransform, World, PheromoneTimeSpan);
         }
 
-        private void CheckEntitiesInRegion<T>(int x, int y, IList list)
-        {
-            foreach (Entity e in World.Regions[x][y])
-            {
-                if (e is not T) continue;
-                if (!(e.Transform.GetDistance(Transform) <= PerceptionDistance)) continue;
-                list.Add(e);
-            }
-        }
+        
         
         /// <summary>
         /// Returns the weight factor associated to the distance between an ant and another entity.

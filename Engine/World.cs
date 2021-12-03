@@ -180,6 +180,30 @@ namespace AntEngine
             return (xVal, yVal);
         }
         
+        public List<Entity> CheckEntitiesInRegion<T>(int x, int y)
+        {
+            return Regions[x][y].Where(e => e is T).ToList();
+        }
+        
+        public List<Entity> CheckEntitiesInRegion<T>(int x, int y, int radius)
+        {
+            List<Entity> list = new();
+
+            for (int i = 0; i <= 2 * radius; i++)
+            {
+                for (int j = 0; j <= 2 * radius; j++)
+                {
+                    int xRegion = x - radius + i;
+                    int yRegion = y - radius + j;
+
+                    if (xRegion is < 0 or >= WorldDivision || yRegion is < 0 or >= WorldDivision) continue;
+                    list.AddRange(Regions[xRegion][yRegion].Where(e => e is T));
+                }
+            }
+
+            return list;
+        }
+        
         private void ApplyAddEntity()
         {
             foreach (Entity entity in _entitiesAddedBuffer)
