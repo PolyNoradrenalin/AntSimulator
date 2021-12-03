@@ -87,12 +87,12 @@ namespace AntEngine.Entities.Ants
                 Vector2 pheromoneDirection = e.Transform.Position - Transform.Position;
                 
                 float angleDifference = MathF.Acos(Vector2.Dot(antDirection,pheromoneDirection) / (antDirection.Length() * pheromoneDirection.Length()));
-
+                angleDifference = MathF.Atan2(pheromoneDirection.Y, Vector2.Dot(pheromoneDirection, Vector2.UnitX));
+                
                 int weightListIndex = (int) MathF.Floor(angleDifference / (2 * MathF.PI / PerceptionMapPrecision));
 
                 float weightSum = weights[weightListIndex];
                 weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform));
-                weightSum += GetWeightFactorFromRotation(angleDifference);
                 weights[weightListIndex] = weightSum;
             }
 
@@ -162,17 +162,7 @@ namespace AntEngine.Entities.Ants
         /// <returns>Weight value to be added to total weight</returns>
         private float GetWeightFactorFromDistance(float distance)
         {
-            return MathF.Pow(distance, 2) != 0 ? 1 / MathF.Pow(distance, 2) : 0;
-        }
-
-        /// <summary>
-        /// Returns the weight factor associated to the rotationDifference between an ant and another entity.
-        /// </summary>
-        /// <param name="rotationDelta">Difference in rotation between the entity and the ant</param>
-        /// <returns>Weight value to be added to total weight</returns>
-        private float GetWeightFactorFromRotation(float rotationDelta)
-        {
-            return MathF.Pow(rotationDelta, 2) != 0 ? 1 / MathF.Pow(rotationDelta, 2) : 0;
+            return MathF.Pow(distance, 2) != 0 ? 1 / MathF.Pow(distance + 5F, 2) : 0;
         }
     }
 }
