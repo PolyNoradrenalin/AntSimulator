@@ -15,7 +15,7 @@ namespace AntEngine.Entities.States.Living
     /// </summary>
     public class SearchState : LivingState
     {
-        private const int ObstacleIndexDivisor = 4;
+        private const int ObstacleRayIndex = 4;
         
         private static SearchState _instance;
 
@@ -39,28 +39,29 @@ namespace AntEngine.Entities.States.Living
             
             float obstacleDetectRadius = ant.Transform.Scale.Length() / 2F;
             int maxDirIndex = ant.PerceptionMapPrecision;
+            float positiveRotation = ant.Transform.Rotation < 0
+                ? ant.Transform.Rotation + 2F * MathF.PI
+                : ant.Transform.Rotation;
+            
+            int[] dirs = new int[3];
+            dirs[0] = (int) MathF.Floor(positiveRotation / (2 * MathF.PI) * maxDirIndex);
+            dirs[1] = (dirs[0] + ObstacleRayIndex) % maxDirIndex;
+            dirs[2] = (dirs[0] + maxDirIndex - ObstacleRayIndex) % maxDirIndex;
 
-            List<Vector2> dirs = new();
-            dirs.Add(perceptionMap.Weights.Keys.ElementAt(0));
-            dirs.Add(perceptionMap.Weights.Keys.ElementAt(maxDirIndex / ObstacleIndexDivisor - 1));
-            dirs.Add(perceptionMap.Weights.Keys.ElementAt(maxDirIndex - maxDirIndex / ObstacleIndexDivisor - 1));
-
-            foreach (Vector2 dir in dirs)
+            foreach (int i in dirs)
             {
-                Vector2 globalDir = new Vector2(
-                    MathF.Cos(ant.Transform.Rotation) * dir.X - MathF.Sin(ant.Transform.Rotation) * dir.Y,
-                    MathF.Sin(ant.Transform.Rotation) * dir.X + MathF.Cos(ant.Transform.Rotation) * dir.Y
-                );
-                
+                Vector2 dir = perceptionMap.Weights.Keys.ElementAt(i);
+                Vector2 opposite = perceptionMap.Weights.Keys.ElementAt((i + maxDirIndex / 2) % maxDirIndex);
+
                 IList<Collider> collisions = new List<Collider>(
                     stateEntity.World.CircleCast(
-                    stateEntity.Transform.Position + globalDir * obstacleDetectRadius,
+                    stateEntity.Transform.Position + dir * obstacleDetectRadius,
                     obstacleDetectRadius));
                 
                 collisions = collisions.Where(collider => collider is not CircleCollider).ToList();
                 if (collisions.Count > 0)
                 {
-                    perceptionMap.Weights[dir] -= 1F;
+                    perceptionMap.Weights[opposite] += 1/3F;
                 }
             }
 
@@ -73,7 +74,6 @@ namespace AntEngine.Entities.States.Living
                 if (e is ResourceEntity resourceEntity)
                 {
                     ant.PickUp(resourceEntity);
-
                     stateEntity.State = Next(stateEntity);
 
                     break;

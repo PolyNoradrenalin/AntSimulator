@@ -46,7 +46,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// The ant's current movement strategy.
         /// </summary>
-        public IMovementStrategy MovementStrategy { get; protected set; } = new WandererStrategy(0.5f, 0.9f);
+        public IMovementStrategy MovementStrategy { get; protected set; } = new WandererStrategy(0.3f, 0.90f);
 
         /// <summary>
         /// Represents the ant's inventory.
@@ -83,14 +83,10 @@ namespace AntEngine.Entities.Ants
             
             foreach (Entity e in entities)
             {
-                Vector2 antDirection = Transform.GetDirectorVector();
                 Vector2 pheromoneDirection = e.Transform.Position - Transform.Position;
-                
-                float angleDifference = MathF.Acos(Vector2.Dot(antDirection,pheromoneDirection) / (antDirection.Length() * pheromoneDirection.Length()));
-                angleDifference = MathF.Atan2(pheromoneDirection.Y, Vector2.Dot(pheromoneDirection, Vector2.UnitX));
-                
+                float angleDifference = MathF.Atan2(pheromoneDirection.Y, Vector2.Dot(pheromoneDirection, Vector2.UnitX));
                 int weightListIndex = (int) MathF.Floor(angleDifference / (2 * MathF.PI / PerceptionMapPrecision));
-
+                
                 float weightSum = weights[weightListIndex];
                 weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform));
                 weights[weightListIndex] = weightSum;

@@ -62,16 +62,12 @@ namespace AntEngine.Entities
         /// <param name="dir"></param>
         public void Move(Vector2 dir)
         {
-            Vector2 globalDir = dir.Length() > 0
-                ? Vector2.Normalize(new Vector2(
-                    dir.X * MathF.Cos(Transform.Rotation) - dir.Y * MathF.Sin(Transform.Rotation),
-                    dir.X * MathF.Sin(Transform.Rotation) + dir.Y * MathF.Cos(Transform.Rotation)))
-                : Vector2.Zero;
-
-            Transform.Rotation = MathF.Atan2(globalDir.Y, Vector2.Dot(globalDir, Vector2.UnitX));
+            Transform.Rotation = MathF.Atan2(dir.Y, Vector2.Dot(dir, Vector2.UnitX));
 
             Vector2 lastPos = Transform.Position;
-            Collider.ParentTransform.Position += globalDir * Speed;
+            Vector2 movement = dir * Speed;
+            movement = movement.Length() > MaxSpeed ? MaxSpeed * (movement / movement.Length()) : movement;
+            Collider.ParentTransform.Position += movement;
             if (Collider.CheckCollision(World.Collider)) Collider.ParentTransform.Position = lastPos;
         }
 
