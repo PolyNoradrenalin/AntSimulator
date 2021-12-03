@@ -121,7 +121,7 @@ namespace AntEngine.Entities.Ants
         /// <returns>List of the entities in the perception range of this Ant</returns>
         public List<Entity> GetSurroundingEntities<T>() where T : Entity
         {
-            (int x, int y) = World.GetRegionFromTransform(Transform);
+            (uint x, uint y) = World.GetRegionFromTransform(Transform);
 
             int radius = Math.Max((int) MathF.Round(PerceptionDistance / World.WorldDivision), 1);
 

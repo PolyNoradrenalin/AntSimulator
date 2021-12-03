@@ -172,20 +172,23 @@ namespace AntEngine
         /// </summary>
         /// <param name="t"></param>
         /// <returns>Coordinates of the region in which the Transform belongs.</returns>
-        public (int, int) GetRegionFromTransform(Transform t)
+        public (uint, uint) GetRegionFromTransform(Transform t)
         {
-            int xVal = (int) MathF.Floor(t.Position.X / WorldDivision);
-            int yVal = (int) MathF.Floor(t.Position.Y / WorldDivision);
+            uint xVal = (uint) MathF.Floor(t.Position.X / WorldDivision);
+            uint yVal = (uint) MathF.Floor(t.Position.Y / WorldDivision);
 
             return (xVal, yVal);
         }
-        
-        public List<Entity> CheckEntitiesInRegion<T>(int x, int y)
-        {
-            return Regions[x][y].Where(e => e is T).ToList();
-        }
-        
-        public List<Entity> CheckEntitiesInRegion<T>(int x, int y, int radius)
+
+        /// <summary>
+        /// Allows us to get the list of entities that exist in a certain square of regions in the map.
+        /// </summary>
+        /// <param name="x">X coordinate of the center region of the square.</param>
+        /// <param name="y">Y coordinate of the center region of the square.</param>
+        /// <param name="radius">Radius that indicates how many regions we extend the list in each direction.</param>
+        /// <typeparam name="T">Type of entity to get.</typeparam>
+        /// <returns>A list of entities containing all entities belonging to the checked regions.</returns>
+        public List<Entity> CheckEntitiesInRegion<T>(uint x, uint y, int radius)
         {
             List<Entity> list = new();
 
@@ -193,8 +196,8 @@ namespace AntEngine
             {
                 for (int j = 0; j <= 2 * radius; j++)
                 {
-                    int xRegion = x - radius + i;
-                    int yRegion = y - radius + j;
+                    int xRegion = (int) x - radius + i;
+                    int yRegion = (int) y - radius + j;
 
                     if (xRegion is < 0 or >= WorldDivision || yRegion is < 0 or >= WorldDivision) continue;
                     list.AddRange(Regions[xRegion][yRegion].Where(e => e is T));
@@ -210,7 +213,7 @@ namespace AntEngine
             {
                 if (!Entities.Contains(entity))
                 {
-                    (int x, int y) = GetRegionFromTransform(entity.Transform);
+                    (uint x, uint y) = GetRegionFromTransform(entity.Transform);
                     _regions[x][y].Add(entity);
                     if (entity.Collider != null) Colliders.Add(entity.Collider);
                     EntityAdded?.Invoke(entity);
@@ -224,7 +227,7 @@ namespace AntEngine
         {
             foreach (Entity entity in _entitiesRemovedBuffer)
             {
-                (int x, int y) = GetRegionFromTransform(entity.Transform);
+                (uint x, uint y) = GetRegionFromTransform(entity.Transform);
                 bool removed = _regions[x][y].Remove(entity);
                 if (removed)
                 {
