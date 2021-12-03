@@ -139,7 +139,7 @@ namespace AntEngine.Entities.Ants
         public void EmitHomePheromone()
         {
             Transform homeTransform = new(Transform.Position, 0, Vector2.One);
-            World.AddEntity(new HomePheromone(Name, homeTransform, World, PheromoneTimeSpan));
+            HomePheromone unused = new(Name, homeTransform, World, PheromoneTimeSpan);
         }
         
         /// <summary>
@@ -148,7 +148,7 @@ namespace AntEngine.Entities.Ants
         public void EmitFoodPheromone()
         {
             Transform foodTransform = new(Transform.Position, 0, Vector2.One);
-            World.AddEntity(new FoodPheromone(Name, foodTransform, World, PheromoneTimeSpan));
+            FoodPheromone unused = new(Name, foodTransform, World, PheromoneTimeSpan);
         }
         
         /// <summary>
