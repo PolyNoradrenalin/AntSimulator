@@ -40,9 +40,7 @@ namespace AntEngine.Entities.Ants
             MaxSpeed = DefaultMaxSpeed;
             Speed = MaxSpeed;
         }
-
-        //TODO: Make these movement related properties not belong to only Ants.
-
+        
         public Colony Home { get; set; }
 
 
@@ -118,11 +116,9 @@ namespace AntEngine.Entities.Ants
         /// <returns>List of the entities in the perception range of this Ant</returns>
         public List<Entity> GetSurroundingEntities<T>() where T : Entity
         {
-            (int x, int y) = World.GetRegionFromTransform(Transform.Position);
-
             int radius = Math.Max((int) MathF.Ceiling(PerceptionDistance / World.WorldDivision), 1);
 
-            return World.CheckEntitiesInRegion<T>(x, y, radius);
+            return World.CheckEntitiesInRegion<T>(Region.X, Region.Y, radius);
         }
 
         /// <summary>
