@@ -6,7 +6,7 @@ namespace AntEngine.Entities
     /// <summary>
     /// Represents a resource in the world.
     /// </summary>
-    public abstract class ResourceEntity : Entity
+    public class ResourceEntity : Entity
     {
         public ResourceEntity(World world, int quantity, Resource resource) : base(world)
         {

@@ -40,7 +40,7 @@ namespace AntEngine.Utils.Maths
 
         /// <summary>
         /// Stores a rotation value.
-        /// Goes from 0 to 360 and default value is 0.
+        /// Goes from -2*Pi to 2*Pi and default value is 0.
         /// </summary>
         public float Rotation
         {

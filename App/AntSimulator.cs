@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using AntEngine;
+using AntEngine.Entities;
 using AntEngine.Entities.Ants;
+using AntEngine.Entities.Colonies;
+using AntEngine.Resources;
 using AntEngine.Utils.Maths;
 using App.Renderers;
 using App.UIElements;
@@ -22,7 +25,6 @@ namespace App
         private List<IRenderer> _renderers;
         private DateTime _lastTimeTick;
         private int _targetTps = 60;
-        private bool _initialized;
 
         public AntSimulator()
         {
@@ -44,18 +46,26 @@ namespace App
             
             _renderers.Add(mainSimFrame);
 
-            for (int i = 0; i < 50; i++)
+            Resource food = new Resource("food", "Test Food");
+
+            Colony colony = new Colony(_world, (name, transform, world, _) => new Ant("Ant", transform, world));
+            colony.Transform.Position = Vector2.One * 250F;
+            colony.Transform.Scale = Vector2.One * 20F;
+            colony.SpawnCost.AddResource(food, 10);
+            colony.Stockpile.AddResource(food, 10000);
+            colony.Spawn(10);
+            
+            for (int i = 0; i < 10; i++)
             {
-                Ant a = new Ant("EntityTest",
-                    new Transform(new Vector2(new Random().Next(10,
-                                490),
-                            new Random().Next(10,
-                                490)),
-                        0,
-                        new Vector2(15,
-                            10)),
-                    _world);
+                ResourceEntity foodEntity = new ResourceEntity(_world, 1000, food);
+                foodEntity.Transform.Position = new Vector2(new Random().Next(10,
+                        490),
+                    new Random().Next(10,
+                        490));
+                foodEntity.Transform.Scale = Vector2.One * 10;
             }
+
+
         }
 
         protected override void LoadContent()

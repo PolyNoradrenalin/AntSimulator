@@ -132,7 +132,7 @@ namespace AntEngine
                 }
             }
             
-            _entitiesRemovedBuffer.Clear();
+            _entitiesAddedBuffer.Clear();
         }
 
         private void ApplyRemoveEntity()

@@ -28,8 +28,6 @@ namespace AntEngine.Entities.States.Living
             }
         }
 
-        private DateTime _lastEmit;
-
         public override void OnStateUpdate(StateEntity stateEntity)
         {
             base.OnStateUpdate(stateEntity);
@@ -73,17 +71,15 @@ namespace AntEngine.Entities.States.Living
             {
                 if (e is ResourceEntity resourceEntity)
                 {
-                    ant.PickUp(resourceEntity);
-                    stateEntity.State = Next(stateEntity);
-
+                    if (ant.PickUp(resourceEntity)) stateEntity.State = Next(stateEntity);
                     break;
                 }
             }
 
-            if (DateTime.Now.Subtract(_lastEmit).TotalSeconds > ant.PheromoneEmissionDelay)
+            if (DateTime.Now.Subtract(ant.LastEmitTime).TotalSeconds > ant.PheromoneEmissionDelay)
             {
-                //ant.EmitHomePheromone();
-                _lastEmit = DateTime.Now;
+                ant.EmitHomePheromone();
+                ant.LastEmitTime = DateTime.Now;
             }
         }
 

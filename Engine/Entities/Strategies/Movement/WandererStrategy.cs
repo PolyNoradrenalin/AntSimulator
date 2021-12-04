@@ -40,15 +40,8 @@ namespace AntEngine.Entities.Strategies.Movement
             
             Vector2 targetDir = map.Mean;
             Vector2 rawDir = (1 - _random) * targetDir + _random * randomDir;
-
-            if (Vector2.Dot(rawDir, _dir) <= 0F)
-            {
-                _dir = rawDir;
-            }
-            else
-            {
-                _dir = _oldDirFactor * _dir + (1 - _oldDirFactor) * rawDir;
-            }
+            
+            _dir = _oldDirFactor * _dir + (1 - _oldDirFactor) * rawDir;
             
             return _dir;
         }
