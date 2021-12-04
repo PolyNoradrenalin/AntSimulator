@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Intrinsics.X86;
 using AntEngine.Colliders;
 using AntEngine.Entities;
 using AntEngine.Utils.Maths;
@@ -18,10 +19,11 @@ namespace AntEngine
         public const int WorldDivision = 64;
 
         private readonly List<Entity>[][] _regions;
-        
+
         private IList<Entity> _entitiesAddedBuffer;
+        private IList<Entity> _entitiesUpdatedBuffer;
         private IList<Entity> _entitiesRemovedBuffer;
-        
+
         public World(Vector2 size)
         {
             Size = size;
@@ -30,17 +32,15 @@ namespace AntEngine
             for (int i = 0; i < WorldDivision; i++)
             {
                 Regions[i] = new List<Entity>[WorldDivision];
-                for (int j = 0; j < WorldDivision; j++)
-                {
-                    Regions[i][j] = new List<Entity>();
-                }
+                for (int j = 0; j < WorldDivision; j++) Regions[i][j] = new List<Entity>();
             }
-            
+
             Colliders = new List<Collider>();
 
             _entitiesAddedBuffer = new List<Entity>();
+            _entitiesUpdatedBuffer = new List<Entity>();
             _entitiesRemovedBuffer = new List<Entity>();
-            
+
             Collider = new WorldCollider(new Transform(), size, WorldDivision);
             Colliders.Add(Collider);
         }
@@ -51,11 +51,12 @@ namespace AntEngine
         /// Called when an entity is spawned in the world.
         /// </summary>
         public event Action<Entity> EntityAdded;
+
         /// <summary>
         /// Called when an entity is removed from the world.
         /// </summary>
         public event Action<Entity> EntityRemoved;
-        
+
         /// <summary>
         /// List of the entities present on the map.
         /// </summary>
@@ -63,15 +64,11 @@ namespace AntEngine
         {
             get
             {
-                List<Entity> retList = new List<Entity>();
-                
+                List<Entity> retList = new();
+
                 for (int i = 0; i < WorldDivision; i++)
-                {
-                    for (int j = 0; j < WorldDivision; j++)
-                    {
-                        retList.AddRange(Regions[i][j]);
-                    }
-                }
+                for (int j = 0; j < WorldDivision; j++)
+                    retList.AddRange(Regions[i][j]);
 
                 return retList;
             }
@@ -83,12 +80,8 @@ namespace AntEngine
             {
                 int count = 0;
                 for (int i = 0; i < WorldDivision; i++)
-                {
-                    for (int j = 0; j < WorldDivision; j++)
-                    {
-                        count += Regions[i][j].Count;
-                    }
-                }
+                for (int j = 0; j < WorldDivision; j++)
+                    count += Regions[i][j].Count;
                 return count;
             }
         }
@@ -117,11 +110,8 @@ namespace AntEngine
         /// </summary>
         public void Update()
         {
-            foreach (Entity entity in Entities)
-            {
-                entity.Update();
-            }
-            
+            foreach (Entity entity in Entities) entity.Update();
+
             ApplyEntityBuffers();
         }
 
@@ -132,6 +122,15 @@ namespace AntEngine
         public void AddEntity(Entity entity)
         {
             _entitiesAddedBuffer.Add(entity);
+        }
+
+        /// <summary>
+        /// Updates the region of an entity.
+        /// </summary>
+        /// <param name="entity">Entity to be updated</param>
+        public void UpdateEntityRegion(Entity entity)
+        {
+            _entitiesUpdatedBuffer.Add(entity);
         }
 
         /// <summary>
@@ -164,18 +163,19 @@ namespace AntEngine
         public void ApplyEntityBuffers()
         {
             ApplyAddEntity();
+            ApplyUpdateEntity();
             ApplyRemoveEntity();
         }
 
         /// <summary>
         /// Calculates the region that a transform belongs to and returns it in the form of a pair.
         /// </summary>
-        /// <param name="t"></param>
+        /// <param name="p"></param>
         /// <returns>Coordinates of the region in which the Transform belongs.</returns>
-        public (uint, uint) GetRegionFromTransform(Transform t)
+        public (int, int) GetRegionFromTransform(Vector2 p)
         {
-            uint xVal = (uint) MathF.Floor(t.Position.X / WorldDivision);
-            uint yVal = (uint) MathF.Floor(t.Position.Y / WorldDivision);
+            int xVal = (int) MathF.Floor(p.X / WorldDivision);
+            int yVal = (int) MathF.Floor(p.Y / WorldDivision);
 
             return (xVal, yVal);
         }
@@ -188,46 +188,61 @@ namespace AntEngine
         /// <param name="radius">Radius that indicates how many regions we extend the list in each direction.</param>
         /// <typeparam name="T">Type of entity to get.</typeparam>
         /// <returns>A list of entities containing all entities belonging to the checked regions.</returns>
-        public List<Entity> CheckEntitiesInRegion<T>(uint x, uint y, int radius)
+        public List<Entity> CheckEntitiesInRegion<T>(int x, int y, int radius)
         {
             List<Entity> list = new();
 
             for (int i = 0; i <= 2 * radius; i++)
+            for (int j = 0; j <= 2 * radius; j++)
             {
-                for (int j = 0; j <= 2 * radius; j++)
-                {
-                    int xRegion = (int) x - radius + i;
-                    int yRegion = (int) y - radius + j;
+                int xRegion = x - radius + i;
+                int yRegion = y - radius + j;
 
-                    if (xRegion is < 0 or >= WorldDivision || yRegion is < 0 or >= WorldDivision) continue;
-                    list.AddRange(Regions[xRegion][yRegion].Where(e => e is T));
-                }
+                if (xRegion is < 0 or >= WorldDivision || yRegion is < 0 or >= WorldDivision) continue;
+                list.AddRange(Regions[xRegion][yRegion].Where(e => e is T));
             }
 
             return list;
         }
-        
+
         private void ApplyAddEntity()
         {
             foreach (Entity entity in _entitiesAddedBuffer)
             {
-                if (!Entities.Contains(entity))
-                {
-                    (uint x, uint y) = GetRegionFromTransform(entity.Transform);
-                    _regions[x][y].Add(entity);
-                    if (entity.Collider != null) Colliders.Add(entity.Collider);
-                    EntityAdded?.Invoke(entity);
-                }
+                (int x, int y) = GetRegionFromTransform(entity.Transform.Position);
+
+                if (Regions[x][y].Contains(entity)) continue;
+
+                entity.Region = (x, y);
+                _regions[x][y].Add(entity);
+                if (entity.Collider != null) Colliders.Add(entity.Collider);
+                EntityAdded?.Invoke(entity);
             }
             
             _entitiesAddedBuffer.Clear();
+        }
+
+        private void ApplyUpdateEntity()
+        {
+            foreach (Entity entity in _entitiesUpdatedBuffer)
+            {
+                (int x, int y) = GetRegionFromTransform(entity.Transform.Position);
+
+                if (entity.Region == (x, y)) continue;
+
+                Regions[entity.Region.X][entity.Region.Y].Remove(entity);
+                entity.Region = (x, y);
+                Regions[entity.Region.X][entity.Region.Y].Add(entity);
+            }
+
+            _entitiesUpdatedBuffer.Clear();
         }
 
         private void ApplyRemoveEntity()
         {
             foreach (Entity entity in _entitiesRemovedBuffer)
             {
-                (uint x, uint y) = GetRegionFromTransform(entity.Transform);
+                (int x, int y) = GetRegionFromTransform(entity.Transform.Position);
                 bool removed = _regions[x][y].Remove(entity);
                 if (removed)
                 {
@@ -235,7 +250,7 @@ namespace AntEngine
                     EntityRemoved?.Invoke(entity);
                 }
             }
-            
+
             _entitiesRemovedBuffer.Clear();
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using AntEngine.Colliders;
 using AntEngine.Utils.Maths;
 
@@ -10,7 +11,9 @@ namespace AntEngine.Entities
     public abstract class Entity
     {
         protected const string DefaultName = "Entity";
-        
+
+        protected (int X, int Y) _region;
+
         public Entity(World world) : this(DefaultName, new Transform(), world)
         {
         }
@@ -29,23 +32,29 @@ namespace AntEngine.Entities
         /// Names are not necessarily unique but it's better to distinguish entities. 
         /// </summary>
         public string Name { get; private set; }
-        
+
         /// <summary>
         /// Transform of the entity in the world.
         /// Represents the position, rotation and scale of the entity in the world.
         /// </summary>
         public Transform Transform { get; private set; }
-        
+
         /// <summary>
         /// World of the entity.
         /// </summary>
         public World World { get; private set; }
 
+        public (int X, int Y) Region
+        {
+            get => _region;
+            set => _region = value;
+        }
+
         /// <summary>
         /// Collider of the current entity.
         /// </summary>
         public Collider Collider { get; protected set; }
-        
+
         /// <summary>
         /// Called by the world when this entity needs to update the status of each of its components.
         /// </summary>

@@ -32,7 +32,6 @@ namespace AntEngine.Entities.Ants
 
         //TODO: Some attributes/properties are not initialised with the constructor. Example : MovementStrategy.
 
-
         public Ant(string name, Transform transform, World world, IState initialState) : base(name, transform, world,
             initialState)
         {
@@ -55,7 +54,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// Represents the ant's inventory.
         /// </summary>
-        public ResourceInventory ResourceInventory { get; protected set; } = new ResourceInventory();
+        public ResourceInventory ResourceInventory { get; protected set; } = new();
 
         /// <summary>
         /// The distance in which the ant can perceive another entity.
@@ -68,7 +67,6 @@ namespace AntEngine.Entities.Ants
         public int PerceptionMapPrecision { get; } = 24;
 
         public TimeSpan PheromoneTimeSpan { get; protected set; } = TimeSpan.FromSeconds(500);
-
 
         /// <summary>
         /// Delay between each emission of a pheromone.
@@ -88,7 +86,7 @@ namespace AntEngine.Entities.Ants
         public PerceptionMap GetPerceptionMap<T>() where T : Pheromone
         {
             List<float> weights = new(new float[PerceptionMapPrecision]);
-            List <Entity> entities = GetSurroundingEntities<T>();
+            List<Entity> entities = GetSurroundingEntities<T>();
             
             foreach (Entity e in entities)
             {
@@ -114,14 +112,13 @@ namespace AntEngine.Entities.Ants
 
         //TODO: Could be added to a higher level of entity. The only problem is that it depends on PerceptionDistance so maybe in LivingEntity?
 
-
         /// <summary>
         /// Generates a list of the entities that are in this Ant's perceptionDistance. 
         /// </summary>
         /// <returns>List of the entities in the perception range of this Ant</returns>
         public List<Entity> GetSurroundingEntities<T>() where T : Entity
         {
-            (uint x, uint y) = World.GetRegionFromTransform(Transform);
+            (int x, int y) = World.GetRegionFromTransform(Transform.Position);
 
             int radius = Math.Max((int) MathF.Ceiling(PerceptionDistance / World.WorldDivision), 1);
 
@@ -152,7 +149,7 @@ namespace AntEngine.Entities.Ants
             Transform homeTransform = new(Transform.Position, 0, Vector2.One);
             HomePheromone unused = new(Name, homeTransform, World, PheromoneTimeSpan);
         }
-        
+
         /// <summary>
         /// The Ant emits a food pheromone.
         /// </summary>
@@ -162,8 +159,7 @@ namespace AntEngine.Entities.Ants
             FoodPheromone unused = new(Name, foodTransform, World, PheromoneTimeSpan);
         }
 
-        
-        
+
         /// <summary>
         /// Returns the weight factor associated to the distance between an ant and another entity.
         /// </summary>
