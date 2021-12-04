@@ -159,12 +159,12 @@ namespace AntEngine
         /// <summary>
         /// Calculates the region that a transform belongs to and returns it in the form of a pair.
         /// </summary>
-        /// <param name="p"></param>
+        /// <param name="position"></param>
         /// <returns>Coordinates of the region in which the Transform belongs.</returns>
-        public (int, int) GetRegionFromTransform(Vector2 p)
+        public (int, int) GetRegionFromPosition(Vector2 position)
         {
-            int xVal = (int) MathF.Floor(p.X / WorldDivision);
-            int yVal = (int) MathF.Floor(p.Y / WorldDivision);
+            int xVal = (int) MathF.Floor(position.X / WorldDivision);
+            int yVal = (int) MathF.Floor(position.Y / WorldDivision);
 
             return (xVal, yVal);
         }
@@ -177,7 +177,7 @@ namespace AntEngine
         /// <returns>List of the colliders</returns>
         public IEnumerable<Collider> CircleCast(Vector2 position, float radius)
         {
-            (int x, int y) = GetRegionFromTransform(position);
+            (int x, int y) = GetRegionFromPosition(position);
 
             List<Entity> entities = CheckEntitiesInRegion<Entity>(x, y, radius);
 
@@ -224,7 +224,7 @@ namespace AntEngine
         {
             foreach (Entity entity in _entitiesAddedBuffer)
             {
-                (int x, int y) = GetRegionFromTransform(entity.Transform.Position);
+                (int x, int y) = GetRegionFromPosition(entity.Transform.Position);
 
                 if (Regions[x][y].Contains(entity)) continue;
 
@@ -241,7 +241,7 @@ namespace AntEngine
         {
             foreach (Entity entity in _entitiesUpdatedBuffer)
             {
-                (int x, int y) = GetRegionFromTransform(entity.Transform.Position);
+                (int x, int y) = GetRegionFromPosition(entity.Transform.Position);
 
                 if (entity.Region == (x, y)) continue;
 
@@ -257,7 +257,7 @@ namespace AntEngine
         {
             foreach (Entity entity in _entitiesRemovedBuffer)
             {
-                (int x, int y) = GetRegionFromTransform(entity.Transform.Position);
+                (int x, int y) = GetRegionFromPosition(entity.Transform.Position);
                 bool removed = _regions[x][y].Remove(entity);
                 if (removed)
                 {
