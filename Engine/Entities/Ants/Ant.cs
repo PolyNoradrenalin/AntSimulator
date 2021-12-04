@@ -84,9 +84,10 @@ namespace AntEngine.Entities.Ants
         public PerceptionMap GetPerceptionMap<T>() where T : Pheromone
         {
             List<float> weights = new(new float[PerceptionMapPrecision]);
-            List<Entity> entities = GetSurroundingEntities<T>();
-            
-            foreach (Entity e in entities)
+
+            List<T> entities = GetSurroundingEntities<T>();
+
+            foreach (T e in entities)
             {
                 Vector2 antDir = Transform.GetDirectorVector();
                 Vector2 pheromoneDirection = e.Transform.Position - Transform.Position;
@@ -114,7 +115,7 @@ namespace AntEngine.Entities.Ants
         /// Generates a list of the entities that are in this Ant's perceptionDistance. 
         /// </summary>
         /// <returns>List of the entities in the perception range of this Ant</returns>
-        public List<Entity> GetSurroundingEntities<T>() where T : Entity
+        public List<T> GetSurroundingEntities<T>() where T : Entity
         {
             int radius = Math.Max((int) MathF.Ceiling(PerceptionDistance / World.WorldDivision), 1);
 

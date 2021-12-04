@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.X86;
 using AntEngine.Colliders;
 using AntEngine.Entities;
@@ -143,18 +144,6 @@ namespace AntEngine
         }
 
         /// <summary>
-        /// Returns all colliders in a range of a specific position.
-        /// </summary>
-        /// <param name="position">Origin of the detection range</param>
-        /// <param name="radius">Radius of the range</param>
-        /// <returns>List of the colliders</returns>
-        public IEnumerable<Collider> CircleCast(Vector2 position, float radius)
-        {
-            CircleCollider cast = new(new Transform(position, 0, Vector2.One * radius));
-            return Colliders.Where(collider => collider.CheckCollision(cast));
-        }
-
-        /// <summary>
         /// Adds or removes the entities currently in the buffers.
         ///
         /// This method is called after a tick of the world.
@@ -179,6 +168,21 @@ namespace AntEngine
 
             return (xVal, yVal);
         }
+        
+        /// <summary>
+        /// Returns all colliders in a range of a specific position.
+        /// </summary>
+        /// <param name="position">Origin of the detection range</param>
+        /// <param name="radius">Radius of the range</param>
+        /// <returns>List of the colliders</returns>
+        public IEnumerable<Collider> CircleCast(Vector2 position, float radius)
+        {
+            (int x, int y) = GetRegionFromTransform(position);
+
+            List<Entity> entities = CheckEntitiesInRegion<Entity>(x, y, radius);
+
+            return (from e in entities where e.Collider != null select e.Collider).ToList();
+        }
 
         /// <summary>
         /// Allows us to get the list of entities that exist in a certain square of regions in the map.
@@ -188,9 +192,9 @@ namespace AntEngine
         /// <param name="radius">Radius that indicates how many regions we extend the list in each direction.</param>
         /// <typeparam name="T">Type of entity to get.</typeparam>
         /// <returns>A list of entities containing all entities belonging to the checked regions.</returns>
-        public List<Entity> CheckEntitiesInRegion<T>(int x, int y, int radius)
+        public List<T> CheckEntitiesInRegion<T>(int x, int y, int radius) where T : Entity
         {
-            List<Entity> list = new();
+            List<T> list = new();
 
             for (int i = 0; i <= 2 * radius; i++)
             for (int j = 0; j <= 2 * radius; j++)
@@ -199,10 +203,21 @@ namespace AntEngine
                 int yRegion = y - radius + j;
 
                 if (xRegion is < 0 or >= WorldDivision || yRegion is < 0 or >= WorldDivision) continue;
-                list.AddRange(Regions[xRegion][yRegion].Where(e => e is T));
+                foreach (Entity e in Regions[xRegion][yRegion])
+                {
+                    if (e is T entity)
+                    {
+                        list.Add(entity);
+                    }
+                }
             }
 
             return list;
+        }
+        
+        public List<T> CheckEntitiesInRegion<T>(int x, int y, float radius) where T : Entity
+        {
+            return CheckEntitiesInRegion<T>(x, y, (int) (radius / WorldDivision));
         }
 
         private void ApplyAddEntity()

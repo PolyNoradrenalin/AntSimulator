@@ -68,22 +68,21 @@ namespace AntEngine.Entities.States.Living
             
             ant.Move(ant.MovementStrategy.Move(perceptionMap));
 
-            List<Entity> list = ant.GetSurroundingEntities<ResourceEntity>();
+            List<Colony> colonies = ant.GetSurroundingEntities<Colony>();
 
-            foreach (Entity e in list)
+            foreach (Colony c in colonies)
             {
-                if (e is Colony colony)
+                if (ant.Home != c) continue;
+                
+                foreach ((Resource resource, int cost) in ant.ResourceInventory.All)
                 {
-                    foreach ((Resource resource, int cost) in ant.ResourceInventory.All)
-                    {
-                        colony.Stockpile.AddResource(resource, cost);
-                        ant.ResourceInventory.RemoveResource(resource, cost);
-                    }
-                    
-                    stateEntity.State = Next(stateEntity);
-
-                    break;
+                    c.Stockpile.AddResource(resource, cost);
+                    ant.ResourceInventory.RemoveResource(resource, cost);
                 }
+                
+                stateEntity.State = Next(stateEntity);
+
+                break;
             }
 
             if (DateTime.Now.Subtract(ant.LastEmitTime).TotalSeconds > ant.PheromoneEmissionDelay)
