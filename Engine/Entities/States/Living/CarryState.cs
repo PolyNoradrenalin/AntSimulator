@@ -13,7 +13,10 @@ namespace AntEngine.Entities.States.Living
 {
     public class CarryState : LivingState
     {
-        private const int ObstacleRayIndex = 4;
+        /// <summary>
+        /// Represents the total field of view in which the entity can detect obstacles.
+        /// </summary>
+        private const float ObstacleFieldOfView = 2F * MathF.PI / 3F;
         
         private static CarryState _instance;
 
@@ -38,11 +41,13 @@ namespace AntEngine.Entities.States.Living
             float positiveRotation = ant.Transform.Rotation < 0
                 ? ant.Transform.Rotation + 2F * MathF.PI
                 : ant.Transform.Rotation;
+
+            int obstacleRayIndex = (int)MathF.Floor((ObstacleFieldOfView / 2) / (2 * MathF.PI) * maxDirIndex);
             
             int[] dirs = new int[3];
             dirs[0] = (int) MathF.Floor(positiveRotation / (2 * MathF.PI) * maxDirIndex);
-            dirs[1] = (dirs[0] + ObstacleRayIndex) % maxDirIndex;
-            dirs[2] = (dirs[0] + maxDirIndex - ObstacleRayIndex) % maxDirIndex;
+            dirs[1] = (dirs[0] + obstacleRayIndex) % maxDirIndex;
+            dirs[2] = (dirs[0] + maxDirIndex - obstacleRayIndex) % maxDirIndex;
 
             foreach (int i in dirs)
             {
