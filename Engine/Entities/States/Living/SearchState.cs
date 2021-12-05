@@ -65,15 +65,13 @@ namespace AntEngine.Entities.States.Living
 
             ant.Move(ant.MovementStrategy.Move(perceptionMap));
 
-            List<Entity> list = ant.GetSurroundingEntities<ResourceEntity>();
+            List<ResourceEntity> list = ant.GetSurroundingEntities<ResourceEntity>();
 
-            foreach (Entity e in list)
+            foreach (ResourceEntity resourceEntity in list)
             {
-                if (e is ResourceEntity resourceEntity)
-                {
-                    if (ant.PickUp(resourceEntity)) stateEntity.State = Next(stateEntity);
-                    break;
-                }
+                if (ant.PickUp(resourceEntity)) stateEntity.State = Next(stateEntity);
+                
+                break;
             }
 
             if (DateTime.Now.Subtract(ant.LastEmitTime).TotalSeconds > ant.PheromoneEmissionDelay)

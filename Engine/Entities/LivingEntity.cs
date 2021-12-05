@@ -69,6 +69,8 @@ namespace AntEngine.Entities
             movement = movement.Length() > MaxSpeed ? MaxSpeed * (movement / movement.Length()) : movement;
             Collider.ParentTransform.Position += movement;
             if (Collider.CheckCollision(World.Collider)) Collider.ParentTransform.Position = lastPos;
+            
+            World.UpdateEntityRegion(this);
         }
 
         

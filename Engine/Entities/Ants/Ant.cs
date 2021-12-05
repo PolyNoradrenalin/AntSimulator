@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Numerics;
 using AntEngine.Colliders;
 using AntEngine.Entities.Colonies;
@@ -31,18 +33,14 @@ namespace AntEngine.Entities.Ants
 
         //TODO: Some attributes/properties are not initialised with the constructor. Example : MovementStrategy.
 
-
         public Ant(string name, Transform transform, World world, IState initialState) : base(name, transform, world,
             initialState)
         {
             Collider = new CircleCollider(Transform);
-            World.Colliders.Add(Collider);
             MaxSpeed = DefaultMaxSpeed;
             Speed = MaxSpeed;
         }
-
-        //TODO: Make these movement related properties not belong to only Ants.
-
+        
         public Colony Home { get; set; }
 
 
@@ -54,7 +52,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// Represents the ant's inventory.
         /// </summary>
-        public ResourceInventory ResourceInventory { get; protected set; } = new ResourceInventory();
+        public ResourceInventory ResourceInventory { get; protected set; } = new();
 
         /// <summary>
         /// The distance in which the ant can perceive another entity.
@@ -68,11 +66,10 @@ namespace AntEngine.Entities.Ants
 
         public TimeSpan PheromoneTimeSpan { get; protected set; } = TimeSpan.FromSeconds(500);
 
-
         /// <summary>
         /// Delay between each emission of a pheromone.
         /// </summary>
-        public float PheromoneEmissionDelay { get; protected set; } = 1F;
+        public float PheromoneEmissionDelay { get; protected set; } = 0.3F;
 
         /// <summary>
         /// The timestamp of when the ant emitted a pheromone
@@ -87,9 +84,10 @@ namespace AntEngine.Entities.Ants
         public PerceptionMap GetPerceptionMap<T>() where T : Pheromone
         {
             List<float> weights = new(new float[PerceptionMapPrecision]);
-            List <Entity> entities = GetSurroundingEntities<T>();
-            
-            foreach (Entity e in entities)
+
+            List<T> entities = GetSurroundingEntities<T>();
+
+            foreach (T e in entities)
             {
                 Vector2 antDir = Transform.GetDirectorVector();
                 Vector2 pheromoneDirection = e.Transform.Position - Transform.Position;
@@ -113,23 +111,15 @@ namespace AntEngine.Entities.Ants
 
         //TODO: Could be added to a higher level of entity. The only problem is that it depends on PerceptionDistance so maybe in LivingEntity?
 
-
         /// <summary>
         /// Generates a list of the entities that are in this Ant's perceptionDistance. 
         /// </summary>
         /// <returns>List of the entities in the perception range of this Ant</returns>
-        public List<Entity> GetSurroundingEntities<T>() where T : Entity
+        public List<T> GetSurroundingEntities<T>() where T : Entity
         {
-            List<Entity> list = new();
-            
-            foreach (Entity e in World.Entities)
-            {
-                if (e is not T) continue;
-                if (!(e.Transform.GetDistance(Transform) <= PerceptionDistance)) continue;
-                list.Add(e);
-            }
+            int radius = Math.Max((int) MathF.Ceiling(PerceptionDistance / World.WorldRegionDivision), 1);
 
-            return list;
+            return World.CheckEntitiesInRegion<T>(Region.X, Region.Y, radius).FindAll(e => e.Transform.GetDistance(Transform) <= PerceptionDistance);
         }
 
         /// <summary>
@@ -156,7 +146,7 @@ namespace AntEngine.Entities.Ants
             Transform homeTransform = new(Transform.Position, 0, Vector2.One);
             HomePheromone unused = new(Name, homeTransform, World, PheromoneTimeSpan);
         }
-        
+
         /// <summary>
         /// The Ant emits a food pheromone.
         /// </summary>
@@ -165,7 +155,8 @@ namespace AntEngine.Entities.Ants
             Transform foodTransform = new(Transform.Position, 0, Vector2.One);
             FoodPheromone unused = new(Name, foodTransform, World, PheromoneTimeSpan);
         }
-        
+
+
         /// <summary>
         /// Returns the weight factor associated to the distance between an ant and another entity.
         /// </summary>
