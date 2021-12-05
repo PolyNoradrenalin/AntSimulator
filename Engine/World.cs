@@ -17,7 +17,8 @@ namespace AntEngine
     /// </summary>
     public class World
     {
-        public const int WorldDivision = 64;
+        private const int WorldColliderDivision = 64;
+        public const int WorldRegionDivision = 10;
         
         private IList<Entity> _entitiesAddedBuffer;
         private IList<Entity> _entitiesUpdatedBuffer;
@@ -26,12 +27,12 @@ namespace AntEngine
         public World(Vector2 size)
         {
             Size = size;
-            Regions = new List<Entity>[WorldDivision][];
+            Regions = new List<Entity>[WorldRegionDivision][];
 
-            for (int i = 0; i < WorldDivision; i++)
+            for (int i = 0; i < WorldRegionDivision; i++)
             {
-                Regions[i] = new List<Entity>[WorldDivision];
-                for (int j = 0; j < WorldDivision; j++) Regions[i][j] = new List<Entity>();
+                Regions[i] = new List<Entity>[WorldRegionDivision];
+                for (int j = 0; j < WorldRegionDivision; j++) Regions[i][j] = new List<Entity>();
             }
 
             Colliders = new List<Collider>();
@@ -40,7 +41,7 @@ namespace AntEngine
             _entitiesUpdatedBuffer = new List<Entity>();
             _entitiesRemovedBuffer = new List<Entity>();
 
-            Collider = new WorldCollider(new Transform(), size, WorldDivision);
+            Collider = new WorldCollider(new Transform(), size, WorldColliderDivision);
             Colliders.Add(Collider);
         }
 
@@ -65,8 +66,8 @@ namespace AntEngine
             {
                 List<Entity> retList = new();
 
-                for (int i = 0; i < WorldDivision; i++)
-                for (int j = 0; j < WorldDivision; j++)
+                for (int i = 0; i < WorldRegionDivision; i++)
+                for (int j = 0; j < WorldRegionDivision; j++)
                     retList.AddRange(Regions[i][j]);
 
                 return retList;
@@ -78,8 +79,8 @@ namespace AntEngine
             get
             {
                 int count = 0;
-                for (int i = 0; i < WorldDivision; i++)
-                for (int j = 0; j < WorldDivision; j++)
+                for (int i = 0; i < WorldRegionDivision; i++)
+                for (int j = 0; j < WorldRegionDivision; j++)
                     count += Regions[i][j].Count;
                 return count;
             }
@@ -105,8 +106,12 @@ namespace AntEngine
         /// </summary>
         public void Update()
         {
-            foreach (Entity entity in Entities) entity.Update();
-
+            for (int i = 0; i < WorldRegionDivision; i++)
+            for (int j = 0; j < WorldRegionDivision; j++)
+                foreach (Entity e in Regions[i][j])
+                {
+                    e.Update();
+                }
             ApplyEntityBuffers();
         }
 
@@ -157,8 +162,8 @@ namespace AntEngine
         /// <returns>Coordinates of the region in which the Transform belongs.</returns>
         public (int, int) GetRegionFromPosition(Vector2 position)
         {
-            int xVal = (int) MathF.Floor(position.X / WorldDivision);
-            int yVal = (int) MathF.Floor(position.Y / WorldDivision);
+            int xVal = (int) MathF.Floor((position.X / Size.X) * WorldRegionDivision);
+            int yVal = (int) MathF.Floor((position.Y / Size.Y) * WorldRegionDivision);
 
             return (xVal, yVal);
         }
@@ -196,7 +201,7 @@ namespace AntEngine
                 int xRegion = x - radius + i;
                 int yRegion = y - radius + j;
 
-                if (xRegion is < 0 or >= WorldDivision || yRegion is < 0 or >= WorldDivision) continue;
+                if (xRegion is < 0 or >= WorldRegionDivision || yRegion is < 0 or >= WorldRegionDivision) continue;
                 foreach (Entity e in Regions[xRegion][yRegion])
                 {
                     if (e is T entity)
@@ -211,7 +216,7 @@ namespace AntEngine
         
         public List<T> CheckEntitiesInRegion<T>(int x, int y, float radius) where T : Entity
         {
-            return CheckEntitiesInRegion<T>(x, y, (int) (radius / WorldDivision));
+            return CheckEntitiesInRegion<T>(x, y, (int) (radius / WorldRegionDivision));
         }
 
         private void ApplyAddEntity()

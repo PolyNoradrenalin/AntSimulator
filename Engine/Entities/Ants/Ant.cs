@@ -70,7 +70,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// Delay between each emission of a pheromone.
         /// </summary>
-        public float PheromoneEmissionDelay { get; protected set; } = 1F;
+        public float PheromoneEmissionDelay { get; protected set; } = 0.3F;
 
         /// <summary>
         /// The timestamp of when the ant emitted a pheromone
@@ -118,7 +118,7 @@ namespace AntEngine.Entities.Ants
         /// <returns>List of the entities in the perception range of this Ant</returns>
         public List<T> GetSurroundingEntities<T>() where T : Entity
         {
-            int radius = Math.Max((int) MathF.Ceiling(PerceptionDistance / World.WorldDivision), 1);
+            int radius = Math.Max((int) MathF.Ceiling(PerceptionDistance / World.WorldRegionDivision), 1);
 
             return World.CheckEntitiesInRegion<T>(Region.X, Region.Y, radius).FindAll(e => e.Transform.GetDistance(Transform) <= PerceptionDistance);
         }
