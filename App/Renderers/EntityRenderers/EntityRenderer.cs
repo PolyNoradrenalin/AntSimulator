@@ -14,9 +14,9 @@ namespace App.Renderers.EntityRenderers
     public class EntityRenderer : IRenderer
     {
         private const float DefaultDepthBuffer = 0F;
-        
+
         private float _depthBuffer;
-        
+
         public EntityRenderer(Entity e, Texture2D entityCharset, float depthBuffer = DefaultDepthBuffer)
         {
             Entity = e;
@@ -36,12 +36,12 @@ namespace App.Renderers.EntityRenderers
             int newWorldWidth = canvasOffset.Width;
             int newWorldHeight = canvasOffset.Height;
             float scale = canvasOffset.Width / Entity.World.Size.X;
-            
+
             if (worldAspectRatio > simFrameAspectRatio)
             {
                 newWorldHeight = (int) (Entity.World.Size.X * canvasOffset.Height / canvasOffset.Width);
                 scale = canvasOffset.Width / Entity.World.Size.X;
-            } 
+            }
             else if (worldAspectRatio < simFrameAspectRatio)
             {
                 newWorldWidth = (int) (Entity.World.Size.Y * canvasOffset.Width / canvasOffset.Height);
@@ -49,13 +49,13 @@ namespace App.Renderers.EntityRenderers
             }
 
             int posX = (int) (Entity.Transform.Position.X / Entity.World.Size.X * newWorldWidth);
-            int posY = (int) (Entity.Transform.Position.Y / Entity.World.Size.Y * newWorldHeight) ;
+            int posY = (int) (Entity.Transform.Position.Y / Entity.World.Size.Y * newWorldHeight);
 
             int scaleX = (int) MathF.Round(Entity.Transform.Scale.X * scale);
             int scaleY = (int) MathF.Round(Entity.Transform.Scale.Y * scale);
 
             Rectangle spritePos = new Rectangle(
-                canvasOffset.Left + posX, 
+                canvasOffset.Left + posX,
                 canvasOffset.Top + canvasOffset.Height - posY,
                 scaleX,
                 scaleY);
@@ -69,7 +69,7 @@ namespace App.Renderers.EntityRenderers
                 SpriteEffects.None,
                 _depthBuffer);
         }
-        
-        public Texture2D EntityCharset { get; set; } 
+
+        public Texture2D EntityCharset { get; set; }
     }
 }

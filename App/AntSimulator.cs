@@ -36,12 +36,12 @@ namespace App
         protected override void Initialize()
         {
             base.Initialize();
-            
+
             SimFrame mainSimFrame = new SimFrame(_world);
 
             mainSimFrame.Position = (0, 0);
             mainSimFrame.Size = (800, 500);
-            
+
             _renderers.Add(mainSimFrame);
 
             for (int i = 0; i < 50; i++)
@@ -61,7 +61,7 @@ namespace App
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
             SimFrame.EntityTexture = Content.Load<Texture2D>("Entities/Entity");
             SimFrame.AntTexture = Content.Load<Texture2D>("Entities/Ant");
             SimFrame.ColonyTexture = Content.Load<Texture2D>("Entities/Colony");
@@ -78,7 +78,7 @@ namespace App
                 _lastTimeTick = DateTime.Now;
                 _world.Update();
             }
-            
+
             base.Update(gameTime);
         }
 
@@ -87,14 +87,14 @@ namespace App
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin(SpriteSortMode.FrontToBack);
-            
+
             foreach (IRenderer r in _renderers)
-            {
-                r.Render(_spriteBatch, _graphics, new Rectangle(0, 0, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height));
-            }
+                r.Render(_spriteBatch, _graphics,
+                    new Rectangle(0, 0, _graphics.GraphicsDevice.Viewport.Width,
+                        _graphics.GraphicsDevice.Viewport.Height));
 
             base.Draw(gameTime);
-            
+
             _spriteBatch.End();
         }
     }

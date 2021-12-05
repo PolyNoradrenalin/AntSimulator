@@ -21,7 +21,7 @@ namespace App.UIElements
         public static Texture2D EntityTexture;
         public static Texture2D AntTexture;
         public static Texture2D ColonyTexture;
-        
+
         private IList<IRenderer> _renderers;
 
         public SimFrame(World world)
@@ -30,25 +30,25 @@ namespace App.UIElements
             SimWorld = world;
             world.EntityAdded += OnEntityAdded;
             world.EntityRemoved += OnEntityRemoved;
-            
+
             // TODO: Unsubscribe to allow GC.
         }
 
         public World SimWorld { get; private set; }
-        
+
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             foreach (IRenderer r in _renderers)
-            {
-                r.Render(spriteBatch, gdm, new Rectangle(Position.X + canvasOffset.Left, Position.Y + canvasOffset.Top, Size.Width, Size.Height));
-            }
+                r.Render(spriteBatch, gdm,
+                    new Rectangle(Position.X + canvasOffset.Left, Position.Y + canvasOffset.Top, Size.Width,
+                        Size.Height));
         }
 
         public void AddRenderer(IRenderer r)
         {
             _renderers.Add(r);
         }
-        
+
         public void RemoveRenderer(IRenderer r)
         {
             _renderers.Remove(r);
@@ -65,17 +65,14 @@ namespace App.UIElements
 
             AddRenderer(renderer);
         }
-        
+
         private void OnEntityRemoved(Entity entity)
         {
             foreach (IRenderer renderer in _renderers.ToList())
             {
                 if (!(renderer is EntityRenderer entityRenderer)) continue;
-                
-                if (entityRenderer.Entity.Equals(entity))
-                {
-                    RemoveRenderer(renderer);
-                }
+
+                if (entityRenderer.Entity.Equals(entity)) RemoveRenderer(renderer);
             }
         }
     }
