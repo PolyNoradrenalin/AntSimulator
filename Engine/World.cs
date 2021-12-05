@@ -174,8 +174,10 @@ namespace AntEngine
             (int x, int y) = GetRegionFromPosition(position);
 
             List<Entity> entities = CheckEntitiesInRegion<Entity>(x, y, radius);
-
-            return (from e in entities where e.Collider != null select e.Collider).ToList();
+            List<Collider> colliders = (from e in entities where e.Collider != null select e.Collider).ToList();
+            CircleCollider circle = new(new Transform(position, 0, Vector2.One * radius));
+            if (Collider.CheckCollision(circle)) colliders.Add(Collider);
+            return colliders;
         }
 
         /// <summary>
