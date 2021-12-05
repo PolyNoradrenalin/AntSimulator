@@ -15,11 +15,11 @@ namespace AntEngine
     public class World
     {
         public const int WorldDivision = 64;
-        
+
         private readonly IList<Entity> _entities;
         private IList<Entity> _entitiesAddedBuffer;
         private IList<Entity> _entitiesRemovedBuffer;
-        
+
         public World(Vector2 size)
         {
             Size = size;
@@ -28,7 +28,7 @@ namespace AntEngine
 
             _entitiesAddedBuffer = new List<Entity>();
             _entitiesRemovedBuffer = new List<Entity>();
-            
+
             Collider = new WorldCollider(new Transform(), size, WorldDivision);
             Colliders.Add(Collider);
         }
@@ -39,11 +39,12 @@ namespace AntEngine
         /// Called when an entity is spawned in the world.
         /// </summary>
         public event Action<Entity> EntityAdded;
+
         /// <summary>
         /// Called when an entity is removed from the world.
         /// </summary>
         public event Action<Entity> EntityRemoved;
-        
+
         /// <summary>
         /// List of the entities present on the map.
         /// </summary>
@@ -64,17 +65,14 @@ namespace AntEngine
         /// Collider of the world (the walls).
         /// </summary>
         public WorldCollider Collider { get; private set; }
-        
+
         /// <summary>
         /// Updates all entities in the world.
         /// </summary>
         public void Update()
         {
-            foreach (Entity entity in Entities)
-            {
-                entity.Update();
-            }
-            
+            foreach (Entity entity in Entities) entity.Update();
+
             ApplyEntityBuffers();
         }
 
@@ -123,15 +121,13 @@ namespace AntEngine
         private void ApplyAddEntity()
         {
             foreach (Entity entity in _entitiesAddedBuffer)
-            {
                 if (!Entities.Contains(entity))
                 {
                     _entities.Add(entity);
                     if (entity.Collider != null) Colliders.Add(entity.Collider);
                     EntityAdded?.Invoke(entity);
                 }
-            }
-            
+
             _entitiesRemovedBuffer.Clear();
         }
 
@@ -146,7 +142,7 @@ namespace AntEngine
                     EntityRemoved?.Invoke(entity);
                 }
             }
-            
+
             _entitiesRemovedBuffer.Clear();
         }
     }

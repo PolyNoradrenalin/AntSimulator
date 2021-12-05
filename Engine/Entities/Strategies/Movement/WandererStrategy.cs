@@ -13,7 +13,7 @@ namespace AntEngine.Entities.Strategies.Movement
     {
         private const float RandomAngleRange = 0.1F;
         private const float DefaultOldDirFactor = 0.1F;
-        
+
         private float _random;
         private float _oldDirFactor;
         private Vector2 _dir;
@@ -32,9 +32,9 @@ namespace AntEngine.Entities.Strategies.Movement
 
         public Vector2 Move(PerceptionMap map)
         {
-            float randomAngle = (float)new Random().NextDouble() * RandomAngleRange;
+            float randomAngle = (float) new Random().NextDouble() * RandomAngleRange;
             float centeredAngle = randomAngle - RandomAngleRange / 2;
-            
+
             Vector2 randomDir = new(MathF.Cos(centeredAngle), MathF.Sin(centeredAngle));
             Vector2 targetDir = map.Mean;
 
@@ -45,14 +45,12 @@ namespace AntEngine.Entities.Strategies.Movement
             else
             {
                 if (_dir.X < 0)
-                {
                     _dir = (1 - _random) * targetDir + _random * randomDir;
-                }
                 else
-                {
-                    _dir = _oldDirFactor * _dir + (1 - _oldDirFactor) * ((1 - _random) * targetDir + _random * randomDir);
-                }
+                    _dir = _oldDirFactor * _dir +
+                           (1 - _oldDirFactor) * ((1 - _random) * targetDir + _random * randomDir);
             }
+
             return _dir;
         }
     }

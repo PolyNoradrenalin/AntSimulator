@@ -16,7 +16,7 @@ namespace AntEngine.Entities.States.Living
     public class SearchState : LivingState
     {
         private const int ObstacleIndexDivisor = 4;
-        
+
         private static SearchState _instance;
 
         public new static SearchState Instance
@@ -36,7 +36,7 @@ namespace AntEngine.Entities.States.Living
 
             Ant ant = (Ant) stateEntity;
             PerceptionMap perceptionMap = ant.GetPerceptionMap<FoodPheromone>();
-            
+
             float obstacleDetectRadius = ant.Transform.Scale.Length() / 2F;
             int maxDirIndex = ant.PerceptionMapPrecision;
 
@@ -47,21 +47,18 @@ namespace AntEngine.Entities.States.Living
 
             foreach (Vector2 dir in dirs)
             {
-                Vector2 globalDir = new Vector2(
+                Vector2 globalDir = new(
                     MathF.Cos(ant.Transform.Rotation) * dir.X - MathF.Sin(ant.Transform.Rotation) * dir.Y,
                     MathF.Sin(ant.Transform.Rotation) * dir.X + MathF.Cos(ant.Transform.Rotation) * dir.Y
                 );
-                
+
                 IList<Collider> collisions = new List<Collider>(
                     stateEntity.World.CircleCast(
-                    stateEntity.Transform.Position + globalDir * obstacleDetectRadius,
-                    obstacleDetectRadius));
-                
+                        stateEntity.Transform.Position + globalDir * obstacleDetectRadius,
+                        obstacleDetectRadius));
+
                 collisions = collisions.Where(collider => collider is not CircleCollider).ToList();
-                if (collisions.Count > 0)
-                {
-                    perceptionMap.Weights[dir] -= 1F;
-                }
+                if (collisions.Count > 0) perceptionMap.Weights[dir] -= 1F;
             }
 
             ant.Move(ant.MovementStrategy.Move(perceptionMap));
@@ -69,7 +66,6 @@ namespace AntEngine.Entities.States.Living
             List<Entity> list = ant.GetSurroundingEntities<ResourceEntity>();
 
             foreach (Entity e in list)
-            {
                 if (e is ResourceEntity resourceEntity)
                 {
                     ant.PickUp(resourceEntity);
@@ -78,13 +74,10 @@ namespace AntEngine.Entities.States.Living
 
                     break;
                 }
-            }
 
             if (DateTime.Now.Subtract(_lastEmit).TotalSeconds > ant.PheromoneEmissionDelay)
-            {
                 //ant.EmitHomePheromone();
                 _lastEmit = DateTime.Now;
-            }
         }
 
         public new IState Next(StateEntity stateEntity)

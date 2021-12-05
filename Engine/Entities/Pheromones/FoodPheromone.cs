@@ -11,12 +11,14 @@ namespace AntEngine.Entities.Pheromones
         public FoodPheromone(World world) : this(DefaultPheromoneName, new Transform(), world, new TimeSpan())
         {
         }
-        
-        public FoodPheromone(World world, TimeSpan maxTimeSpan) : this(DefaultPheromoneName, new Transform(), world, maxTimeSpan)
+
+        public FoodPheromone(World world, TimeSpan maxTimeSpan) : this(DefaultPheromoneName, new Transform(), world,
+            maxTimeSpan)
         {
         }
 
-        public FoodPheromone(string name, Transform transform, World world, TimeSpan maxTimeSpan) : base(name, transform, world, maxTimeSpan)
+        public FoodPheromone(string name, Transform transform, World world, TimeSpan maxTimeSpan) : base(name,
+            transform, world, maxTimeSpan)
         {
         }
 

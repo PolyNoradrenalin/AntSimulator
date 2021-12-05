@@ -9,7 +9,7 @@ namespace AntEngine.Colliders
     /// </summary>
     public class WorldCollider : Collider
     {
-        public WorldCollider(Transform parentTransform, Vector2 size, int div) :  base(parentTransform)
+        public WorldCollider(Transform parentTransform, Vector2 size, int div) : base(parentTransform)
         {
             Size = size;
             Subdivision = div;
@@ -55,19 +55,19 @@ namespace AntEngine.Colliders
         /// <returns>True if all constraints are in the world boundaries, false otherwise</returns>
         public bool IsOutOfBounds(float x, float y)
         {
-            return IsOutOfBounds((x,x), (y,y));
+            return IsOutOfBounds((x, x), (y, y));
         }
-        
+
         /// <summary>
         /// Returns the indexes corresponding to the coordinates.
         /// </summary>
         public (int x, int y) ConvertCoordsToIndex(Vector2 position)
         {
             return (
-                (int)(position.X / Size.X * Subdivision),
-                (int)(position.Y / Size.Y * Subdivision));
+                (int) (position.X / Size.X * Subdivision),
+                (int) (position.Y / Size.Y * Subdivision));
         }
-        
+
         public override bool CheckCollision(CircleCollider circleCollider)
         {
             return CollisionDetection.CircleAndWorld(circleCollider, this);
@@ -82,7 +82,7 @@ namespace AntEngine.Colliders
         {
             return CollisionDetection.WorldAndWorld(this, worldCollider);
         }
-        
+
         public override bool CheckCollision(Collider collider)
         {
             return collider.CheckCollision(this);

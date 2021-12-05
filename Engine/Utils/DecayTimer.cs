@@ -1,52 +1,49 @@
 ﻿using System;
 
 namespace AntEngine.Utils
- {
-     /// <summary>
-     /// Allows for the use of a timer that decays over time.
-     /// </summary>
-     public class DecayTimer
-     {
-         protected DateTime creationTime = DateTime.Now;
-         
-         protected TimeSpan _lifeSpan;
+{
+    /// <summary>
+    /// Allows for the use of a timer that decays over time.
+    /// </summary>
+    public class DecayTimer
+    {
+        protected DateTime creationTime = DateTime.Now;
 
-         public DecayTimer(TimeSpan maxLifeSpan)
-         {
-             MaxLifeSpan = maxLifeSpan;
-         }
+        protected TimeSpan _lifeSpan;
 
-         /// <summary>
-         /// The timer has decayed event.
-         /// </summary>
-         public event EventHandler TimerDecayed;
- 
-         /// <summary>
-         /// Current LifeSpan (in seconds).
-         /// </summary>
-         public TimeSpan LifeSpan
-         {
-             get => _lifeSpan;
-             protected set => _lifeSpan = value > MaxLifeSpan ? MaxLifeSpan : value;
-         }
-         
-         /// <summary>
-         /// Maximum LifeSpan of the pheromone.
-         /// </summary>
-         public TimeSpan MaxLifeSpan { get; set; }
+        public DecayTimer(TimeSpan maxLifeSpan)
+        {
+            MaxLifeSpan = maxLifeSpan;
+        }
 
-         public void Update()
-         {
-             LifeSpan = DateTime.Now - creationTime;
-             if (LifeSpan >= MaxLifeSpan)
-             {
-                 OnDecay(EventArgs.Empty);
-             }
-         }
+        /// <summary>
+        /// The timer has decayed event.
+        /// </summary>
+        public event EventHandler TimerDecayed;
 
-         protected void OnDecay(EventArgs e)
-         {
-             TimerDecayed?.Invoke(this, e);
-         }
-     }
- }
+        /// <summary>
+        /// Current LifeSpan (in seconds).
+        /// </summary>
+        public TimeSpan LifeSpan
+        {
+            get => _lifeSpan;
+            protected set => _lifeSpan = value > MaxLifeSpan ? MaxLifeSpan : value;
+        }
+
+        /// <summary>
+        /// Maximum LifeSpan of the pheromone.
+        /// </summary>
+        public TimeSpan MaxLifeSpan { get; set; }
+
+        public void Update()
+        {
+            LifeSpan = DateTime.Now - creationTime;
+            if (LifeSpan >= MaxLifeSpan) OnDecay(EventArgs.Empty);
+        }
+
+        protected void OnDecay(EventArgs e)
+        {
+            TimerDecayed?.Invoke(this, e);
+        }
+    }
+}

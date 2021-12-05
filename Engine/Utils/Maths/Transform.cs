@@ -48,13 +48,9 @@ namespace AntEngine.Utils.Maths
             set
             {
                 if (value < 0)
-                {
                     _rotation = value % (-2 * MathF.PI);
-                }
                 else
-                {
                     _rotation = value % (2 * MathF.PI);
-                }
             }
         }
 
@@ -80,7 +76,7 @@ namespace AntEngine.Utils.Maths
 
             return director;
         }
-        
+
         /// <summary>
         /// Generates the colliders vertices in the world from ColliderTransform and ParentTransform.
         /// </summary>
@@ -92,7 +88,7 @@ namespace AntEngine.Utils.Maths
         public List<Vector2> GetRectangleVertices()
         {
             List<Vector2> verts = new();
-            
+
             Vector2[] rotationCoefficients = {new(1, 1), new(-1, 1), new(-1, -1), new(1, -1)};
 
             // Calculating each vertex
@@ -130,7 +126,7 @@ namespace AntEngine.Utils.Maths
         public Vector2 ConvertToReferenceFrame(Vector2 local)
         {
             Vector2 scaled = new(local.X * Scale.X, local.Y * Scale.Y);
-            
+
             Vector2 rotated = new(scaled.X * MathF.Cos(Rotation) - scaled.Y * MathF.Sin(Rotation),
                 scaled.X * MathF.Sin(Rotation) + scaled.Y * MathF.Cos(Rotation));
 

@@ -18,16 +18,18 @@ namespace AntEngine.Entities.Colonies
         private const string ColonyDefaultName = "Colony";
 
         public delegate IColonyMember ColonySpawnMethod(string name, Transform transform, World world, Colony colony);
-        
+
         private List<IColonyMember> _population;
         private ResourceInventory _stockpile;
         private ResourceInventory _spawnCost;
 
-        public Colony(World world, ColonySpawnMethod spawnMethod) : this(ColonyDefaultName, new Transform(), world, spawnMethod)
+        public Colony(World world, ColonySpawnMethod spawnMethod) : this(ColonyDefaultName, new Transform(), world,
+            spawnMethod)
         {
         }
 
-        public Colony(string name, Transform transform, World world, ColonySpawnMethod spawnMethod) : base(name, transform, world, new LivingState())
+        public Colony(string name, Transform transform, World world, ColonySpawnMethod spawnMethod) : base(name,
+            transform, world, new LivingState())
         {
             _population = new List<IColonyMember>();
             _stockpile = new ResourceInventory();
@@ -65,7 +67,7 @@ namespace AntEngine.Entities.Colonies
         {
             get
             {
-                float angle = (float)new Random().NextDouble();
+                float angle = (float) new Random().NextDouble();
                 float x = MathF.Cos(angle);
                 float y = MathF.Sin(angle);
 
@@ -101,7 +103,6 @@ namespace AntEngine.Entities.Colonies
         protected bool HasEnoughResources()
         {
             foreach ((Resource resource, int cost) in _spawnCost.All)
-            {
                 if (_stockpile.All.ContainsKey(resource))
                 {
                     if (_stockpile.All[resource] < cost) return false;
@@ -110,7 +111,6 @@ namespace AntEngine.Entities.Colonies
                 {
                     return false;
                 }
-            }
 
             return true;
         }
@@ -122,11 +122,8 @@ namespace AntEngine.Entities.Colonies
         protected void ConsumeResources()
         {
             if (!HasEnoughResources()) return;
-            
-            foreach ((Resource resource, int cost) in _spawnCost.All)
-            {
-                _stockpile.RemoveResource(resource, cost);
-            }
+
+            foreach ((Resource resource, int cost) in _spawnCost.All) _stockpile.RemoveResource(resource, cost);
         }
     }
 }

@@ -11,12 +11,14 @@ namespace AntEngine.Entities.Pheromones
         public HomePheromone(World world) : this(DefaultPheromoneName, new Transform(), world, new TimeSpan())
         {
         }
-        
-        public HomePheromone(World world, TimeSpan maxTimeSpan) : this(DefaultPheromoneName, new Transform(), world, maxTimeSpan)
+
+        public HomePheromone(World world, TimeSpan maxTimeSpan) : this(DefaultPheromoneName, new Transform(), world,
+            maxTimeSpan)
         {
         }
 
-        public HomePheromone(string name, Transform transform, World world, TimeSpan maxTimeSpan) : base(name, transform, world, maxTimeSpan)
+        public HomePheromone(string name, Transform transform, World world, TimeSpan maxTimeSpan) : base(name,
+            transform, world, maxTimeSpan)
         {
         }
 

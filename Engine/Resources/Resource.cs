@@ -18,6 +18,7 @@ namespace AntEngine.Resources
         /// Resources can have the same name but still be different.
         /// </summary>
         public string Type { get; private set; }
+
         /// <summary>
         /// Display name of the resource.
         /// </summary>
@@ -32,13 +33,13 @@ namespace AntEngine.Resources
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((Resource)obj);
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Resource) obj);
         }
 
         public override int GetHashCode()
         {
-            return (Type != null ? Type.GetHashCode() : 0);
+            return Type != null ? Type.GetHashCode() : 0;
         }
     }
 }

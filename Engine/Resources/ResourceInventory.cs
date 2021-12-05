@@ -15,7 +15,7 @@ namespace AntEngine.Resources
         {
             _resources = new Dictionary<Resource, int>();
         }
-        
+
         public IDictionary<Resource, int> All => _resources.ToImmutableDictionary();
 
         /// <summary>
@@ -27,13 +27,9 @@ namespace AntEngine.Resources
         public void AddResource(Resource resource, int amount)
         {
             if (_resources.ContainsKey(resource))
-            {
                 _resources[resource] += amount;
-            }
             else
-            {
                 _resources.Add(resource, amount);
-            }
         }
 
         /// <summary>

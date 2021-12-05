@@ -10,16 +10,19 @@ namespace AntEngine.Entities.States
         /// </summary>
         /// <param name="stateEntity">The entity that transitioned to this state.</param>
         void OnStateStart(StateEntity stateEntity);
+
         /// <summary>
         /// Called on each update of a StateEntity.
         /// </summary>
         /// <param name="stateEntity">The updating entity.</param>
         void OnStateUpdate(StateEntity stateEntity);
+
         /// <summary>
         /// Called when the state is being removed from an entity.
         /// </summary>
         /// <param name="stateEntity">The entity ending this state.</param>
         void OnStateEnd(StateEntity stateEntity);
+
         /// <summary>
         /// Gives the next state.
         /// </summary>

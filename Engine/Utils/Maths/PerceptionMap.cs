@@ -20,7 +20,7 @@ namespace AntEngine.Utils.Maths
         {
             Weights = new Dictionary<Vector2, float>(weights.Count);
             float stepAngle = 2F * MathF.PI / weights.Count;
-            
+
             for (int i = 0; i < weights.Count; i++)
             {
                 float angle = i * stepAngle + angleOffset;
@@ -28,7 +28,7 @@ namespace AntEngine.Utils.Maths
                 Weights.Add(dir, weights[i]);
             }
         }
-        
+
         /// <summary>
         /// Each direction associated with its weight.
         /// </summary>
@@ -50,7 +50,7 @@ namespace AntEngine.Utils.Maths
                     totalWeight += Weights[dir];
                 }
 
-                return (totalWeight != 0) ? totalVector / MathF.Abs(totalWeight) : Vector2.Zero;
+                return totalWeight != 0 ? totalVector / MathF.Abs(totalWeight) : Vector2.Zero;
             }
         }
     }

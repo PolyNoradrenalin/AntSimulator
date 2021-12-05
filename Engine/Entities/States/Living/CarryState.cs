@@ -20,13 +20,13 @@ namespace AntEngine.Entities.States.Living
                 return _instance;
             }
         }
-        
+
         private DateTime _lastEmit;
 
         public override void OnStateUpdate(StateEntity stateEntity)
         {
             base.OnStateUpdate(stateEntity);
-            
+
             Ant ant = (Ant) stateEntity;
             PerceptionMap perceptionMap = ant.GetPerceptionMap<FoodPheromone>();
 
@@ -35,7 +35,6 @@ namespace AntEngine.Entities.States.Living
             List<Entity> list = ant.GetSurroundingEntities<ResourceEntity>();
 
             foreach (Entity e in list)
-            {
                 if (e is Colony colony)
                 {
                     foreach ((Resource resource, int cost) in ant.ResourceInventory.All)
@@ -43,12 +42,11 @@ namespace AntEngine.Entities.States.Living
                         colony.Stockpile.AddResource(resource, cost);
                         ant.ResourceInventory.RemoveResource(resource, cost);
                     }
-                    
+
                     stateEntity.State = Next(stateEntity);
 
                     break;
                 }
-            }
 
             if (DateTime.Now.Subtract(_lastEmit).TotalSeconds > ant.PheromoneEmissionDelay)
             {

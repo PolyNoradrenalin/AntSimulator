@@ -11,18 +11,20 @@ namespace AntEngine.Entities.Pheromones
     public abstract class Pheromone : Entity
     {
         protected const string DefaultPheromoneName = "Pheromone";
-        
+
         protected DecayTimer decayTimer;
 
         public Pheromone(World world) : this(DefaultPheromoneName, new Transform(), world, new TimeSpan())
         {
         }
-        
-        public Pheromone(World world, TimeSpan maxTimeSpan) : this(DefaultPheromoneName, new Transform(), world, maxTimeSpan)
+
+        public Pheromone(World world, TimeSpan maxTimeSpan) : this(DefaultPheromoneName, new Transform(), world,
+            maxTimeSpan)
         {
         }
 
-        public Pheromone(string name, Transform transform, World world, TimeSpan maxTimeSpan) : base(name, transform, world)
+        public Pheromone(string name, Transform transform, World world, TimeSpan maxTimeSpan) : base(name, transform,
+            world)
         {
             decayTimer = new DecayTimer(maxTimeSpan);
             decayTimer.TimerDecayed += OnDecay;

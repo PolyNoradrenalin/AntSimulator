@@ -18,11 +18,13 @@ namespace AntEngine.Entities
         {
         }
 
-        public LivingEntity(string name, Transform transform, World world) : this(name, transform, world, new LivingState())
+        public LivingEntity(string name, Transform transform, World world) : this(name, transform, world,
+            new LivingState())
         {
         }
 
-        public LivingEntity(string name, Transform transform, World world, IState initialState, int maxHealth = 100) : base(name, transform, world, initialState)
+        public LivingEntity(string name, Transform transform, World world, IState initialState, int maxHealth = 100) :
+            base(name, transform, world, initialState)
         {
             MaxHealth = maxHealth;
             Health = MaxHealth;
@@ -35,8 +37,9 @@ namespace AntEngine.Entities
         public int Health
         {
             get => _health;
-            protected set => _health = (value > MaxHealth) ? MaxHealth : value;
+            protected set => _health = value > MaxHealth ? MaxHealth : value;
         }
+
         /// <summary>
         /// Maximum health of the entity.
         /// </summary>
@@ -55,7 +58,7 @@ namespace AntEngine.Entities
         /// Maximum speed of the ant.
         /// </summary>
         public float MaxSpeed { get; protected set; }
-        
+
         /// <summary>
         /// Applies movement to ant's coordinates.
         /// </summary>
@@ -75,7 +78,7 @@ namespace AntEngine.Entities
             if (Collider.CheckCollision(World.Collider)) Collider.ParentTransform.Position = lastPos;
         }
 
-        
+
         /// <summary>
         /// Kills the entity.
         /// </summary>

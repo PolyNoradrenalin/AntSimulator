@@ -19,7 +19,6 @@ namespace AntEngine.Entities
 
         public override void Update()
         {
-            
         }
     }
 }

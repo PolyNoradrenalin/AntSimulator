@@ -15,11 +15,12 @@ namespace AntEngine.Entities.States.Living
                 return _instance;
             }
         }
+
         public void OnStateStart(StateEntity stateEntity)
         {
-            if (stateEntity is not LivingEntity living) 
+            if (stateEntity is not LivingEntity living)
                 throw new System.ArgumentException("LivingState is only defined for Living entities.");
-            
+
             living.Kill();
         }
 

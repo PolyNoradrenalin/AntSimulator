@@ -10,7 +10,7 @@ namespace AntEngine.Entities
     public abstract class Entity
     {
         protected const string DefaultName = "Entity";
-        
+
         public Entity(World world) : this(DefaultName, new Transform(), world)
         {
         }
@@ -29,13 +29,13 @@ namespace AntEngine.Entities
         /// Names are not necessarily unique but it's better to distinguish entities. 
         /// </summary>
         public string Name { get; private set; }
-        
+
         /// <summary>
         /// Transform of the entity in the world.
         /// Represents the position, rotation and scale of the entity in the world.
         /// </summary>
         public Transform Transform { get; private set; }
-        
+
         /// <summary>
         /// World of the entity.
         /// </summary>
@@ -45,7 +45,7 @@ namespace AntEngine.Entities
         /// Collider of the current entity.
         /// </summary>
         public Collider Collider { get; protected set; }
-        
+
         /// <summary>
         /// Called by the world when this entity needs to update the status of each of its components.
         /// </summary>
