@@ -150,9 +150,9 @@ namespace AntEngine
         /// </summary>
         public void ApplyEntityBuffers()
         {
-            ApplyAddEntity();
-            ApplyUpdateEntity();
             ApplyRemoveEntity();
+            ApplyUpdateEntity();
+            ApplyAddEntity();
         }
 
         /// <summary>
@@ -257,6 +257,7 @@ namespace AntEngine
             foreach (Entity entity in _entitiesRemovedBuffer)
             {
                 (int x, int y) = GetRegionFromPosition(entity.Transform.Position);
+                _entitiesUpdatedBuffer.Remove(entity);
                 bool removed = Regions[x][y].Remove(entity);
                 if (removed)
                 {
