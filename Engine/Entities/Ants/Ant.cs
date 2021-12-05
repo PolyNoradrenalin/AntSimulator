@@ -37,7 +37,6 @@ namespace AntEngine.Entities.Ants
             initialState)
         {
             Collider = new CircleCollider(Transform);
-            World.Colliders.Add(Collider);
             MaxSpeed = DefaultMaxSpeed;
             Speed = MaxSpeed;
         }

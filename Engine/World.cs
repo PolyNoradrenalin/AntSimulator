@@ -35,17 +35,12 @@ namespace AntEngine
                 for (int j = 0; j < WorldRegionDivision; j++) Regions[i][j] = new List<Entity>();
             }
 
-            Colliders = new List<Collider>();
-
             _entitiesAddedBuffer = new List<Entity>();
             _entitiesUpdatedBuffer = new List<Entity>();
             _entitiesRemovedBuffer = new List<Entity>();
 
             Collider = new WorldCollider(new Transform(), size, WorldColliderDivision);
-            Colliders.Add(Collider);
         }
-
-        public IList<Collider> Colliders { get; }
 
         /// <summary>
         /// Called when an entity is spawned in the world.
@@ -229,7 +224,6 @@ namespace AntEngine
 
                 entity.Region = (x, y);
                 Regions[x][y].Add(entity);
-                if (entity.Collider != null) Colliders.Add(entity.Collider);
                 EntityAdded?.Invoke(entity);
             }
             
@@ -261,7 +255,6 @@ namespace AntEngine
                 bool removed = Regions[x][y].Remove(entity);
                 if (removed)
                 {
-                    if (entity.Collider == null) Colliders.Remove(entity.Collider);
                     EntityRemoved?.Invoke(entity);
                 }
             }
