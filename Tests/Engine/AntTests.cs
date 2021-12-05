@@ -12,7 +12,6 @@ namespace Tests.Engine
 {
     public class AntTests
     {
-
         [Fact]
         public void GetPerceptionMap_OneUpperRightPheromone_ShouldSucceed()
         {
@@ -20,7 +19,7 @@ namespace Tests.Engine
             Ant ant = new(w);
             FoodPheromone foodPheromone = new(w);
             w.ApplyEntityBuffers();
-            
+
             ant.Transform.Position = Vector2.One;
             foodPheromone.Transform.Position = Vector2.One * 2;
 
@@ -30,13 +29,11 @@ namespace Tests.Engine
             };
 
             PerceptionMap perception = ant.GetPerceptionMap<FoodPheromone>();
-            
+
             for (int i = 0; i < perception.Weights.Count; i++)
-            {
                 Assert.Equal(perception.Weights.Values.ToList()[i], wList[i]);
-            }
         }
-        
+
         [Fact]
         public void GetPerceptionMap_OneBottomLeftPheromone_ShouldSucceed()
         {
@@ -54,11 +51,9 @@ namespace Tests.Engine
             };
 
             PerceptionMap perception = ant.GetPerceptionMap<FoodPheromone>();
-            
+
             for (int i = 0; i < perception.Weights.Count; i++)
-            {
                 Assert.Equal(perception.Weights.Values.ToList()[i], wList[i], 4);
-            }
         }
     }
 }

@@ -26,10 +26,10 @@ namespace Tests.Engine
             TestEntity testEntity = new(world);
             world.ApplyEntityBuffers();
             Assert.Contains(testEntity, world.Entities);
-            
+
             world.AddEntity(testEntity);
             world.ApplyEntityBuffers();
-            
+
             Assert.NotEqual(2, world.EntityCount);
         }
     }

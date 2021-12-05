@@ -28,12 +28,12 @@ namespace Tests.Engine
             colony.SpawnCost.AddResource(resource, 10);
 
             colony.Spawn(10);
-            
+
             world.ApplyEntityBuffers();
-            
+
             Assert.Equal(11, world.EntityCount);
         }
-        
+
         [Fact]
         public void SpawnPop_NotEnoughResources_ShouldPartiallySucceed()
         {
@@ -42,14 +42,14 @@ namespace Tests.Engine
             Colony colony = new(world, (_, _, _, _) => new TestEntity(world));
             colony.Stockpile.AddResource(resource, 50);
             colony.SpawnCost.AddResource(resource, 10);
-            
+
             colony.Spawn(10);
-            
+
             world.ApplyEntityBuffers();
-            
+
             Assert.Equal(6, world.EntityCount);
         }
-        
+
         [Fact]
         public void SpawnPop_NoResources_ShouldFail()
         {
@@ -58,14 +58,14 @@ namespace Tests.Engine
             Colony colony = new(world, (_, _, _, _) => new TestEntity(world));
             colony.Stockpile.AddResource(resource, 0);
             colony.SpawnCost.AddResource(resource, 100);
-            
+
             colony.Spawn(10);
-            
+
             world.ApplyEntityBuffers();
-            
+
             Assert.Equal(1, world.EntityCount);
-        } 
-        
+        }
+
         [Fact]
         public void SpawnPop_SeveralResources_ShouldSucceed()
         {
@@ -77,14 +77,14 @@ namespace Tests.Engine
             colony.Stockpile.AddResource(oysters, 500);
             colony.SpawnCost.AddResource(cheese, 100);
             colony.SpawnCost.AddResource(oysters, 50);
-            
+
             colony.Spawn(10);
-            
+
             world.ApplyEntityBuffers();
-            
+
             Assert.Equal(11, world.EntityCount);
         }
-        
+
         [Fact]
         public void SpawnPop_NotEnoughSeveralResources_ShouldPartiallySucceed()
         {
@@ -96,13 +96,12 @@ namespace Tests.Engine
             colony.Stockpile.AddResource(oysters, 500);
             colony.SpawnCost.AddResource(cheese, 100);
             colony.SpawnCost.AddResource(oysters, 50);
-            
+
             colony.Spawn(10);
-            
+
             world.ApplyEntityBuffers();
-            
+
             Assert.Equal(3, world.EntityCount);
         }
-        
     }
 }
