@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Numerics;
 using AntEngine.Colliders;
 using AntEngine.Entities.Colonies;
@@ -119,7 +120,7 @@ namespace AntEngine.Entities.Ants
         {
             int radius = Math.Max((int) MathF.Ceiling(PerceptionDistance / World.WorldDivision), 1);
 
-            return World.CheckEntitiesInRegion<T>(Region.X, Region.Y, radius);
+            return World.CheckEntitiesInRegion<T>(Region.X, Region.Y, radius).FindAll(e => e.Transform.GetDistance(Transform) <= PerceptionDistance);
         }
 
         /// <summary>
