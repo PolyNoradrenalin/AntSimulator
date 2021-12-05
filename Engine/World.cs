@@ -18,9 +18,7 @@ namespace AntEngine
     public class World
     {
         public const int WorldDivision = 64;
-
-        private readonly List<Entity>[][] _regions;
-
+        
         private IList<Entity> _entitiesAddedBuffer;
         private IList<Entity> _entitiesUpdatedBuffer;
         private IList<Entity> _entitiesRemovedBuffer;
@@ -100,11 +98,7 @@ namespace AntEngine
         /// <summary>
         /// Stores entities into a region with all other entities in the same region.
         /// </summary>
-        public List<Entity>[][] Regions
-        {
-            get => _regions;
-            private init => _regions = value;
-        }
+        public List<Entity>[][] Regions { get; private init; }
 
         /// <summary>
         /// Updates all entities in the world.
@@ -229,7 +223,7 @@ namespace AntEngine
                 if (Regions[x][y].Contains(entity)) continue;
 
                 entity.Region = (x, y);
-                _regions[x][y].Add(entity);
+                Regions[x][y].Add(entity);
                 if (entity.Collider != null) Colliders.Add(entity.Collider);
                 EntityAdded?.Invoke(entity);
             }
@@ -258,7 +252,7 @@ namespace AntEngine
             foreach (Entity entity in _entitiesRemovedBuffer)
             {
                 (int x, int y) = GetRegionFromPosition(entity.Transform.Position);
-                bool removed = _regions[x][y].Remove(entity);
+                bool removed = Regions[x][y].Remove(entity);
                 if (removed)
                 {
                     if (entity.Collider == null) Colliders.Remove(entity.Collider);

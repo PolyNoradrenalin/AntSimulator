@@ -11,9 +11,7 @@ namespace AntEngine.Entities
     public abstract class Entity
     {
         protected const string DefaultName = "Entity";
-
-        protected (int X, int Y) _region;
-
+        
         public Entity(World world) : this(DefaultName, new Transform(), world)
         {
         }
@@ -44,11 +42,7 @@ namespace AntEngine.Entities
         /// </summary>
         public World World { get; private set; }
 
-        public (int X, int Y) Region
-        {
-            get => _region;
-            set => _region = value;
-        }
+        public (int X, int Y) Region { get; set; }
 
         /// <summary>
         /// Collider of the current entity.
