@@ -18,7 +18,8 @@ namespace AntEngine.Entities.Ants
     /// </summary>
     public class Ant : LivingEntity, IColonyMember
     {
-        private const float DefaultMaxSpeed = 0.5F;
+        private const float DefaultMaxSpeed = 1F;
+        private const float PickUpDistance = 10F;
         
         public Ant(World world) : this("Ant", new Transform(), world)
         {
@@ -29,7 +30,8 @@ namespace AntEngine.Entities.Ants
         }
 
         //TODO: Some attributes/properties are not initialised with the constructor. Example : MovementStrategy.
-        
+
+
         public Ant(string name, Transform transform, World world, IState initialState) : base(name, transform, world,
             initialState)
         {
@@ -38,15 +40,16 @@ namespace AntEngine.Entities.Ants
             MaxSpeed = DefaultMaxSpeed;
             Speed = MaxSpeed;
         }
-        
+
         //TODO: Make these movement related properties not belong to only Ants.
 
         public Colony Home { get; set; }
 
+
         /// <summary>
         /// The ant's current movement strategy.
         /// </summary>
-        public IMovementStrategy MovementStrategy { get; protected set; } = new WandererStrategy(0.5f, 0.9f);
+        public IMovementStrategy MovementStrategy { get; protected set; } = new WandererStrategy(0.5f, 0.90f);
 
         /// <summary>
         /// Represents the ant's inventory.
@@ -56,19 +59,25 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         /// The distance in which the ant can perceive another entity.
         /// </summary>
-        public float PerceptionDistance { get; protected set; } = 5F;
+        public float PerceptionDistance { get; protected set; } = 10F;
 
         /// <summary>
         /// Precision that will determine the size of the weights list.
         /// </summary>
         public int PerceptionMapPrecision { get; } = 24;
 
-        public TimeSpan PheromoneTimeSpan { get; protected set; } = TimeSpan.FromSeconds(10);
-        
+        public TimeSpan PheromoneTimeSpan { get; protected set; } = TimeSpan.FromSeconds(500);
+
+
         /// <summary>
         /// Delay between each emission of a pheromone.
         /// </summary>
-        public float PheromoneEmissionDelay { get; protected set; } = 2F;
+        public float PheromoneEmissionDelay { get; protected set; } = 1F;
+
+        /// <summary>
+        /// The timestamp of when the ant emitted a pheromone
+        /// </summary>
+        public DateTime LastEmitTime { get; set; }
 
         /// <summary>
         /// Creates the ant's perception map.
@@ -78,21 +87,24 @@ namespace AntEngine.Entities.Ants
         public PerceptionMap GetPerceptionMap<T>() where T : Pheromone
         {
             List<float> weights = new(new float[PerceptionMapPrecision]);
-
             List <Entity> entities = GetSurroundingEntities<T>();
             
             foreach (Entity e in entities)
             {
-                Vector2 antDirection = Transform.GetDirectorVector();
+                Vector2 antDir = Transform.GetDirectorVector();
                 Vector2 pheromoneDirection = e.Transform.Position - Transform.Position;
                 
-                float angleDifference = MathF.Acos(Vector2.Dot(antDirection,pheromoneDirection) / (antDirection.Length() * pheromoneDirection.Length()));
+                float angle = MathF.Atan2(pheromoneDirection.Y, Vector2.Dot(pheromoneDirection, Vector2.UnitX));
+                angle = (angle < 0F) ? angle + 2 * MathF.PI : angle;
+                
+                float angleDiff = MathF.Atan2(antDir.Y * pheromoneDirection.X - antDir.X * pheromoneDirection.X,
+                    antDir.X * pheromoneDirection.X + antDir.Y * pheromoneDirection.Y);
 
-                int weightListIndex = (int) MathF.Floor(angleDifference / (2 * MathF.PI / PerceptionMapPrecision));
-
+                int weightListIndex = (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision));
+                
                 float weightSum = weights[weightListIndex];
-                weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform));
-                weightSum += GetWeightFactorFromRotation(angleDifference);
+                weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform)) *
+                             GetWeightFactorFromRotation(angleDiff);
                 weights[weightListIndex] = weightSum;
             }
 
@@ -100,7 +112,8 @@ namespace AntEngine.Entities.Ants
         }
 
         //TODO: Could be added to a higher level of entity. The only problem is that it depends on PerceptionDistance so maybe in LivingEntity?
-        
+
+
         /// <summary>
         /// Generates a list of the entities that are in this Ant's perceptionDistance. 
         /// </summary>
@@ -125,12 +138,10 @@ namespace AntEngine.Entities.Ants
         /// <param name="e">Entity we want to pick up</param>
         public bool PickUp(ResourceEntity e)
         {
-            if (Collider.CheckCollision(e.Collider))
+            if (Vector2.Distance(Transform.Position, e.Transform.Position) <= PickUpDistance)
             {
                 ResourceInventory.AddResource(e.Type, e.Quantity);
-
                 World.RemoveEntity(e);
-
                 return true;
             }
 
@@ -143,7 +154,7 @@ namespace AntEngine.Entities.Ants
         public void EmitHomePheromone()
         {
             Transform homeTransform = new(Transform.Position, 0, Vector2.One);
-            World.AddEntity(new HomePheromone(Name, homeTransform, World, PheromoneTimeSpan));
+            HomePheromone unused = new(Name, homeTransform, World, PheromoneTimeSpan);
         }
         
         /// <summary>
@@ -152,7 +163,7 @@ namespace AntEngine.Entities.Ants
         public void EmitFoodPheromone()
         {
             Transform foodTransform = new(Transform.Position, 0, Vector2.One);
-            World.AddEntity(new FoodPheromone(Name, foodTransform, World, PheromoneTimeSpan));
+            FoodPheromone unused = new(Name, foodTransform, World, PheromoneTimeSpan);
         }
         
         /// <summary>
@@ -162,9 +173,9 @@ namespace AntEngine.Entities.Ants
         /// <returns>Weight value to be added to total weight</returns>
         private float GetWeightFactorFromDistance(float distance)
         {
-            return MathF.Pow(distance, 2) != 0 ? 1 / MathF.Pow(distance, 2) : 0;
+            return 1F / (1 + MathF.Exp((PerceptionDistance / 2 - distance)));
         }
-
+        
         /// <summary>
         /// Returns the weight factor associated to the rotationDifference between an ant and another entity.
         /// </summary>
@@ -172,7 +183,9 @@ namespace AntEngine.Entities.Ants
         /// <returns>Weight value to be added to total weight</returns>
         private float GetWeightFactorFromRotation(float rotationDelta)
         {
-            return MathF.Pow(rotationDelta, 2) != 0 ? 1 / MathF.Pow(rotationDelta, 2) : 0;
+            float minValue = 0;
+            float maxValue = 1;
+            return MathF.Max(1 - MathF.Abs(rotationDelta) / MathF.PI * maxValue, minValue);
         }
     }
 }

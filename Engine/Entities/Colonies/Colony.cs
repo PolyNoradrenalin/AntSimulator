@@ -65,7 +65,7 @@ namespace AntEngine.Entities.Colonies
         {
             get
             {
-                float angle = (float)new Random().NextDouble();
+                float angle = (float)new Random().NextDouble() * 2F * MathF.PI;
                 float x = MathF.Cos(angle);
                 float y = MathF.Sin(angle);
 
@@ -88,7 +88,9 @@ namespace AntEngine.Entities.Colonies
             {
                 ConsumeResources();
 
-                IColonyMember pop = SpawnMethod("", new Transform(SpawnPosition, 0, Vector2.One), World, this);
+                // TODO : Spawn Transform scale, rotation, ...
+                IColonyMember pop = SpawnMethod("", new Transform(SpawnPosition, 0, Vector2.One * 10F), World, this);
+                // TODO : REMOVE POP MEMBER
                 _population.Add(pop);
                 pop.Home = this;
             }

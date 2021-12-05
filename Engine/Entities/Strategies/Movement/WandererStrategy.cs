@@ -11,9 +11,9 @@ namespace AntEngine.Entities.Strategies.Movement
     /// </summary>
     public class WandererStrategy : IMovementStrategy
     {
-        private const float RandomAngleRange = 0.1F;
+        private const float RandomAngleRange = MathF.PI / 2F;
         private const float DefaultOldDirFactor = 0.1F;
-        
+
         private float _random;
         private float _oldDirFactor;
         private Vector2 _dir;
@@ -32,27 +32,17 @@ namespace AntEngine.Entities.Strategies.Movement
 
         public Vector2 Move(PerceptionMap map)
         {
+            float oldDirAngle = MathF.Atan2(_dir.Y, Vector2.Dot(_dir, Vector2.UnitX));
+            
             float randomAngle = (float)new Random().NextDouble() * RandomAngleRange;
             float centeredAngle = randomAngle - RandomAngleRange / 2;
+            Vector2 randomDir = new(MathF.Cos(centeredAngle + oldDirAngle), MathF.Sin(centeredAngle + oldDirAngle));
             
-            Vector2 randomDir = new(MathF.Cos(centeredAngle), MathF.Sin(centeredAngle));
             Vector2 targetDir = map.Mean;
-
-            if (targetDir.X < -0.5f)
-            {
-                _dir = targetDir;
-            }
-            else
-            {
-                if (_dir.X < 0)
-                {
-                    _dir = (1 - _random) * targetDir + _random * randomDir;
-                }
-                else
-                {
-                    _dir = _oldDirFactor * _dir + (1 - _oldDirFactor) * ((1 - _random) * targetDir + _random * randomDir);
-                }
-            }
+            Vector2 rawDir = (1 - _random) * targetDir + _random * randomDir;
+            
+            _dir = _oldDirFactor * _dir + (1 - _oldDirFactor) * rawDir;
+            
             return _dir;
         }
     }
