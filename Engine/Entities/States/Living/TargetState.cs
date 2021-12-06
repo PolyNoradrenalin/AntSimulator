@@ -23,13 +23,13 @@ namespace AntEngine.Entities.States.Living
             _target = target;
         }
 
-        public void OnStateStart(StateEntity stateEntity)
+        public override void OnStateStart(StateEntity stateEntity)
         {
             if (stateEntity is not Ant)
                 throw new ArgumentException("TargetState is only valid on Ant entity");
         }
 
-        public void OnStateUpdate(StateEntity stateEntity)
+        public override void OnStateUpdate(StateEntity stateEntity)
         {
             Ant ant = (Ant)stateEntity;
             Vector2 dir = _target.Transform.Position - ant.Transform.Position;

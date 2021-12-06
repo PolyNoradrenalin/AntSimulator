@@ -73,7 +73,13 @@ namespace AntEngine.Entities.States.Living
             foreach (Colony c in colonies)
             {
                 if (ant.Home != c) continue;
-                
+
+                if (ant.Transform.GetDistance(c.Transform) >= ant.PickUpDistance)
+                {
+                    ant.State = new TargetState(this, c);
+                    return;
+                }
+
                 foreach ((Resource resource, int cost) in ant.ResourceInventory.All)
                 {
                     c.Stockpile.AddResource(resource, cost);
