@@ -21,8 +21,7 @@ namespace AntEngine.Entities.Ants
     public class Ant : LivingEntity, IColonyMember
     {
         private const float DefaultMaxSpeed = 1F;
-        private const float PickUpDistance = 10F;
-        
+
         public Ant(World world) : this("Ant", new Transform(), world)
         {
         }
@@ -42,7 +41,6 @@ namespace AntEngine.Entities.Ants
         }
         
         public Colony Home { get; set; }
-
 
         /// <summary>
         /// The ant's current movement strategy.
@@ -65,6 +63,12 @@ namespace AntEngine.Entities.Ants
         public int PerceptionMapPrecision { get; } = 24;
 
         public TimeSpan PheromoneTimeSpan { get; protected set; } = TimeSpan.FromSeconds(500);
+        
+        /// <summary>
+        /// Distance from which an ant can pick up or depose ressources.
+        /// </summary>
+        public float PickUpDistance { get; } = 5F;
+
 
         /// <summary>
         /// Delay between each emission of a pheromone.
