@@ -53,7 +53,7 @@ namespace App
             colony.Transform.Scale = Vector2.One * 20F;
             colony.SpawnCost.AddResource(food, 10);
             colony.Stockpile.AddResource(food, 10000);
-            colony.Spawn(100);
+            colony.Spawn(500);
             
             for (int i = 0; i < 10; i++)
             {

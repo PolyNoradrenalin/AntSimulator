@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Timers;
-using AntEngine.Utils;
 using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities.Pheromones
@@ -11,29 +10,34 @@ namespace AntEngine.Entities.Pheromones
     public abstract class Pheromone : Entity
     {
         protected const string DefaultPheromoneName = "Pheromone";
+        protected const int DefaultMaxTimeSpan = 100;
         
-        protected DecayTimer decayTimer;
-
-        public Pheromone(World world) : this(DefaultPheromoneName, new Transform(), world, new TimeSpan())
+        public int Intensity;
+        
+        public Pheromone(World world) : this(DefaultPheromoneName, new Transform(), world, DefaultMaxTimeSpan)
         {
         }
         
-        public Pheromone(World world, TimeSpan maxTimeSpan) : this(DefaultPheromoneName, new Transform(), world, maxTimeSpan)
+        public Pheromone(World world, int maxTimeSpan) : this(DefaultPheromoneName, new Transform(), world, maxTimeSpan)
         {
         }
 
-        public Pheromone(string name, Transform transform, World world, TimeSpan maxTimeSpan) : base(name, transform, world)
+        public Pheromone(string name, Transform transform, World world, int maxTimeSpan) : base(name, transform, world)
         {
-            decayTimer = new DecayTimer(maxTimeSpan);
-            decayTimer.TimerDecayed += OnDecay;
+            Intensity = maxTimeSpan;
         }
 
         public override void Update()
         {
-            decayTimer.Update();
+            Intensity--;
+
+            if (Intensity <= 0)
+            {
+                OnDecay();
+            }
         }
 
-        protected virtual void OnDecay(object sender, EventArgs e)
+        protected virtual void OnDecay()
         {
             World.RemoveEntity(this);
         }

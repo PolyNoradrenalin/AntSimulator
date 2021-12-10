@@ -20,6 +20,8 @@ namespace AntEngine.Entities.Ants
     /// </summary>
     public class Ant : LivingEntity, IColonyMember
     {
+        private const float PheromoneMergeDistance = 2F;
+        
         private const float DefaultMaxSpeed = 1F;
         private const float PickUpDistance = 10F;
         
@@ -64,17 +66,17 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public int PerceptionMapPrecision { get; } = 24;
 
-        public TimeSpan PheromoneTimeSpan { get; protected set; } = TimeSpan.FromSeconds(500);
+        public int PheromoneTimeSpan { get; protected set; } = 60000;
 
         /// <summary>
         /// Delay between each emission of a pheromone.
         /// </summary>
-        public float PheromoneEmissionDelay { get; protected set; } = 0.3F;
+        public int PheromoneEmissionDelay { get; protected set; } = 5;
 
         /// <summary>
-        /// The timestamp of when the ant emitted a pheromone
+        /// The number of tick since the ant emitted a pheromone
         /// </summary>
-        public DateTime LastEmitTime { get; set; }
+        public int LastEmitTime;
 
         /// <summary>
         /// Creates the ant's perception map.
@@ -101,8 +103,8 @@ namespace AntEngine.Entities.Ants
                 int weightListIndex = (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision));
                 
                 float weightSum = weights[weightListIndex];
-                weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform)) *
-                             GetWeightFactorFromRotation(angleDiff);
+                weightSum += (GetWeightFactorFromDistance(e.Transform.GetDistance(Transform)) *
+                              GetWeightFactorFromRotation(angleDiff)) * e.Intensity;
                 weights[weightListIndex] = weightSum;
             }
 
@@ -137,14 +139,18 @@ namespace AntEngine.Entities.Ants
 
             return false;
         }
-
+        
         /// <summary>
         /// The Ant emits a home pheromone.
         /// </summary>
         public void EmitHomePheromone()
         {
             Transform homeTransform = new(Transform.Position, 0, Vector2.One);
-            HomePheromone unused = new(Name, homeTransform, World, PheromoneTimeSpan);
+
+            if (!ReinforceNearestPheromone<HomePheromone>())
+            {
+                HomePheromone unused = new(Name, homeTransform, World, PheromoneTimeSpan);
+            }
         }
 
         /// <summary>
@@ -153,9 +159,37 @@ namespace AntEngine.Entities.Ants
         public void EmitFoodPheromone()
         {
             Transform foodTransform = new(Transform.Position, 0, Vector2.One);
-            FoodPheromone unused = new(Name, foodTransform, World, PheromoneTimeSpan);
+            if (!ReinforceNearestPheromone<FoodPheromone>())
+            {
+                FoodPheromone unused = new(Name, foodTransform, World, PheromoneTimeSpan);
+            }
         }
 
+        /// <summary>
+        /// Increases the intensity of the nearest pheromone by PheromoneTimeSpan if it is in range of merge.
+        /// </summary>
+        /// <typeparam name="T">The type of pheromone to search</typeparam>
+        /// <returns>true if a pheromone has been reinforce, false otherwise</returns>
+        private bool ReinforceNearestPheromone<T>() where T : Pheromone
+        {
+            List<T> pheromones = World.CheckEntitiesInRegion<T>(Region.X, Region.Y, PheromoneMergeDistance);
+            if (pheromones.Count == 0) return false;
+            
+            (T pheromone, float distance) candidate = (null, float.MaxValue);
+            
+            foreach (T p in pheromones)
+            {
+                float dist = p.Transform.GetDistance(Transform);
+
+                if (!(dist < PheromoneMergeDistance) || !(dist < candidate.distance)) continue;
+                candidate.pheromone = p;
+                candidate.distance = dist;
+            }
+
+            if (candidate.pheromone != null) candidate.pheromone.Intensity += PheromoneTimeSpan;
+
+            return candidate.pheromone != null;
+        }
 
         /// <summary>
         /// Returns the weight factor associated to the distance between an ant and another entity.
