@@ -39,11 +39,8 @@ namespace App
         {
             base.Initialize();
             
-            SimFrame mainSimFrame = new SimFrame(_world);
+            SimFrame mainSimFrame = new SimFrame(new Rectangle(0, 0, 800, 500), _world);
 
-            mainSimFrame.Position = (0, 0);
-            mainSimFrame.Size = (800, 500);
-            
             _renderers.Add(mainSimFrame);
 
             Resource food = new Resource("food", "Test Food");
@@ -65,7 +62,9 @@ namespace App
                 foodEntity.Transform.Scale = Vector2.One * 10;
             }
 
-
+            Button button = new Button(new Rectangle(10, 10, 100, 100));
+            
+            _renderers.Add(button);
         }
 
         protected override void LoadContent()
@@ -75,6 +74,7 @@ namespace App
             SimFrame.EntityTexture = Content.Load<Texture2D>("Entities/Entity");
             SimFrame.AntTexture = Content.Load<Texture2D>("Entities/Ant");
             SimFrame.ColonyTexture = Content.Load<Texture2D>("Entities/Colony");
+            Button.Texture = Content.Load<Texture2D>("UIElements/Button");
         }
 
         protected override void Update(GameTime gameTime)

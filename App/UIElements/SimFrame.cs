@@ -24,7 +24,7 @@ namespace App.UIElements
         
         private IList<IRenderer> _renderers;
 
-        public SimFrame(World world)
+        public SimFrame(Rectangle rect, World world) : base(rect)
         {
             _renderers = new List<IRenderer>();
             SimWorld = world;
