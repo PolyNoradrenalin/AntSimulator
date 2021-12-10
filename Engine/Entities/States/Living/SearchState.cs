@@ -88,7 +88,7 @@ namespace AntEngine.Entities.States.Living
             }
         }
 
-        public new IState Next(StateEntity stateEntity)
+        public override IState Next(StateEntity stateEntity)
         {
             return CarryState.Instance;
         }

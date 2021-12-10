@@ -39,7 +39,7 @@ namespace AntEngine.Entities.States.Living
             if (ant.Transform.GetDistance(_target.Transform) <= ThresholdDistance) ant.State = Next(stateEntity);
         }
 
-        public IState Next(StateEntity stateEntity)
+        public override IState Next(StateEntity stateEntity)
         {
             return _previousState;
         }
