@@ -74,7 +74,7 @@ namespace AntEngine.Entities.Ants
         public int PheromoneEmissionDelay { get; protected set; } = 5;
 
         /// <summary>
-        /// The number of tick since the ant emitted a pheromone
+        /// The number of ticks since the ant emitted a pheromone
         /// </summary>
         public int LastEmitTime;
 
@@ -169,7 +169,7 @@ namespace AntEngine.Entities.Ants
         /// Increases the intensity of the nearest pheromone by PheromoneTimeSpan if it is in range of merge.
         /// </summary>
         /// <typeparam name="T">The type of pheromone to search</typeparam>
-        /// <returns>true if a pheromone has been reinforce, false otherwise</returns>
+        /// <returns>true if a pheromone has been reinforced, false otherwise</returns>
         private bool ReinforceNearestPheromone<T>() where T : Pheromone
         {
             List<T> pheromones = World.CheckEntitiesInRegion<T>(Region.X, Region.Y, PheromoneMergeDistance);
