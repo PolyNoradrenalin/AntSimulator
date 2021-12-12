@@ -69,7 +69,14 @@ namespace AntEngine.Entities.States.Living
 
             foreach (ResourceEntity resourceEntity in list)
             {
-                if (ant.PickUp(resourceEntity)) stateEntity.State = Next(stateEntity);
+                if (ant.PickUp(resourceEntity))
+                {
+                    stateEntity.State = Next(stateEntity);
+                }
+                else
+                {
+                    stateEntity.State = new TargetState(this, resourceEntity);
+                }
                 
                 break;
             }
@@ -81,7 +88,7 @@ namespace AntEngine.Entities.States.Living
             }
         }
 
-        public new IState Next(StateEntity stateEntity)
+        public override IState Next(StateEntity stateEntity)
         {
             return CarryState.Instance;
         }

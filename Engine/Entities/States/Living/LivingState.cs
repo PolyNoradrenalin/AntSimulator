@@ -35,7 +35,7 @@ namespace AntEngine.Entities.States.Living
         {
         }
 
-        public IState Next(StateEntity stateEntity)
+        public virtual IState Next(StateEntity stateEntity)
         {
             return DeathState.Instance;
         }
