@@ -5,21 +5,21 @@ using System.Collections.Immutable;
 namespace AntEngine.Resources
 {
     /// <summary>
-    /// Represents the association Resource => amount.
+    ///     Represents the association Resource => amount.
     /// </summary>
     public class ResourceInventory
     {
-        private Dictionary<Resource, int> _resources;
+        private readonly Dictionary<Resource, int> _resources;
 
         public ResourceInventory()
         {
             _resources = new Dictionary<Resource, int>();
         }
-        
+
         public IDictionary<Resource, int> All => _resources.ToImmutableDictionary();
 
         /// <summary>
-        /// Adds a specific amount of resources to the deposit. 
+        ///     Adds a specific amount of resources to the deposit.
         /// </summary>
         /// If the resource is already stored in the deposit, the amount will be added to the already existing entry.
         /// <param name="resource">Resource to be added</param>
@@ -27,17 +27,13 @@ namespace AntEngine.Resources
         public void AddResource(Resource resource, int amount)
         {
             if (_resources.ContainsKey(resource))
-            {
                 _resources[resource] += amount;
-            }
             else
-            {
                 _resources.Add(resource, amount);
-            }
         }
 
         /// <summary>
-        /// Removes a specific amount of resources from the deposit.
+        ///     Removes a specific amount of resources from the deposit.
         /// </summary>
         /// If the resource is depleted, the entry will be removed.
         /// <param name="resource">Resource to be removed</param>

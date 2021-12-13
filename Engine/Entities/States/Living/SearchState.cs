@@ -5,18 +5,17 @@ using System.Numerics;
 using AntEngine.Colliders;
 using AntEngine.Entities.Ants;
 using AntEngine.Entities.Pheromones;
-using AntEngine.Entities.Strategies.Movement;
 using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities.States.Living
 {
     /// <summary>
-    /// State of a Living Entity that searches for pheromones.
+    ///     State of a Living Entity that searches for pheromones.
     /// </summary>
     public class SearchState : LivingState
     {
         private const int ObstacleRayIndex = 4;
-        
+
         private static SearchState _instance;
 
         public new static SearchState Instance
@@ -32,17 +31,17 @@ namespace AntEngine.Entities.States.Living
         {
             base.OnStateUpdate(stateEntity);
 
-            Ant ant = (Ant) stateEntity;
+            Ant ant = (Ant)stateEntity;
             PerceptionMap perceptionMap = ant.GetPerceptionMap<FoodPheromone>();
-            
+
             float obstacleDetectRadius = ant.Transform.Scale.Length() / 2F;
             int maxDirIndex = ant.PerceptionMapPrecision;
             float positiveRotation = ant.Transform.Rotation < 0
                 ? ant.Transform.Rotation + 2F * MathF.PI
                 : ant.Transform.Rotation;
-            
+
             int[] dirs = new int[3];
-            dirs[0] = (int) MathF.Floor(positiveRotation / (2 * MathF.PI) * maxDirIndex);
+            dirs[0] = (int)MathF.Floor(positiveRotation / (2 * MathF.PI) * maxDirIndex);
             dirs[1] = (dirs[0] + ObstacleRayIndex) % maxDirIndex;
             dirs[2] = (dirs[0] + maxDirIndex - ObstacleRayIndex) % maxDirIndex;
 
@@ -53,14 +52,11 @@ namespace AntEngine.Entities.States.Living
 
                 IList<Collider> collisions = new List<Collider>(
                     stateEntity.World.CircleCast(
-                    stateEntity.Transform.Position + dir * obstacleDetectRadius,
-                    obstacleDetectRadius));
-                
+                        stateEntity.Transform.Position + dir * obstacleDetectRadius,
+                        obstacleDetectRadius));
+
                 collisions = collisions.Where(collider => collider is not CircleCollider).ToList();
-                if (collisions.Count > 0)
-                {
-                    perceptionMap.Weights[opposite] += 1/3F;
-                }
+                if (collisions.Count > 0) perceptionMap.Weights[opposite] += 1 / 3F;
             }
 
             ant.Move(ant.MovementStrategy.Move(perceptionMap));
@@ -70,14 +66,10 @@ namespace AntEngine.Entities.States.Living
             foreach (ResourceEntity resourceEntity in list)
             {
                 if (ant.PickUp(resourceEntity))
-                {
                     stateEntity.State = Next(stateEntity);
-                }
                 else
-                {
                     stateEntity.State = new TargetState(this, resourceEntity);
-                }
-                
+
                 break;
             }
 

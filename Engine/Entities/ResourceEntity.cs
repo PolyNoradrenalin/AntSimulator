@@ -1,10 +1,9 @@
-﻿using System.Transactions;
-using AntEngine.Resources;
+﻿using AntEngine.Resources;
 
 namespace AntEngine.Entities
 {
     /// <summary>
-    /// Represents a resource in the world.
+    ///     Represents a resource in the world.
     /// </summary>
     public class ResourceEntity : Entity
     {
@@ -14,12 +13,11 @@ namespace AntEngine.Entities
             Type = resource;
         }
 
-        public int Quantity { get; private set; }
-        public Resource Type { get; private set; }
+        public int Quantity { get; }
+        public Resource Type { get; }
 
         public override void Update()
         {
-            
         }
     }
 }

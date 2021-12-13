@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace App.Renderers
 {
     /// <summary>
-    /// Interface for a renderer
+    ///     Interface for a renderer
     /// </summary>
     public interface IRenderer
     {

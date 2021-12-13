@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace App.Renderers.EntityRenderers
 {
     /// <summary>
-    /// Renderer for a Colony Entity.
+    ///     Renderer for a Colony Entity.
     /// </summary>
     public class ColonyRenderer : EntityRenderer
     {

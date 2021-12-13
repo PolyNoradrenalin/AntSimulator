@@ -5,13 +5,13 @@ using System.Numerics;
 namespace AntEngine.Utils.Maths
 {
     /// <summary>
-    /// A list of Vector2 each associated with a weight.
-    /// Used to represent which directions are the most important.
+    ///     A list of Vector2 each associated with a weight.
+    ///     Used to represent which directions are the most important.
     /// </summary>
     public class PerceptionMap
     {
         /// <summary>
-        /// Associates each weight of the list to a vector going all around a circle, equally spaced.
+        ///     Associates each weight of the list to a vector going all around a circle, equally spaced.
         /// </summary>
         /// <param name="weights">List of weights</param>
         /// <param name="angleOffset">Offset to be applied to the angle</param>
@@ -19,7 +19,7 @@ namespace AntEngine.Utils.Maths
         {
             Weights = new Dictionary<Vector2, float>(weights.Count);
             float stepAngle = 2F * MathF.PI / weights.Count;
-            
+
             for (int i = 0; i < weights.Count; i++)
             {
                 float angle = i * stepAngle + angleOffset;
@@ -27,14 +27,14 @@ namespace AntEngine.Utils.Maths
                 Weights.Add(dir, weights[i]);
             }
         }
-        
+
         /// <summary>
-        /// Each direction associated with its weight.
+        ///     Each direction associated with its weight.
         /// </summary>
         public Dictionary<Vector2, float> Weights { get; }
 
         /// <summary>
-        /// Returns the mean vector of all directions with weights considered.
+        ///     Returns the mean vector of all directions with weights considered.
         /// </summary>
         public Vector2 Mean
         {
@@ -49,7 +49,7 @@ namespace AntEngine.Utils.Maths
                     totalWeight += Weights[dir];
                 }
 
-                return (totalWeight != 0) ? totalVector / MathF.Abs(totalWeight) : Vector2.Zero;
+                return totalWeight != 0 ? totalVector / MathF.Abs(totalWeight) : Vector2.Zero;
             }
         }
     }
