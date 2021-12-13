@@ -91,10 +91,14 @@ namespace AntEngine.Entities.States.Living
                 break;
             }
 
-            if (DateTime.Now.Subtract(ant.LastEmitTime).TotalSeconds > ant.PheromoneEmissionDelay)
+            if (ant.LastEmitTime > ant.PheromoneEmissionDelay)
             {
                 ant.EmitFoodPheromone();
-                ant.LastEmitTime = DateTime.Now;
+                ant.LastEmitTime = 0;
+            }
+            else
+            {
+                ant.LastEmitTime++;
             }
         }
 

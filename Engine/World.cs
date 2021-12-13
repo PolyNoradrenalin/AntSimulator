@@ -18,7 +18,7 @@ namespace AntEngine
     public class World
     {
         private const int WorldColliderDivision = 64;
-        public const int WorldRegionDivision = 10;
+        public const int WorldRegionDivision = 256;
         
         private IList<Entity> _entitiesAddedBuffer;
         private IList<Entity> _entitiesUpdatedBuffer;
@@ -213,7 +213,8 @@ namespace AntEngine
         
         public List<T> CheckEntitiesInRegion<T>(int x, int y, float radius) where T : Entity
         {
-            return CheckEntitiesInRegion<T>(x, y, (int) (radius / WorldRegionDivision));
+            float minSize = MathF.Min(Size.X, Size.Y);
+            return CheckEntitiesInRegion<T>(x, y, (int) ((radius / minSize) * WorldRegionDivision));
         }
 
         private void ApplyAddEntity()
