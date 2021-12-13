@@ -5,7 +5,6 @@ using AntEngine.Entities;
 using AntEngine.Entities.Ants;
 using AntEngine.Entities.Colonies;
 using AntEngine.Resources;
-using AntEngine.Utils.Maths;
 using App.Renderers;
 using App.UIElements;
 using Microsoft.Xna.Framework;
@@ -13,18 +12,17 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Vector2 = System.Numerics.Vector2;
 
-
 namespace App
 {
     public class AntSimulator : Game
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private readonly GraphicsDeviceManager _graphics;
+        private readonly List<IRenderer> _renderers;
+        private readonly int _targetTps = 60;
 
-        private World _world;
-        private List<IRenderer> _renderers;
+        private readonly World _world;
         private DateTime _lastTimeTick;
-        private int _targetTps = 60;
+        private SpriteBatch _spriteBatch;
 
         public AntSimulator()
         {
@@ -38,7 +36,7 @@ namespace App
         protected override void Initialize()
         {
             base.Initialize();
-            
+
             SimFrame mainSimFrame = new SimFrame(new Rectangle(0, 0, 800, 500), _world);
 
             _renderers.Add(mainSimFrame);
@@ -51,7 +49,7 @@ namespace App
             colony.SpawnCost.AddResource(food, 10);
             colony.Stockpile.AddResource(food, 10000);
             colony.Spawn(500);
-            
+
             for (int i = 0; i < 10; i++)
             {
                 ResourceEntity foodEntity = new ResourceEntity(_world, 1000, food);
@@ -63,14 +61,14 @@ namespace App
             }
 
             Button button = new Button(new Rectangle(10, 10, 100, 100));
-            
+
             _renderers.Add(button);
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
             SimFrame.EntityTexture = Content.Load<Texture2D>("Entities/Entity");
             SimFrame.AntTexture = Content.Load<Texture2D>("Entities/Ant");
             SimFrame.ColonyTexture = Content.Load<Texture2D>("Entities/Colony");
@@ -88,7 +86,7 @@ namespace App
                 _lastTimeTick = DateTime.Now;
                 _world.Update();
             }
-            
+
             base.Update(gameTime);
         }
 
@@ -97,14 +95,16 @@ namespace App
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin(SpriteSortMode.FrontToBack);
-            
+
             foreach (IRenderer r in _renderers)
             {
-                r.Render(_spriteBatch, _graphics, new Rectangle(0, 0, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height));
+                r.Render(_spriteBatch, _graphics,
+                    new Rectangle(0, 0, _graphics.GraphicsDevice.Viewport.Width,
+                        _graphics.GraphicsDevice.Viewport.Height));
             }
 
             base.Draw(gameTime);
-            
+
             _spriteBatch.End();
         }
     }

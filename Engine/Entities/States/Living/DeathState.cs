@@ -1,7 +1,9 @@
+using System;
+
 namespace AntEngine.Entities.States.Living
 {
     /// <summary>
-    /// Final state of a living entity.
+    ///     Final state of a living entity.
     /// </summary>
     public class DeathState : IState
     {
@@ -15,11 +17,12 @@ namespace AntEngine.Entities.States.Living
                 return _instance;
             }
         }
+
         public void OnStateStart(StateEntity stateEntity)
         {
-            if (stateEntity is not LivingEntity living) 
-                throw new System.ArgumentException("LivingState is only defined for Living entities.");
-            
+            if (stateEntity is not LivingEntity living)
+                throw new ArgumentException("LivingState is only defined for Living entities.");
+
             living.Kill();
         }
 

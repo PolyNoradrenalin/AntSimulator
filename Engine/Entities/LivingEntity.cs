@@ -7,7 +7,7 @@ using AntEngine.Utils.Maths;
 namespace AntEngine.Entities
 {
     /// <summary>
-    /// An Entity that can live and die.
+    ///     An Entity that can live and die.
     /// </summary>
     public abstract class LivingEntity : StateEntity
     {
@@ -18,32 +18,35 @@ namespace AntEngine.Entities
         {
         }
 
-        public LivingEntity(string name, Transform transform, World world) : this(name, transform, world, new LivingState())
+        public LivingEntity(string name, Transform transform, World world) : this(name, transform, world,
+            new LivingState())
         {
         }
 
-        public LivingEntity(string name, Transform transform, World world, IState initialState, int maxHealth = 100) : base(name, transform, world, initialState)
+        public LivingEntity(string name, Transform transform, World world, IState initialState, int maxHealth = 100) :
+            base(name, transform, world, initialState)
         {
             MaxHealth = maxHealth;
             Health = MaxHealth;
         }
 
         /// <summary>
-        /// Health of the entity.
-        /// The entity dies if this falls down to zero.
+        ///     Health of the entity.
+        ///     The entity dies if this falls down to zero.
         /// </summary>
         public int Health
         {
             get => _health;
-            protected set => _health = (value > MaxHealth) ? MaxHealth : value;
+            protected set => _health = value > MaxHealth ? MaxHealth : value;
         }
+
         /// <summary>
-        /// Maximum health of the entity.
+        ///     Maximum health of the entity.
         /// </summary>
         public int MaxHealth { get; protected set; }
 
         /// <summary>
-        /// Current speed of the ant.
+        ///     Current speed of the ant.
         /// </summary>
         public float Speed
         {
@@ -52,12 +55,12 @@ namespace AntEngine.Entities
         }
 
         /// <summary>
-        /// Maximum speed of the ant.
+        ///     Maximum speed of the ant.
         /// </summary>
         public float MaxSpeed { get; protected set; }
-        
+
         /// <summary>
-        /// Applies movement to ant's coordinates.
+        ///     Applies movement to ant's coordinates.
         /// </summary>
         /// <param name="dir"></param>
         public void Move(Vector2 dir)
@@ -69,13 +72,13 @@ namespace AntEngine.Entities
             movement = movement.Length() > MaxSpeed ? MaxSpeed * (movement / movement.Length()) : movement;
             Collider.ParentTransform.Position += movement;
             if (Collider.CheckCollision(World.Collider)) Collider.ParentTransform.Position = lastPos;
-            
+
             World.UpdateEntityRegion(this);
         }
 
-        
+
         /// <summary>
-        /// Kills the entity.
+        ///     Kills the entity.
         /// </summary>
         public void Kill()
         {
@@ -84,8 +87,8 @@ namespace AntEngine.Entities
         }
 
         /// <summary>
-        /// Called when the entity just died.
-        /// Note: this is called before the world removes the entity.
+        ///     Called when the entity just died.
+        ///     Note: this is called before the world removes the entity.
         /// </summary>
         protected virtual void OnEntityDeath()
         {

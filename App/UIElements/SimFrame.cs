@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AntEngine;
 using AntEngine.Entities;
@@ -14,15 +12,15 @@ using Microsoft.Xna.Framework.Graphics;
 namespace App.UIElements
 {
     /// <summary>
-    /// Represents the frame in which a simulation will occur.
+    ///     Represents the frame in which a simulation will occur.
     /// </summary>
     public class SimFrame : UIElement
     {
         public static Texture2D EntityTexture;
         public static Texture2D AntTexture;
         public static Texture2D ColonyTexture;
-        
-        private IList<IRenderer> _renderers;
+
+        private readonly IList<IRenderer> _renderers;
 
         public SimFrame(Rectangle rect, World world) : base(rect)
         {
@@ -30,17 +28,19 @@ namespace App.UIElements
             SimWorld = world;
             world.EntityAdded += OnEntityAdded;
             world.EntityRemoved += OnEntityRemoved;
-            
+
             // TODO: Unsubscribe to allow GC.
         }
 
-        public World SimWorld { get; private set; }
-        
+        public World SimWorld { get; }
+
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             foreach (IRenderer r in _renderers)
             {
-                r.Render(spriteBatch, gdm, new Rectangle(Position.X + canvasOffset.Left, Position.Y + canvasOffset.Top, Size.Width, Size.Height));
+                r.Render(spriteBatch, gdm,
+                    new Rectangle(Position.X + canvasOffset.Left, Position.Y + canvasOffset.Top, Size.Width,
+                        Size.Height));
             }
         }
 
@@ -48,7 +48,7 @@ namespace App.UIElements
         {
             _renderers.Add(r);
         }
-        
+
         public void RemoveRenderer(IRenderer r)
         {
             _renderers.Remove(r);
@@ -65,17 +65,14 @@ namespace App.UIElements
 
             AddRenderer(renderer);
         }
-        
+
         private void OnEntityRemoved(Entity entity)
         {
             foreach (IRenderer renderer in _renderers.ToList())
             {
                 if (!(renderer is EntityRenderer entityRenderer)) continue;
-                
-                if (entityRenderer.Entity.Equals(entity))
-                {
-                    RemoveRenderer(renderer);
-                }
+
+                if (entityRenderer.Entity.Equals(entity)) RemoveRenderer(renderer);
             }
         }
     }

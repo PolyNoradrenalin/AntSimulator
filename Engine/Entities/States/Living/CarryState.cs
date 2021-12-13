@@ -14,10 +14,10 @@ namespace AntEngine.Entities.States.Living
     public class CarryState : LivingState
     {
         /// <summary>
-        /// Represents the total field of view in which the entity can detect obstacles.
+        ///     Represents the total field of view in which the entity can detect obstacles.
         /// </summary>
         private const float ObstacleFieldOfView = 2F * MathF.PI / 3F;
-        
+
         private static CarryState _instance;
 
         public new static CarryState Instance
@@ -32,20 +32,20 @@ namespace AntEngine.Entities.States.Living
         public override void OnStateUpdate(StateEntity stateEntity)
         {
             base.OnStateUpdate(stateEntity);
-            
-            Ant ant = (Ant) stateEntity;
+
+            Ant ant = (Ant)stateEntity;
             PerceptionMap perceptionMap = ant.GetPerceptionMap<HomePheromone>();
-            
+
             float obstacleDetectRadius = ant.Transform.Scale.Length() / 2F;
             int maxDirIndex = ant.PerceptionMapPrecision;
             float positiveRotation = ant.Transform.Rotation < 0
                 ? ant.Transform.Rotation + 2F * MathF.PI
                 : ant.Transform.Rotation;
 
-            int obstacleRayIndex = (int)MathF.Floor((ObstacleFieldOfView / 2) / (2 * MathF.PI) * maxDirIndex);
-            
+            int obstacleRayIndex = (int)MathF.Floor(ObstacleFieldOfView / 2 / (2 * MathF.PI) * maxDirIndex);
+
             int[] dirs = new int[3];
-            dirs[0] = (int) MathF.Floor(positiveRotation / (2 * MathF.PI) * maxDirIndex);
+            dirs[0] = (int)MathF.Floor(positiveRotation / (2 * MathF.PI) * maxDirIndex);
             dirs[1] = (dirs[0] + obstacleRayIndex) % maxDirIndex;
             dirs[2] = (dirs[0] + maxDirIndex - obstacleRayIndex) % maxDirIndex;
 
@@ -58,14 +58,11 @@ namespace AntEngine.Entities.States.Living
                     stateEntity.World.CircleCast(
                         stateEntity.Transform.Position + dir * obstacleDetectRadius,
                         obstacleDetectRadius));
-                
+
                 collisions = collisions.Where(collider => collider is not CircleCollider).ToList();
-                if (collisions.Count > 0)
-                {
-                    perceptionMap.Weights[opposite] += 1/3F;
-                }
+                if (collisions.Count > 0) perceptionMap.Weights[opposite] += 1 / 3F;
             }
-            
+
             ant.Move(ant.MovementStrategy.Move(perceptionMap));
 
             List<Colony> colonies = ant.GetSurroundingEntities<Colony>();
@@ -85,7 +82,7 @@ namespace AntEngine.Entities.States.Living
                     c.Stockpile.AddResource(resource, cost);
                     ant.ResourceInventory.RemoveResource(resource, cost);
                 }
-                
+
                 stateEntity.State = Next(stateEntity);
 
                 break;

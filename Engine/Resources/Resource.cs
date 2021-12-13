@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace AntEngine.Resources
+﻿namespace AntEngine.Resources
 {
     /// <summary>
-    /// Represents a resource type.
+    ///     Represents a resource type.
     /// </summary>
     public class Resource
     {
@@ -14,14 +12,15 @@ namespace AntEngine.Resources
         }
 
         /// <summary>
-        /// Unique identifier of the resource. <br />
-        /// Resources can have the same name but still be different.
+        ///     Unique identifier of the resource. <br />
+        ///     Resources can have the same name but still be different.
         /// </summary>
-        public string Type { get; private set; }
+        public string Type { get; }
+
         /// <summary>
-        /// Display name of the resource.
+        ///     Display name of the resource.
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         protected bool Equals(Resource other)
         {
@@ -32,13 +31,13 @@ namespace AntEngine.Resources
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((Resource)obj);
         }
 
         public override int GetHashCode()
         {
-            return (Type != null ? Type.GetHashCode() : 0);
+            return Type != null ? Type.GetHashCode() : 0;
         }
     }
 }

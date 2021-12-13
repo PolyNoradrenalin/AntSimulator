@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using AntEngine.Utils.Maths;
 
@@ -9,7 +8,7 @@ namespace AntEngine.Colliders
     public static class CollisionDetection
     {
         /// <summary>
-        /// Checks if two CircleColliders collide.
+        ///     Checks if two CircleColliders collide.
         /// </summary>
         /// <returns>true if collision, false otherwise</returns>
         public static bool CircleAndCircle(CircleCollider circleA, CircleCollider circleB)
@@ -17,9 +16,9 @@ namespace AntEngine.Colliders
             float distance = Vector2.Distance(circleA.ParentTransform.Position, circleB.ParentTransform.Position);
             return distance < circleA.Radius + circleB.Radius;
         }
-        
+
         /// <summary>
-        /// Checks if a CircleCollider and a RectangleCollider collide.
+        ///     Checks if a CircleCollider and a RectangleCollider collide.
         /// </summary>
         /// <returns>true if collision, false otherwise</returns>
         public static bool CircleAndRectangle(CircleCollider circle, RectangleCollider rect)
@@ -27,9 +26,9 @@ namespace AntEngine.Colliders
             List<Vector2> vertices = rect.ParentTransform.GetRectangleVertices();
 
             Vector2 circlePos = circle.ParentTransform.Position;
-            
+
             // First we want to compute the closest point on the circle to a vertex of the rectangle
-            
+
             float minDist = float.MaxValue;
             Vector2 closestDelta = new();
 
@@ -38,7 +37,7 @@ namespace AntEngine.Colliders
                 Vector2 delta = new(vert.X - circlePos.X, vert.Y - circlePos.Y);
 
                 float distance = MathF.Pow(delta.X, 2) + MathF.Pow(delta.Y, 2);
-                
+
                 if (!(distance < minDist)) continue;
                 minDist = distance;
                 closestDelta = delta;
@@ -53,26 +52,23 @@ namespace AntEngine.Colliders
             };
 
             Vector2 directorVector = t.GetDirectorVector();
-            
+
             Vector2 normalVector = new(-directorVector.Y, directorVector.X);
 
-            List<Vector2> axes = new() {directorVector, normalVector, circleAxis};
+            List<Vector2> axes = new() { directorVector, normalVector, circleAxis };
 
             // Iterate through the axis, projecting each time all the rectangle's vertices and the circle's center +/- its width
             foreach (Vector2 axis in axes)
             {
                 (float rectProjMin, float rectProjMax) = ProjectVertsOnAxis(axis, vertices);
-                
+
                 float temp = Vector2.Dot(axis, circlePos);
                 (float circleProjMin, float circleProjMax) =
                     (temp - circle.Radius, temp + circle.Radius);
-                
+
                 // Check if the projected vertices overlap.
                 // If they do then according to Separating Axis Theorem, the rectangles cannot be in collision.
-                if (rectProjMin - circleProjMax > 0 || circleProjMin - rectProjMax > 0)
-                {
-                    return false;
-                }
+                if (rectProjMin - circleProjMax > 0 || circleProjMin - rectProjMax > 0) return false;
             }
 
             // If all vertices have been checked, then the two colliders are in collision
@@ -80,7 +76,7 @@ namespace AntEngine.Colliders
         }
 
         /// <summary>
-        /// Checks if a CircleCollider and a WorldCollider collide.
+        ///     Checks if a CircleCollider and a WorldCollider collide.
         /// </summary>
         /// <returns>true if collision, false otherwise</returns>
         public static bool CircleAndWorld(CircleCollider circle, WorldCollider world)
@@ -90,7 +86,7 @@ namespace AntEngine.Colliders
                 circle.ParentTransform.Position,
                 0,
                 circle.ParentTransform.Scale);
-            
+
             IList<Vector2> rectVertices = rectTransform.GetRectangleVertices();
 
             (float min, float max) XPos = (rectVertices[2].X, rectVertices[0].X);
@@ -98,38 +94,36 @@ namespace AntEngine.Colliders
 
             // If the circle has a part outside the world that's a collision
             if (world.IsOutOfBounds(XPos, YPos)) return true;
-            
+
             // Convert the bounds into indexes to iterate through the world collider pixels
             (int x, int y) minIndex = world.ConvertCoordsToIndex(new Vector2(XPos.min, YPos.min));
             (int x, int y) maxIndex = world.ConvertCoordsToIndex(new Vector2(XPos.max, YPos.max));
-            
+
             // Check if any of the pixel inside the circle collide with the world
             for (int x = minIndex.x; x <= maxIndex.x; x++)
+            for (int y = minIndex.y; y <= maxIndex.y; y++)
             {
-                for (int y = minIndex.y; y <= maxIndex.y; y++)
-                {
-                    Vector2 pixelPos = new(
-                        (float) x / world.Subdivision * world.Size.X, 
-                        (float) y / world.Subdivision * world.Size.Y);
+                Vector2 pixelPos = new(
+                    (float)x / world.Subdivision * world.Size.X,
+                    (float)y / world.Subdivision * world.Size.Y);
 
-                    float distFromOrigin = Vector2.Distance(pixelPos, circle.ParentTransform.Position);
+                float distFromOrigin = Vector2.Distance(pixelPos, circle.ParentTransform.Position);
 
-                    if (!(distFromOrigin <= circle.Radius)) continue;
-                    if (world.Matrix[y][x]) return true;
-                }
+                if (!(distFromOrigin <= circle.Radius)) continue;
+                if (world.Matrix[y][x]) return true;
             }
 
             return false;
         }
 
         /// <summary>
-        /// Checks if a RectCollider is in collision with another RectCollider by using the Separating Axis Theorem.
+        ///     Checks if a RectCollider is in collision with another RectCollider by using the Separating Axis Theorem.
         /// </summary>
         /// <returns>
-        /// True if the rectangles are in collision and false otherwise.
+        ///     True if the rectangles are in collision and false otherwise.
         /// </returns>
         /// <exception cref="NullReferenceException">
-        /// Throws an exception if the generated vertices list is empty.
+        ///     Throws an exception if the generated vertices list is empty.
         /// </exception>
         public static bool RectangleAndRectangle(RectangleCollider rectA, RectangleCollider rectB)
         {
@@ -138,29 +132,27 @@ namespace AntEngine.Colliders
             {
                 Rotation = rectA.ParentTransform.Rotation
             };
-            
+
             Vector2 direct1 = t.GetDirectorVector();
 
             t.Rotation = rectB.ParentTransform.Rotation;
-            
+
             Vector2 direct2 = t.GetDirectorVector();
 
             Vector2 normal1 = new(-direct1.Y, direct1.X);
             Vector2 normal2 = new(-direct2.Y, direct2.X);
 
-            List<Vector2> axes = new() {direct1, direct2, normal1, normal2};
+            List<Vector2> axes = new() { direct1, direct2, normal1, normal2 };
 
             //TODO : Remove duplicate axes.
-            
+
             // Gets the rectangles' vertices list.
             List<Vector2> vertices1 = rectA.ParentTransform.GetRectangleVertices();
             List<Vector2> vertices2 = rectB.ParentTransform.GetRectangleVertices();
 
             // Check that the vertex list has been correctly created
             if (vertices1?.Count == 0 || vertices2?.Count == 0)
-            {
                 throw new NullReferenceException("Generated vertices list is null during rectangleCollision.");
-            }
 
             foreach (Vector2 axis in axes)
             {
@@ -171,9 +163,7 @@ namespace AntEngine.Colliders
                 // Check if the projected vertices overlap.
                 // If they do then according to Separating Axis Theorem, the rectangles cannot be in collision.
                 if (projectionMinimum1 - projectionMaximum2 > 0 || projectionMinimum2 - projectionMaximum1 > 0)
-                {
                     return false;
-                }
                 // Otherwise continue until all axes have been tested.
             }
 
@@ -183,7 +173,7 @@ namespace AntEngine.Colliders
         }
 
         /// <summary>
-        /// Checks if a RectangleCollider and a WorldCollider collide.
+        ///     Checks if a RectangleCollider and a WorldCollider collide.
         /// </summary>
         /// <returns>true if collision, false otherwise</returns>
         public static bool RectangleAndWorld(RectangleCollider rect, WorldCollider world)
@@ -197,55 +187,55 @@ namespace AntEngine.Colliders
 
             // If the circle has a part outside the world that's a collision
             if (world.IsOutOfBounds(XPos, YPos)) return true;
-            
+
             // Convert the bounds into indexes to iterate through the world collider pixels
             (int x, int y) MinIndex = world.ConvertCoordsToIndex(new Vector2(XPos.min, YPos.min));
             (int x, int y) MaxIndex = world.ConvertCoordsToIndex(new Vector2(XPos.max, YPos.max));
 
             (int x, int y) origin =
                 world.ConvertCoordsToIndex(rect.ParentTransform.Position);
-            
-            for (int x = MinIndex.x; x < MaxIndex.x; x++)
-            {
-                for (int y = MinIndex.y; y < MaxIndex.y; y++)
-                {
-                    (int x, int y) rotatedPixels = (
-                        (int) ((x - origin.x) * MathF.Cos(rect.ParentTransform.Rotation) - (y - origin.y) * MathF.Sin(rect.ParentTransform.Rotation)), 
-                        (int) ((x - origin.x) * MathF.Sin(rect.ParentTransform.Rotation) + (y - origin.y) * MathF.Cos(rect.ParentTransform.Rotation)));
 
-                    if (world.IsOutOfBounds(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
-                    if (world.Matrix[rotatedPixels.y + origin.y][rotatedPixels.x + origin.x]) return true;
-                }
+            for (int x = MinIndex.x; x < MaxIndex.x; x++)
+            for (int y = MinIndex.y; y < MaxIndex.y; y++)
+            {
+                (int x, int y) rotatedPixels = (
+                    (int)((x - origin.x) * MathF.Cos(rect.ParentTransform.Rotation) -
+                          (y - origin.y) * MathF.Sin(rect.ParentTransform.Rotation)),
+                    (int)((x - origin.x) * MathF.Sin(rect.ParentTransform.Rotation) +
+                          (y - origin.y) * MathF.Cos(rect.ParentTransform.Rotation)));
+
+                if (world.IsOutOfBounds(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
+                if (world.Matrix[rotatedPixels.y + origin.y][rotatedPixels.x + origin.x]) return true;
             }
 
             return false;
-
         }
 
         /// <summary>
-        /// Checks if two WorldColliders collide.
+        ///     Checks if two WorldColliders collide.
         /// </summary>
         /// <returns>true if collision, false otherwise</returns>
         public static bool WorldAndWorld(WorldCollider worldA, WorldCollider worldB)
         {
             int minDiv = Math.Min(worldA.Subdivision, worldB.Subdivision);
-            
+
             for (int y = 0; y < minDiv; y++)
+            for (int x = 0; x < minDiv; x++)
             {
-                for (int x = 0; x < minDiv; x++)
-                {
-                    if (worldA.Matrix[y][x] && worldB.Matrix[x][y]) return true;
-                }
+                if (worldA.Matrix[y][x] && worldB.Matrix[x][y])
+                    return true;
             }
 
             return false;
         }
-        
+
         /// <summary>
-        /// Projects a list of vertices onto an axis and returns the minimum and maximum value of the projection.
+        ///     Projects a list of vertices onto an axis and returns the minimum and maximum value of the projection.
         /// </summary>
-        /// <param name="axis"></param> Axis on which the vertices will be projected
-        /// <param name="vertices"></param> Vertices to be projected
+        /// <param name="axis"></param>
+        /// Axis on which the vertices will be projected
+        /// <param name="vertices"></param>
+        /// Vertices to be projected
         /// <returns>Tuple composed of the minimum projection value and the maximum projection value.</returns>
         private static Tuple<float, float> ProjectVertsOnAxis(Vector2 axis, List<Vector2> vertices)
         {
