@@ -30,7 +30,7 @@ namespace App.Renderers.EntityRenderers
             if (EntityCharset == null) return;
 
             float worldAspectRatio = Entity.World.Size.X / Entity.World.Size.Y;
-            float simFrameAspectRatio = (float)canvasOffset.Width / canvasOffset.Height;
+            float simFrameAspectRatio = (float) canvasOffset.Width / canvasOffset.Height;
 
             int newWorldWidth = canvasOffset.Width;
             int newWorldHeight = canvasOffset.Height;
@@ -38,20 +38,20 @@ namespace App.Renderers.EntityRenderers
 
             if (worldAspectRatio > simFrameAspectRatio)
             {
-                newWorldHeight = (int)(Entity.World.Size.X * canvasOffset.Height / canvasOffset.Width);
+                newWorldHeight = (int) (Entity.World.Size.X * canvasOffset.Height / canvasOffset.Width);
                 scale = canvasOffset.Width / Entity.World.Size.X;
             }
             else if (worldAspectRatio < simFrameAspectRatio)
             {
-                newWorldWidth = (int)(Entity.World.Size.Y * canvasOffset.Width / canvasOffset.Height);
+                newWorldWidth = (int) (Entity.World.Size.Y * canvasOffset.Width / canvasOffset.Height);
                 scale = canvasOffset.Height / Entity.World.Size.Y;
             }
 
-            int posX = (int)(Entity.Transform.Position.X / Entity.World.Size.X * newWorldWidth);
-            int posY = (int)(Entity.Transform.Position.Y / Entity.World.Size.Y * newWorldHeight);
+            int posX = (int) (Entity.Transform.Position.X / Entity.World.Size.X * newWorldWidth);
+            int posY = (int) (Entity.Transform.Position.Y / Entity.World.Size.Y * newWorldHeight);
 
-            int scaleX = (int)MathF.Round(Entity.Transform.Scale.X * scale);
-            int scaleY = (int)MathF.Round(Entity.Transform.Scale.Y * scale);
+            int scaleX = (int) MathF.Round(Entity.Transform.Scale.X * scale);
+            int scaleY = (int) MathF.Round(Entity.Transform.Scale.Y * scale);
 
             Rectangle spritePos = new Rectangle(
                 canvasOffset.Left + posX,

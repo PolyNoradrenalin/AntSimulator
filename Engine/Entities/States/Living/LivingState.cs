@@ -26,7 +26,7 @@ namespace AntEngine.Entities.States.Living
 
         public virtual void OnStateUpdate(StateEntity stateEntity)
         {
-            LivingEntity living = (LivingEntity)stateEntity;
+            LivingEntity living = (LivingEntity) stateEntity;
             if (living.Health <= 0) living.State = Next(stateEntity);
         }
 

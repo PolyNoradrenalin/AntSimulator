@@ -33,7 +33,7 @@ namespace AntEngine.Entities.Strategies.Movement
         {
             float oldDirAngle = MathF.Atan2(_dir.Y, Vector2.Dot(_dir, Vector2.UnitX));
 
-            float randomAngle = (float)new Random().NextDouble() * RandomAngleRange;
+            float randomAngle = (float) new Random().NextDouble() * RandomAngleRange;
             float centeredAngle = randomAngle - RandomAngleRange / 2;
             Vector2 randomDir = new(MathF.Cos(centeredAngle + oldDirAngle), MathF.Sin(centeredAngle + oldDirAngle));
 

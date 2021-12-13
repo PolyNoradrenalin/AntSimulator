@@ -28,7 +28,7 @@ namespace AntEngine.Entities.States.Living
 
         public override void OnStateUpdate(StateEntity stateEntity)
         {
-            Ant ant = (Ant)stateEntity;
+            Ant ant = (Ant) stateEntity;
             Vector2 dir = _target.Transform.Position - ant.Transform.Position;
 
             ant.Move(dir);
