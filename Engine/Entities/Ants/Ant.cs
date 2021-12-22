@@ -101,7 +101,7 @@ namespace AntEngine.Entities.Ants
                 float angleDiff = MathF.Atan2(antDir.Y * pheromoneDirection.X - antDir.X * pheromoneDirection.X,
                     antDir.X * pheromoneDirection.X + antDir.Y * pheromoneDirection.Y);
 
-                int weightListIndex = (int)MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision));
+                int weightListIndex = (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision));
 
                 float weightSum = weights[weightListIndex];
                 weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform)) *
@@ -120,7 +120,7 @@ namespace AntEngine.Entities.Ants
         /// <returns>List of the entities in the perception range of this Ant</returns>
         public List<T> GetSurroundingEntities<T>() where T : Entity
         {
-            int radius = Math.Max((int)MathF.Ceiling(PerceptionDistance / World.WorldRegionDivision), 1);
+            int radius = Math.Max((int) MathF.Ceiling(PerceptionDistance / World.WorldRegionDivision), 1);
 
             return World.CheckEntitiesInRegion<T>(Region.X, Region.Y, radius)
                 .FindAll(e => e.Transform.GetDistance(Transform) <= PerceptionDistance);

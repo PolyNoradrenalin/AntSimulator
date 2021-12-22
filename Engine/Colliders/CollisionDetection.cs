@@ -104,8 +104,8 @@ namespace AntEngine.Colliders
             for (int y = minIndex.y; y <= maxIndex.y; y++)
             {
                 Vector2 pixelPos = new(
-                    (float)x / world.Subdivision * world.Size.X,
-                    (float)y / world.Subdivision * world.Size.Y);
+                    (float) x / world.Subdivision * world.Size.X,
+                    (float) y / world.Subdivision * world.Size.Y);
 
                 float distFromOrigin = Vector2.Distance(pixelPos, circle.ParentTransform.Position);
 
@@ -199,10 +199,10 @@ namespace AntEngine.Colliders
             for (int y = MinIndex.y; y < MaxIndex.y; y++)
             {
                 (int x, int y) rotatedPixels = (
-                    (int)((x - origin.x) * MathF.Cos(rect.ParentTransform.Rotation) -
-                          (y - origin.y) * MathF.Sin(rect.ParentTransform.Rotation)),
-                    (int)((x - origin.x) * MathF.Sin(rect.ParentTransform.Rotation) +
-                          (y - origin.y) * MathF.Cos(rect.ParentTransform.Rotation)));
+                    (int) ((x - origin.x) * MathF.Cos(rect.ParentTransform.Rotation) -
+                           (y - origin.y) * MathF.Sin(rect.ParentTransform.Rotation)),
+                    (int) ((x - origin.x) * MathF.Sin(rect.ParentTransform.Rotation) +
+                           (y - origin.y) * MathF.Cos(rect.ParentTransform.Rotation)));
 
                 if (world.IsOutOfBounds(rotatedPixels.x + origin.x, rotatedPixels.y + origin.y)) return true;
                 if (world.Matrix[rotatedPixels.y + origin.y][rotatedPixels.x + origin.x]) return true;

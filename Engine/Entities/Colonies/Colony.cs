@@ -63,7 +63,7 @@ namespace AntEngine.Entities.Colonies
         {
             get
             {
-                float angle = (float)new Random().NextDouble() * 2F * MathF.PI;
+                float angle = (float) new Random().NextDouble() * 2F * MathF.PI;
                 float x = MathF.Cos(angle);
                 float y = MathF.Sin(angle);
 

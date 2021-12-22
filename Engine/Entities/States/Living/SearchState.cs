@@ -31,7 +31,7 @@ namespace AntEngine.Entities.States.Living
         {
             base.OnStateUpdate(stateEntity);
 
-            Ant ant = (Ant)stateEntity;
+            Ant ant = (Ant) stateEntity;
             PerceptionMap perceptionMap = ant.GetPerceptionMap<FoodPheromone>();
 
             float obstacleDetectRadius = ant.Transform.Scale.Length() / 2F;
@@ -41,7 +41,7 @@ namespace AntEngine.Entities.States.Living
                 : ant.Transform.Rotation;
 
             int[] dirs = new int[3];
-            dirs[0] = (int)MathF.Floor(positiveRotation / (2 * MathF.PI) * maxDirIndex);
+            dirs[0] = (int) MathF.Floor(positiveRotation / (2 * MathF.PI) * maxDirIndex);
             dirs[1] = (dirs[0] + ObstacleRayIndex) % maxDirIndex;
             dirs[2] = (dirs[0] + maxDirIndex - ObstacleRayIndex) % maxDirIndex;
 

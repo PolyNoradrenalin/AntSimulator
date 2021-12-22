@@ -163,8 +163,8 @@ namespace AntEngine
         /// <returns>Coordinates of the region in which the Transform belongs.</returns>
         public (int, int) GetRegionFromPosition(Vector2 position)
         {
-            int xVal = (int)MathF.Floor(position.X / Size.X * WorldRegionDivision);
-            int yVal = (int)MathF.Floor(position.Y / Size.Y * WorldRegionDivision);
+            int xVal = (int) MathF.Floor(position.X / Size.X * WorldRegionDivision);
+            int yVal = (int) MathF.Floor(position.Y / Size.Y * WorldRegionDivision);
 
             return (xVal, yVal);
         }
@@ -218,7 +218,7 @@ namespace AntEngine
         public List<T> CheckEntitiesInRegion<T>(int x, int y, float radius) where T : Entity
         {
             float minSize = MathF.Min(Size.X, Size.Y);
-            return CheckEntitiesInRegion<T>(x, y, (int)(radius / minSize * WorldRegionDivision));
+            return CheckEntitiesInRegion<T>(x, y, (int) (radius / minSize * WorldRegionDivision));
         }
 
         private void ApplyAddEntity()

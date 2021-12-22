@@ -66,8 +66,8 @@ namespace AntEngine.Colliders
         public (int x, int y) ConvertCoordsToIndex(Vector2 position)
         {
             return (
-                (int)(position.X / Size.X * Subdivision),
-                (int)(position.Y / Size.Y * Subdivision));
+                (int) (position.X / Size.X * Subdivision),
+                (int) (position.Y / Size.Y * Subdivision));
         }
 
         public override bool CheckCollision(CircleCollider circleCollider)
