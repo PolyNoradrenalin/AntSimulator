@@ -19,35 +19,38 @@ namespace App.Renderers
 
         public void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
-            int posX = 0;
             int posY = 0;
             
             for (int y = 0; y < _worldCollider.Subdivision; y++)
             {
+                int posX = 0;
+                int yTileSize = (int) MathF.Floor((float) canvasOffset.Height / _worldCollider.Subdivision);
+                int yCorrectionThreshold = (int) (_worldCollider.Subdivision * ((float) canvasOffset.Height / _worldCollider.Subdivision % 1));
+                if (y < yCorrectionThreshold) yTileSize++;
+                
                 for (int x = 0; x < _worldCollider.Subdivision; x++)
                 {
                     bool isWall = _worldCollider.Matrix[y][x];
-                    if (!isWall) continue;
-                    
                     int xTileSize = (int) MathF.Floor((float) canvasOffset.Width / _worldCollider.Subdivision);
                     int xCorrectionThreshold = (int) (_worldCollider.Subdivision * ((float) canvasOffset.Width / _worldCollider.Subdivision % 1));
                     if (x < xCorrectionThreshold) xTileSize++;
-
-                    int yTileSize = (int) MathF.Floor((float) canvasOffset.Height / _worldCollider.Subdivision);
-                    int yCorrectionThreshold = (int) (_worldCollider.Subdivision * ((float) canvasOffset.Height / _worldCollider.Subdivision % 1));
-                    if (y < yCorrectionThreshold) yTileSize++;
-
-                    Rectangle destRectangle = new Rectangle(
-                        canvasOffset.Left + posX, 
-                        canvasOffset.Bottom - posY - yTileSize, 
-                        xTileSize,
-                        yTileSize);
+                    
+                    if (isWall)
+                    {
+                        Rectangle destRectangle = new Rectangle(
+                            canvasOffset.Left + posX - (int) MathF.Floor((float) canvasOffset.Width / _worldCollider.Subdivision),
+                            canvasOffset.Bottom - posY,
+                            xTileSize,
+                            yTileSize);
+                        
+                        spriteBatch.Draw(TileTexture, destRectangle, null, Color.Black, 0, Vector2.Zero,
+                            SpriteEffects.None, 0F);
+                    }
 
                     posX += xTileSize;
-                    posY += yTileSize;
-                    
-                    spriteBatch.Draw(TileTexture, destRectangle, null, Color.Black, 0, Vector2.Zero, SpriteEffects.None, 0F);
                 }
+
+                posY += yTileSize;
             }
         }
     }
