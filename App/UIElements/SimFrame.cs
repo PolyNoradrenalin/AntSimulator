@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AntEngine;
 using AntEngine.Entities;
@@ -8,6 +9,7 @@ using App.Renderers;
 using App.Renderers.EntityRenderers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace App.UIElements
 {
@@ -28,14 +30,32 @@ namespace App.UIElements
             SimWorld = world;
             world.EntityAdded += OnEntityAdded;
             world.EntityRemoved += OnEntityRemoved;
+            MouseHeld += OnMouseHeld;
 
             // TODO: Unsubscribe to allow GC.
+        }
+
+        private void OnMouseHeld(MouseState mouseState, UIElement arg2)
+        {
+            (float mouseX, float mouseY) = mouseState.Position.ToVector2();
+            (float relativeX, float relativeY) = (mouseX - Position.X, Size.Height - (mouseY - Position.Y));
+            (float simX, float simY) = (SimWorld.Size.X * (relativeX / Size.Width), SimWorld.Size.Y * (relativeY / Size.Height));
+            (int worldDivX, int worldDivY) = (
+                (int) MathF.Round(relativeX / Size.Width * SimWorld.Collider.Subdivision),
+                (int) MathF.Round(relativeY / Size.Height * SimWorld.Collider.Subdivision));
+
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                SimWorld.Collider.Matrix[worldDivY][worldDivX] = true;
+            }
         }
 
         public World SimWorld { get; }
 
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
+            base.Render(spriteBatch, gdm, canvasOffset);
+            
             foreach (IRenderer r in _renderers)
             {
                 r.Render(spriteBatch, gdm,
