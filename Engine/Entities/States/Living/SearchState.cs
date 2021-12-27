@@ -66,9 +66,13 @@ namespace AntEngine.Entities.States.Living
             foreach (ResourceEntity resourceEntity in list)
             {
                 if (ant.PickUp(resourceEntity))
+                {
                     stateEntity.State = Next(stateEntity);
+                }
                 else
+                {
                     stateEntity.State = new TargetState(this, resourceEntity);
+                }
 
                 break;
             }

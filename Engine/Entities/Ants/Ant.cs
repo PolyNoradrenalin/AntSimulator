@@ -17,7 +17,7 @@ namespace AntEngine.Entities.Ants
     /// </summary>
     public class Ant : LivingEntity, IColonyMember
     {
-        private const float PheromoneMergeDistance = 2F;
+        private const float PheromoneMergeDistance = 5F;
 
         private const float DefaultMaxSpeed = 1F;
 
@@ -57,20 +57,21 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         ///     The distance in which the ant can perceive another entity.
         /// </summary>
-        public float PerceptionDistance { get; protected set; } = 10F;
+        public float PerceptionDistance { get; protected set; } = 50F;
 
         /// <summary>
         ///     Precision that will determine the size of the weights list.
         /// </summary>
         public int PerceptionMapPrecision { get; } = 24;
 
-        public int PheromoneTimeSpan { get; protected set; } = 60000;
+        public int PheromoneTimeSpan { get; protected set; } = 6000;
 
         /// <summary>
         ///     Distance from which an ant can pick up or depose ressources.
         /// </summary>
         public float PickUpDistance { get; } = 5F;
 
+        public int PickUpCapacity { get; set; } = 15;
 
         /// <summary>
         ///     Delay between each emission of a pheromone.
@@ -120,9 +121,7 @@ namespace AntEngine.Entities.Ants
         /// <returns>List of the entities in the perception range of this Ant</returns>
         public List<T> GetSurroundingEntities<T>() where T : Entity
         {
-            int radius = Math.Max((int) MathF.Ceiling(PerceptionDistance / World.WorldRegionDivision), 1);
-
-            return World.CheckEntitiesInRegion<T>(Region.X, Region.Y, radius)
+            return World.CheckEntitiesInRegion<T>(Region.X, Region.Y, PerceptionDistance)
                 .FindAll(e => e.Transform.GetDistance(Transform) <= PerceptionDistance);
         }
 
@@ -134,8 +133,8 @@ namespace AntEngine.Entities.Ants
         {
             if (Vector2.Distance(Transform.Position, e.Transform.Position) <= PickUpDistance)
             {
-                ResourceInventory.AddResource(e.Type, e.Quantity);
-                World.RemoveEntity(e);
+                ResourceInventory.AddResource(e.Type, PickUpCapacity);
+                e.RemoveResource(PickUpCapacity);
                 return true;
             }
 

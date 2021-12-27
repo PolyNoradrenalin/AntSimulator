@@ -19,6 +19,8 @@ namespace AntEngine.Entities.Colonies
 
         private readonly List<IColonyMember> _population;
 
+        private int _lastUpdateTick = 0;
+
         public Colony(World world, ColonySpawnMethod spawnMethod) : this(ColonyDefaultName, new Transform(), world,
             spawnMethod)
         {
@@ -52,9 +54,13 @@ namespace AntEngine.Entities.Colonies
         public ResourceInventory SpawnCost { get; }
 
         /// <summary>
-        ///     Distance of spawning from the colony center.
+        ///     Instructions to spawn an entity of the colony.
         /// </summary>
-        private float SpawnRadius { get; } = 1F;
+        public ColonySpawnMethod SpawnMethod { private get; set; }
+
+        public int SpawnDelay { get; set; } = 16;
+
+        public int SpawnBurst { get; set; } = 6;
 
         /// <summary>
         ///     Where an entity should spawn.
@@ -72,9 +78,22 @@ namespace AntEngine.Entities.Colonies
         }
 
         /// <summary>
-        ///     Instructions to spawn an entity of the colony.
+        ///     Distance of spawning from the colony center.
         /// </summary>
-        public ColonySpawnMethod SpawnMethod { private get; set; }
+        private float SpawnRadius { get; } = 1F;
+
+        public override void Update()
+        {
+            if (_lastUpdateTick > SpawnDelay)
+            {
+                Spawn(SpawnBurst);
+                _lastUpdateTick = 0;
+            }
+            else
+            {
+                _lastUpdateTick++;
+            }
+        }
 
         /// <summary>
         ///     Spawn entities stopping when at count or when the stockpile no longer has enough resources.
