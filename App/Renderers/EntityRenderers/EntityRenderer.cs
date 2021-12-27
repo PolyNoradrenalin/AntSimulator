@@ -10,7 +10,7 @@ namespace App.Renderers.EntityRenderers
     /// </summary>
     public class EntityRenderer : IRenderer
     {
-        private const float DefaultDepthBuffer = 0F;
+        private const float DefaultDepthBuffer = 0.5F;
 
         private readonly float _depthBuffer;
 

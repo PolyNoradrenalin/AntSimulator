@@ -29,6 +29,8 @@ namespace App.UIElements
             world.EntityAdded += OnEntityAdded;
             world.EntityRemoved += OnEntityRemoved;
 
+            WorldRenderer worldRenderer = new WorldRenderer(world.Collider, EntityTexture);
+            _renderers.Add(worldRenderer);
             // TODO: Unsubscribe to allow GC.
         }
 
