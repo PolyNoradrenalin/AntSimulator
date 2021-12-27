@@ -19,8 +19,12 @@ namespace App.Renderers
 
         public void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
-            int posY = 0;
+            // To draw the world, we display a sprite at each cell of the world collider when it is a wall.
+            // The size (in pixels) of each cell is defined by the size of the canvas divided by the collider subdivision.
+            // In the case the cell size have decimals (ex: 12.25px), we correct this by adding 1px to the first cells
+            // until we corrected the offset.
             
+            int posY = 0;
             for (int y = 0; y < _worldCollider.Subdivision; y++)
             {
                 int posX = 0;
