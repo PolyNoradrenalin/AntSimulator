@@ -38,14 +38,16 @@ namespace App.UIElements
             // TODO: Unsubscribe to allow GC.
         }
 
-        private void OnMouseHeld(MouseState mouseState, UIElement arg2)
+        private void OnMouseHeld(MouseState mouseState, UIElement arg2, Rectangle canvasOffset)
         {
+            (int worldPixelWidth, int worldPixelHeight) = WorldRenderer.WorldPixelSize(canvasOffset, SimWorld.Size);
+            
             (float mouseX, float mouseY) = mouseState.Position.ToVector2();
             (float relativeX, float relativeY) = (mouseX - Position.X, Size.Height - (mouseY - Position.Y));
-            (float simX, float simY) = (SimWorld.Size.X * (relativeX / Size.Width), SimWorld.Size.Y * (relativeY / Size.Height));
+            (float simX, float simY) = (SimWorld.Size.X * (relativeX / worldPixelWidth), SimWorld.Size.Y * (relativeY / worldPixelHeight));
             (int worldDivX, int worldDivY) = (
-                (int) MathF.Round(relativeX / Size.Width * SimWorld.Collider.Subdivision),
-                (int) MathF.Round(relativeY / Size.Height * SimWorld.Collider.Subdivision));
+                (int) MathF.Round(relativeX / worldPixelWidth * SimWorld.Collider.Subdivision),
+                (int) MathF.Round(relativeY / worldPixelHeight * SimWorld.Collider.Subdivision));
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
@@ -66,8 +68,7 @@ namespace App.UIElements
             foreach (IRenderer r in _renderers)
             {
                 r.Render(spriteBatch, gdm,
-                    new Rectangle(Position.X + canvasOffset.Left, Position.Y + canvasOffset.Top, Size.Width,
-                        Size.Height));
+                    new Rectangle(Position.X + canvasOffset.Left, Position.Y + canvasOffset.Top, Size.Width, Size.Height));
             }
         }
 

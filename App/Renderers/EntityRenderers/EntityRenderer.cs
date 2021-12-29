@@ -29,30 +29,13 @@ namespace App.Renderers.EntityRenderers
         {
             if (EntityCharset == null) return;
 
-            float worldAspectRatio = Entity.World.Size.X / Entity.World.Size.Y;
-            float simFrameAspectRatio = (float) canvasOffset.Width / canvasOffset.Height;
+            (int worldPixelWidth, int worldPixelHeight) = WorldRenderer.WorldPixelSize(canvasOffset, Entity.World.Size);
 
-            int worldPixelWidth = (int) Entity.World.Size.X;
-            int worldPixelHeight = (int) Entity.World.Size.Y;
-
-            if (worldAspectRatio > simFrameAspectRatio)
-            {
-               // World width is the limiting dimension
-               worldPixelWidth = (int) (worldPixelWidth * (float) canvasOffset.Width / (int) Entity.World.Size.X);
-               worldPixelHeight = (int) (worldPixelHeight * (float) canvasOffset.Width / (int) Entity.World.Size.Y);
-            }
-            else if (worldAspectRatio < simFrameAspectRatio)
-            {
-                // World height is the limiting dimension
-                worldPixelWidth = (int) (worldPixelWidth * (float) canvasOffset.Height / (int) Entity.World.Size.X);
-                worldPixelHeight = (int) (worldPixelHeight * (float) canvasOffset.Height / (int) Entity.World.Size.Y);
-            }
-            
-            float scale = worldPixelWidth / Entity.World.Size.X;
-            
             int posX = (int) (Entity.Transform.Position.X / Entity.World.Size.X * worldPixelWidth);
             int posY = (int) (Entity.Transform.Position.Y / Entity.World.Size.Y * worldPixelHeight);
 
+            float scale = worldPixelWidth / Entity.World.Size.X;
+            
             int scaleX = (int) MathF.Round(Entity.Transform.Scale.X * scale);
             int scaleY = (int) MathF.Round(Entity.Transform.Scale.Y * scale);
 
