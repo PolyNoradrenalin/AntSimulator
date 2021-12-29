@@ -36,9 +36,21 @@ namespace App
         protected override void Initialize()
         {
             base.Initialize();
-
+            
+            Window.AllowUserResizing = true;
+            
+            _graphics.PreferredBackBufferWidth = 800;
+            _graphics.PreferredBackBufferHeight = 500;  
+            _graphics.ApplyChanges();
+            
             SimFrame mainSimFrame = new SimFrame(new Rectangle(0, 0, 800, 500), _world);
 
+            Window.ClientSizeChanged += (sender, args) =>
+            {
+                mainSimFrame.Size = (_graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
+                _graphics.ApplyChanges();
+            };
+            
             _renderers.Add(mainSimFrame);
 
             Resource food = new Resource("food", "Test Food");
