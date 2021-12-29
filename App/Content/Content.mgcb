@@ -61,7 +61,7 @@
 /processorParam:TextureFormat=Color
 /build:UIElements/Button.png
 
-#begin UIElements/SlowDownTimeButton.png
+#begin UIElements/SpeedSliderButtonSpriteSheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -71,19 +71,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UIElements/SlowDownTimeButton.png
-
-#begin UIElements/SpeedUpTimeButton.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:UIElements/SpeedUpTimeButton.png
+/build:UIElements/SpeedSliderButtonSpriteSheet.png
 
 #begin UIElements/TextFont.spritefont
 /importer:FontDescriptionImporter
