@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AntEngine;
+using AntEngine.Colliders;
 using AntEngine.Entities;
 using AntEngine.Entities.Ants;
 using AntEngine.Entities.Colonies;
@@ -48,7 +49,11 @@ namespace App.UIElements
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                SimWorld.Collider.Matrix[worldDivY][worldDivX] = true;
+                if (0 <= worldDivX && worldDivX < World.WorldColliderDivision &&
+                    0 <= worldDivY && worldDivY < World.WorldColliderDivision)
+                {
+                    SimWorld.Collider.Matrix[worldDivY][worldDivX] = true;
+                }
             }
         }
 
