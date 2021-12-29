@@ -13,7 +13,7 @@ namespace AntEngine
     /// </summary>
     public class World
     {
-        private const int WorldColliderDivision = 64;
+        public const int WorldColliderDivision = 64;
         public const int WorldRegionDivision = 256;
 
         private readonly IList<Entity> _entitiesAddedBuffer;
