@@ -12,7 +12,14 @@ namespace App.UIElements
         {
         }
 
-        public static Texture2D Texture { get; set; }
+        public Button(Rectangle rect, Texture2D buttonTexture) : base(rect)
+        {
+            Texture = buttonTexture;
+        }
+
+        public static Texture2D DefaultTexture { get; set; }
+
+        public Texture2D Texture { get; set; } = null;
 
         public Color Color { get; set; }
 
@@ -26,7 +33,7 @@ namespace App.UIElements
                 Size.Width,
                 Size.Height);
 
-            spriteBatch.Draw(Texture, spritePos, Color);
+            spriteBatch.Draw(Texture ?? DefaultTexture, spritePos, Color);
         }
     }
 }
