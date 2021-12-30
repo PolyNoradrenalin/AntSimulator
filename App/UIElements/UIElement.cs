@@ -33,28 +33,28 @@ namespace App.UIElements
         /// <summary>
         ///     Event triggered when this UIElement is released by a mouse.
         /// </summary>
-        public event Action<MouseState, UIElement> MouseReleased;
+        public event Action<MouseState, UIElement, Rectangle> MouseReleased;
 
         /// <summary>
         ///     Event triggered when this UIElement is being held by a mouse click.
         /// </summary>
-        public event Action<MouseState, UIElement> MouseHeld;
+        public event Action<MouseState, UIElement, Rectangle> MouseHeld;
 
         /// <summary>
         ///     Event triggered when this UIElement is pressed by a mouse.
         ///     A click is only considered when the mouse goes from released to pressed to released.
         /// </summary>
-        public event Action<MouseState, UIElement> MousePressed;
+        public event Action<MouseState, UIElement, Rectangle> MousePressed;
 
         /// <summary>
         ///     Event triggered when this UIElement is hovered on by a mouse.
         /// </summary>
-        public event Action<MouseState, UIElement> MouseEnter;
+        public event Action<MouseState, UIElement, Rectangle> MouseEnter;
 
         /// <summary>
         ///     Event triggered when this UIElement is no longer hovered on by a mouse.
         /// </summary>
-        public event Action<MouseState, UIElement> MouseExit;
+        public event Action<MouseState, UIElement, Rectangle> MouseExit;
 
         /// <summary>
         ///     Updates all mouse states and invokes the corresponding event(s) if needed.
@@ -70,12 +70,12 @@ namespace App.UIElements
             if (IsHovered && !newStateIsHovering)
             {
                 IsHovered = false;
-                MouseExit?.Invoke(mouseState, this);
+                MouseExit?.Invoke(mouseState, this, canvasOffset);
             }
             else if (!IsHovered && newStateIsHovering)
             {
                 IsHovered = true;
-                MouseEnter?.Invoke(mouseState, this);
+                MouseEnter?.Invoke(mouseState, this, canvasOffset);
             }
 
             if (IsHovered)
@@ -84,16 +84,16 @@ namespace App.UIElements
                 {
                     // Checks release state
                     case ButtonState.Pressed when mouseState.LeftButton == ButtonState.Released:
-                        MouseReleased?.Invoke(mouseState, this);
+                        MouseReleased?.Invoke(mouseState, this, canvasOffset);
                         break;
                     // Checks pressed state
                     case ButtonState.Released when mouseState.LeftButton == ButtonState.Pressed:
-                        MousePressed?.Invoke(mouseState, this);
+                        MousePressed?.Invoke(mouseState, this, canvasOffset);
                         break;
                 }
 
                 // Checks held state
-                if (mouseState.LeftButton == ButtonState.Pressed) MouseHeld?.Invoke(mouseState, this);
+                if (mouseState.LeftButton == ButtonState.Pressed) MouseHeld?.Invoke(mouseState, this, canvasOffset);
             }
 
             _oldMouseState = mouseState;

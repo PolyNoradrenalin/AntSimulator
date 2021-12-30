@@ -24,25 +24,27 @@ namespace App.Renderers
             // In the case the cell size have decimals (ex: 12.25px), we correct this by adding 1px to the first cells
             // until we corrected the offset.
             
+            (int worldPixelWidth, int worldPixelHeight) = WorldPixelSize(canvasOffset, _worldCollider.Size);
+
             int posY = 0;
             for (int y = 0; y < _worldCollider.Subdivision; y++)
             {
                 int posX = 0;
-                int yTileSize = (int) MathF.Floor((float) canvasOffset.Height / _worldCollider.Subdivision);
-                int yCorrectionThreshold = (int) (_worldCollider.Subdivision * ((float) canvasOffset.Height / _worldCollider.Subdivision % 1));
+                int yTileSize = (int) MathF.Floor((float) worldPixelHeight / _worldCollider.Subdivision);
+                int yCorrectionThreshold = (int) (_worldCollider.Subdivision * ((float) worldPixelHeight / _worldCollider.Subdivision % 1));
                 if (y < yCorrectionThreshold) yTileSize++;
                 
                 for (int x = 0; x < _worldCollider.Subdivision; x++)
                 {
                     bool isWall = _worldCollider.Matrix[y][x];
-                    int xTileSize = (int) MathF.Floor((float) canvasOffset.Width / _worldCollider.Subdivision);
-                    int xCorrectionThreshold = (int) (_worldCollider.Subdivision * ((float) canvasOffset.Width / _worldCollider.Subdivision % 1));
+                    int xTileSize = (int) MathF.Floor((float) worldPixelWidth / _worldCollider.Subdivision);
+                    int xCorrectionThreshold = (int) (_worldCollider.Subdivision * ((float) worldPixelWidth / _worldCollider.Subdivision % 1));
                     if (x < xCorrectionThreshold) xTileSize++;
                     
                     if (isWall)
                     {
                         Rectangle destRectangle = new Rectangle(
-                            canvasOffset.Left + posX - (int) MathF.Floor((float) canvasOffset.Width / _worldCollider.Subdivision),
+                            canvasOffset.Left + posX - (int) MathF.Floor((float) worldPixelWidth / _worldCollider.Subdivision),
                             canvasOffset.Bottom - posY,
                             xTileSize,
                             yTileSize);
@@ -56,6 +58,30 @@ namespace App.Renderers
 
                 posY += yTileSize;
             }
+        }
+
+        public static (int worldPixelWidth, int worldPixelHeight) WorldPixelSize(Rectangle canvasOffset, System.Numerics.Vector2 worldSize)
+        {
+            float worldAspectRatio = worldSize.X / worldSize.Y;
+            float simFrameAspectRatio = (float) canvasOffset.Width / canvasOffset.Height;
+
+            int worldPixelWidth = (int) worldSize.X;
+            int worldPixelHeight = (int) worldSize.Y;
+
+            if (worldAspectRatio > simFrameAspectRatio)
+            {
+                // World width is the limiting dimension
+                worldPixelWidth = (int) (worldPixelWidth * (float) canvasOffset.Width / (int) worldSize.X);
+                worldPixelHeight = (int) (worldPixelHeight * (float) canvasOffset.Width / (int) worldSize.Y);
+            }
+            else if (worldAspectRatio < simFrameAspectRatio)
+            {
+                // World height is the limiting dimension
+                worldPixelWidth = (int) (worldPixelWidth * (float) canvasOffset.Height / (int) worldSize.X);
+                worldPixelHeight = (int) (worldPixelHeight * (float) canvasOffset.Height / (int) worldSize.Y);
+            }
+
+            return (worldPixelWidth, worldPixelHeight);
         }
     }
 }
