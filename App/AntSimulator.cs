@@ -60,21 +60,21 @@ namespace App
             colony.Transform.Scale = Vector2.One * 20F;
             colony.SpawnCost.AddResource(food, 10);
             colony.Stockpile.AddResource(food, 10000);
-            colony.Spawn(500);
+            colony.Spawn(50);
 
             for (int i = 0; i < 10; i++)
             {
-                ResourceEntity foodEntity = new ResourceEntity(_world, 1000, food);
+                ResourceEntity foodEntity = new ResourceEntity(_world, 100000, food);
                 foodEntity.Transform.Position = new Vector2(new Random().Next(10,
                         490),
                     new Random().Next(10,
                         490));
                 foodEntity.Transform.Scale = Vector2.One * 10;
             }
+            
+            SpeedSlider speedSlider = new SpeedSlider(new Rectangle(600, 20, 100, 40), 1, 8);
 
-            Button button = new Button(new Rectangle(10, 10, 100, 100));
-
-            _renderers.Add(button);
+            _renderers.Add(speedSlider);
         }
 
         protected override void LoadContent()
@@ -85,8 +85,8 @@ namespace App
             SimFrame.AntTexture = Content.Load<Texture2D>("Entities/Ant");
             SimFrame.ColonyTexture = Content.Load<Texture2D>("Entities/Colony");
             Button.DefaultTexture = Content.Load<Texture2D>("UIElements/Button");
-            SpeedSlider.SpeedSliderSpriteSheet = Content.Load<Texture2D>("UIElements/SpeedSlider");
-            UIElement.Font = Content.Load<SpriteFont>("UIElements/TextFont");
+            SpeedSlider.SpeedSliderSpriteSheet = Content.Load<Texture2D>("UIElements/SpeedSliderButtonSpriteSheet");
+            //UIElement.Font = Content.Load<SpriteFont>("UIElements/TextFont");
         }
 
         protected override void Update(GameTime gameTime)

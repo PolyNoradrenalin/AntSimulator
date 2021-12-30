@@ -27,6 +27,18 @@ namespace App.UIElements
 
         public bool IsHovered { get; private set; }
 
+        /// <summary>
+        /// Local texture of this UIElement.
+        /// UIElements must also contain static texture to serve as a fallback.
+        /// </summary>
+        public Texture2D Texture { get; set; } = null;
+
+        /// <summary>
+        /// Used when a UIElement's texture is a spritesheet.
+        /// Specifies which part of the spritesheet to use (SourceRectangle).
+        /// </summary>
+        public Rectangle SpriteRectangle { get; set; } = Rectangle.Empty;
+
         public virtual void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             UpdateMouseStates(canvasOffset);

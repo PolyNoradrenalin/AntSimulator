@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace App.UIElements
 {
     /// <summary>
-    ///     Represents a renderable and clickable button.
+    ///     Represents a render-able and clickable button.
     /// </summary>
     public class Button : UIElement
     {
@@ -19,10 +19,8 @@ namespace App.UIElements
 
         public static Texture2D DefaultTexture { get; set; }
 
-        public Texture2D Texture { get; set; } = null;
-
         public Color Color { get; set; }
-
+        
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             base.Render(spriteBatch, gdm, canvasOffset);
@@ -32,8 +30,10 @@ namespace App.UIElements
                 Position.Y,
                 Size.Width,
                 Size.Height);
-
-            spriteBatch.Draw(Texture ?? DefaultTexture, spritePos, Color);
+            if (SpriteRectangle == Rectangle.Empty)
+                spriteBatch.Draw(Texture ?? DefaultTexture, spritePos, Color);
+            else
+                spriteBatch.Draw(Texture ?? DefaultTexture, spritePos, SpriteRectangle, Color);
         }
     }
 }

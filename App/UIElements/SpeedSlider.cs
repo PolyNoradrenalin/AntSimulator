@@ -12,17 +12,16 @@ namespace App.UIElements
         
         private const int DecreaseButtonOffset = -32;
         private const int IncreaseButtonOffset = 32;
-        
+
         private readonly Rectangle PauseButtonPosition = new Rectangle(0, 0 * 32, 32, 32);
         private readonly Rectangle IncreaseButtonPosition = new Rectangle(0, 1 * 32, 32, 32);
         private readonly Rectangle DecreaseButtonPosition = new Rectangle(0, 2 * 32, 32, 32);
         private readonly Rectangle PlayButtonPosition = new Rectangle(0, 3 * 32, 32, 32);
-        
+
         public SpeedSlider(Rectangle posRect, int minimumSpeedValue, int maximumSpeedValue) : base(posRect)
         {
             SpeedValueLimit = (minimumSpeedValue, maximumSpeedValue);
             SpeedValue = 0;
-            
             DecreaseButton = new Button(new Rectangle(posRect.Left + DecreaseButtonOffset, posRect.Top, posRect.Width, posRect.Height));
             PauseButton = new Button(posRect);
             IncreaseButton = new Button(new Rectangle(posRect.Left + IncreaseButtonOffset, posRect.Top, posRect.Width, posRect.Height));
@@ -34,7 +33,7 @@ namespace App.UIElements
             DecreaseButton.SpriteRectangle = DecreaseButtonPosition;
             PauseButton.SpriteRectangle = PauseButtonPosition;
             IncreaseButton.SpriteRectangle = IncreaseButtonPosition;
-
+            
             DecreaseButton.MouseReleased += OnDecreaseMouseRelease;
             PauseButton.MouseReleased += OnPauseMouseRelease;
             IncreaseButton.MouseReleased += OnIncreaseMouseRelease;
