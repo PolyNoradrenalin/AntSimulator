@@ -18,8 +18,8 @@ namespace App
     {
         private readonly GraphicsDeviceManager _graphics;
         private readonly List<IRenderer> _renderers;
-        private readonly int _targetTps = 60;
 
+        private readonly int _defaultTargetTps = 60;
         private readonly World _world;
         private DateTime _lastTimeTick;
         private SpriteBatch _spriteBatch;
@@ -31,7 +31,11 @@ namespace App
             IsMouseVisible = true;
             _world = new World(Vector2.One * 500);
             _renderers = new List<IRenderer>();
+
+            TargetTps = _defaultTargetTps;
         }
+        
+        public int TargetTps { get; set; }
 
         protected override void Initialize()
         {
@@ -75,6 +79,18 @@ namespace App
             SpeedSlider speedSlider = new SpeedSlider(new Rectangle(600, 20, 100, 40), 1, 8);
 
             _renderers.Add(speedSlider);
+            
+            speedSlider.SpeedChange += OnSpeedSliderChange;
+        }
+
+        /// <summary>
+        /// Event to be invoked when the speed slider is changed.
+        /// </summary>
+        /// <param name="newSpeed">New speed multiplier.</param>
+        /// <param name="isPaused">Boolean variable determining if the simulation is paused or not.</param>
+        private void OnSpeedSliderChange(int newSpeed, bool isPaused)
+        {
+            TargetTps = isPaused ? 0 : _defaultTargetTps * newSpeed;
         }
 
         protected override void LoadContent()
@@ -94,11 +110,14 @@ namespace App
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            if (DateTime.Now.Subtract(_lastTimeTick).TotalSeconds >= 1f / _targetTps)
+            
+            if (TargetTps != 0)
             {
-                _lastTimeTick = DateTime.Now;
-                _world.Update();
+                if (DateTime.Now.Subtract(_lastTimeTick).TotalSeconds >= 1f / TargetTps)
+                {
+                    _lastTimeTick = DateTime.Now;
+                    _world.Update();
+                }
             }
 
             base.Update(gameTime);

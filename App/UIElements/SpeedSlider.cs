@@ -33,7 +33,7 @@ namespace App.UIElements
             DecreaseButton.SpriteRectangle = DecreaseButtonPosition;
             PauseButton.SpriteRectangle = PauseButtonPosition;
             IncreaseButton.SpriteRectangle = IncreaseButtonPosition;
-            
+
             DecreaseButton.MouseReleased += OnDecreaseMouseRelease;
             PauseButton.MouseReleased += OnPauseMouseRelease;
             IncreaseButton.MouseReleased += OnIncreaseMouseRelease;
