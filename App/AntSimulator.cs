@@ -34,8 +34,8 @@ namespace App
 
             TargetTps = _defaultTargetTps;
         }
-        
-        public int TargetTps { get; set; }
+
+        private int TargetTps { get; set; }
 
         protected override void Initialize()
         {
@@ -81,16 +81,6 @@ namespace App
             _renderers.Add(speedSlider);
             
             speedSlider.SpeedChange += OnSpeedSliderChange;
-        }
-
-        /// <summary>
-        /// Event to be invoked when the speed slider is changed.
-        /// </summary>
-        /// <param name="newSpeed">New speed multiplier.</param>
-        /// <param name="isPaused">Boolean variable determining if the simulation is paused or not.</param>
-        private void OnSpeedSliderChange(int newSpeed, bool isPaused)
-        {
-            TargetTps = isPaused ? 0 : _defaultTargetTps * newSpeed;
         }
 
         protected override void LoadContent()
@@ -139,6 +129,16 @@ namespace App
             base.Draw(gameTime);
 
             _spriteBatch.End();
+        }
+
+        /// <summary>
+        /// Event to be invoked when the speed slider is changed.
+        /// </summary>
+        /// <param name="newSpeed">New speed multiplier.</param>
+        /// <param name="isPaused">Boolean variable determining if the simulation is paused or not.</param>
+        private void OnSpeedSliderChange(int newSpeed, bool isPaused)
+        {
+            TargetTps = isPaused ? 0 : _defaultTargetTps * newSpeed;
         }
     }
 }
