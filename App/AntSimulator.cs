@@ -92,7 +92,7 @@ namespace App
             SimFrame.ColonyTexture = Content.Load<Texture2D>("Entities/Colony");
             Button.DefaultTexture = Content.Load<Texture2D>("UIElements/Button");
             SpeedSlider.SpeedSliderSpriteSheet = Content.Load<Texture2D>("UIElements/SpeedSliderButtonSpriteSheet");
-            //UIElement.Font = Content.Load<SpriteFont>("UIElements/TextFont");
+            TextLabel.Font = Content.Load<SpriteFont>("UIElements/TextFont");
         }
 
         protected override void Update(GameTime gameTime)

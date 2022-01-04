@@ -19,9 +19,7 @@ namespace App.UIElements
 
             Size = (rectangle.Width, rectangle.Height);
         }
-
-        public static SpriteFont Font;
-
+        
         public (int X, int Y) Position { get; set; }
         public (int Width, int Height) Size { get; set; }
 
