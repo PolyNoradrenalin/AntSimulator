@@ -24,15 +24,13 @@ namespace AntEngine.Entities
 
         public int RemoveResource(int quantity)
         {
-            int newValue = Quantity - quantity;
-            if (newValue <= 0)
+            if (Quantity - quantity <= 0)
             {
-                quantity = Quantity;
+                World.RemoveEntity(this);
+                return Quantity;
             }
 
             Quantity -= quantity;
-            if (Quantity <= 0) World.RemoveEntity(this);
-            
             return quantity;
         }
 
