@@ -19,7 +19,8 @@ namespace App
         private readonly GraphicsDeviceManager _graphics;
         private readonly List<IRenderer> _renderers;
 
-        private readonly int _defaultTargetTps = 60;
+        private int _defaultTargetTps = 30;
+        private bool _isPaused = true;
         private readonly World _world;
         private DateTime _lastTimeTick;
         private SpriteBatch _spriteBatch;
@@ -76,8 +77,8 @@ namespace App
                 foodEntity.Transform.Scale = Vector2.One * 10;
             }
             
-            SpeedSlider speedSlider = new SpeedSlider(new Rectangle(600, 20, 100, 40), 1, 8);
-
+            SpeedSlider speedSlider = new SpeedSlider(new Rectangle(600, 20, 3 * 32, 32), 1, 16);
+            
             _renderers.Add(speedSlider);
             
             speedSlider.SpeedChange += OnSpeedSliderChange;
@@ -101,15 +102,16 @@ namespace App
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             
-            if (TargetTps != 0)
+            if (!_isPaused)
             {
                 if (DateTime.Now.Subtract(_lastTimeTick).TotalSeconds >= 1f / TargetTps)
                 {
                     _lastTimeTick = DateTime.Now;
                     _world.Update();
                 }
+                
             }
-
+            
             base.Update(gameTime);
         }
 
@@ -138,7 +140,8 @@ namespace App
         /// <param name="isPaused">Boolean variable determining if the simulation is paused or not.</param>
         private void OnSpeedSliderChange(int newSpeed, bool isPaused)
         {
-            TargetTps = isPaused ? 0 : _defaultTargetTps * newSpeed;
+            _isPaused = isPaused;
+            TargetTps = _defaultTargetTps * newSpeed;
         }
     }
 }
