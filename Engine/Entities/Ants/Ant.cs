@@ -42,12 +42,14 @@ namespace AntEngine.Entities.Ants
             Collider = new CircleCollider(Transform);
             MaxSpeed = DefaultMaxSpeed;
             Speed = MaxSpeed;
+
+            MovementStrategy = new WandererStrategy(0.5f, Transform.GetDirectorVector(), 0.90f);
         }
 
         /// <summary>
         ///     The ant's current movement strategy.
         /// </summary>
-        public IMovementStrategy MovementStrategy { get; protected set; } = new WandererStrategy(0.5f, 0.90f);
+        public IMovementStrategy MovementStrategy { get; protected set; }
 
         /// <summary>
         ///     Represents the ant's inventory.
@@ -64,7 +66,8 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public int PerceptionMapPrecision { get; } = 24;
 
-        public int PheromoneTimeSpan { get; protected set; } = 6000;
+        public int FoodPheromoneTimeSpan { get; protected set; } = 1200;
+        public int HomePheromoneTimeSpan { get; protected set; } = 6000;
 
         /// <summary>
         ///     Distance from which an ant can pick up or depose ressources.
@@ -76,7 +79,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         ///     Delay between each emission of a pheromone.
         /// </summary>
-        public int PheromoneEmissionDelay { get; protected set; } = 5;
+        public int PheromoneEmissionDelay { get; protected set; } = 30;
 
         public Colony Home { get; set; }
 
@@ -148,9 +151,9 @@ namespace AntEngine.Entities.Ants
         {
             Transform homeTransform = new(Transform.Position, 0, Vector2.One);
 
-            if (!ReinforceNearestPheromone<HomePheromone>())
+            if (!ReinforceNearestPheromone<HomePheromone>(HomePheromoneTimeSpan))
             {
-                HomePheromone unused = new(Name, homeTransform, World, PheromoneTimeSpan);
+                HomePheromone unused = new(Name, homeTransform, World, HomePheromoneTimeSpan);
             }
         }
 
@@ -160,9 +163,9 @@ namespace AntEngine.Entities.Ants
         public void EmitFoodPheromone()
         {
             Transform foodTransform = new(Transform.Position, 0, Vector2.One);
-            if (!ReinforceNearestPheromone<FoodPheromone>())
+            if (!ReinforceNearestPheromone<FoodPheromone>(FoodPheromoneTimeSpan))
             {
-                FoodPheromone unused = new(Name, foodTransform, World, PheromoneTimeSpan);
+                FoodPheromone unused = new(Name, foodTransform, World, FoodPheromoneTimeSpan);
             }
         }
 
@@ -171,7 +174,7 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         /// <typeparam name="T">The type of pheromone to search</typeparam>
         /// <returns>true if a pheromone has been reinforced, false otherwise</returns>
-        private bool ReinforceNearestPheromone<T>() where T : Pheromone
+        private bool ReinforceNearestPheromone<T>(int intensity) where T : Pheromone
         {
             List<T> pheromones = World.CheckEntitiesInRegion<T>(Region.X, Region.Y, PheromoneMergeDistance);
             if (pheromones.Count == 0) return false;
@@ -187,7 +190,7 @@ namespace AntEngine.Entities.Ants
                 candidate.distance = dist;
             }
 
-            if (candidate.pheromone != null) candidate.pheromone.Intensity += PheromoneTimeSpan;
+            if (candidate.pheromone != null) candidate.pheromone.Intensity += intensity;
 
             return candidate.pheromone != null;
         }
@@ -209,9 +212,9 @@ namespace AntEngine.Entities.Ants
         /// <returns>Weight value to be added to total weight</returns>
         private float GetWeightFactorFromRotation(float rotationDelta)
         {
-            float minValue = 0;
+            float minValue = 0.2F;
             float maxValue = 1;
-            return MathF.Max(1 - MathF.Abs(rotationDelta) / MathF.PI * maxValue, minValue);
+            return MathF.Max((1 - MathF.Abs(rotationDelta) / MathF.PI) * maxValue, minValue);
         }
     }
 }
