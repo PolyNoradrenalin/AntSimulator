@@ -18,8 +18,9 @@ namespace App
     {
         private readonly GraphicsDeviceManager _graphics;
         private readonly List<IRenderer> _renderers;
-        private readonly int _targetTps = 60;
 
+        private const int _defaultTargetTps = 30;
+        private bool _isPaused = true;
         private readonly World _world;
         private DateTime _lastTimeTick;
         private SpriteBatch _spriteBatch;
@@ -31,7 +32,11 @@ namespace App
             IsMouseVisible = true;
             _world = new World(Vector2.One * 500);
             _renderers = new List<IRenderer>();
+
+            TargetTps = _defaultTargetTps;
         }
+
+        private int TargetTps { get; set; }
 
         protected override void Initialize()
         {
@@ -60,21 +65,23 @@ namespace App
             colony.Transform.Scale = Vector2.One * 20F;
             colony.SpawnCost.AddResource(food, 10);
             colony.Stockpile.AddResource(food, 10000);
-            colony.Spawn(500);
+            colony.Spawn(50);
 
             for (int i = 0; i < 10; i++)
             {
-                ResourceEntity foodEntity = new ResourceEntity(_world, 1000, food);
+                ResourceEntity foodEntity = new ResourceEntity(_world, 100000, food);
                 foodEntity.Transform.Position = new Vector2(new Random().Next(10,
                         490),
                     new Random().Next(10,
                         490));
                 foodEntity.Transform.Scale = Vector2.One * 10;
             }
-
-            Button button = new Button(new Rectangle(10, 10, 100, 100));
-
-            _renderers.Add(button);
+            
+            SpeedSlider speedSlider = new SpeedSlider(new Rectangle(600, 20, 3 * 32, 32), 1, 16);
+            
+            _renderers.Add(speedSlider);
+            
+            speedSlider.SpeedChange += OnSpeedSliderChange;
         }
 
         protected override void LoadContent()
@@ -84,7 +91,9 @@ namespace App
             SimFrame.EntityTexture = Content.Load<Texture2D>("Entities/Entity");
             SimFrame.AntTexture = Content.Load<Texture2D>("Entities/Ant");
             SimFrame.ColonyTexture = Content.Load<Texture2D>("Entities/Colony");
-            Button.Texture = Content.Load<Texture2D>("UIElements/Button");
+            Button.DefaultTexture = Content.Load<Texture2D>("UIElements/Button");
+            SpeedSlider.SpeedSliderSpriteSheet = Content.Load<Texture2D>("UIElements/SpeedSliderButtonSpriteSheet");
+            TextLabel.Font = Content.Load<SpriteFont>("UIElements/TextFont");
         }
 
         protected override void Update(GameTime gameTime)
@@ -92,13 +101,17 @@ namespace App
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            if (DateTime.Now.Subtract(_lastTimeTick).TotalSeconds >= 1f / _targetTps)
+            
+            if (!_isPaused)
             {
-                _lastTimeTick = DateTime.Now;
-                _world.Update();
+                if (DateTime.Now.Subtract(_lastTimeTick).TotalSeconds >= 1f / TargetTps)
+                {
+                    _lastTimeTick = DateTime.Now;
+                    _world.Update();
+                }
+                
             }
-
+            
             base.Update(gameTime);
         }
 
@@ -118,6 +131,17 @@ namespace App
             base.Draw(gameTime);
 
             _spriteBatch.End();
+        }
+
+        /// <summary>
+        /// Event to be invoked when the speed slider is changed.
+        /// </summary>
+        /// <param name="newSpeed">New speed multiplier.</param>
+        /// <param name="isPaused">Boolean variable determining if the simulation is paused or not.</param>
+        private void OnSpeedSliderChange(int newSpeed, bool isPaused)
+        {
+            _isPaused = isPaused;
+            TargetTps = _defaultTargetTps * newSpeed;
         }
     }
 }
