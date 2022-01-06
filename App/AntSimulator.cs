@@ -19,7 +19,7 @@ namespace App
         private readonly GraphicsDeviceManager _graphics;
         private readonly List<IRenderer> _renderers;
 
-        private int _defaultTargetTps = 30;
+        private const int _defaultTargetTps = 30;
         private bool _isPaused = true;
         private readonly World _world;
         private DateTime _lastTimeTick;
