@@ -33,6 +33,8 @@ namespace AntEngine.Entities.States.Living
         {
             base.OnStateUpdate(stateEntity);
 
+            // TODO: Add comments to this method in order to detail what each part does
+
             Ant ant = (Ant) stateEntity;
             PerceptionMap perceptionMap = ant.GetPerceptionMap<HomePheromone>();
 
