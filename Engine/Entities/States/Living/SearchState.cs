@@ -63,16 +63,26 @@ namespace AntEngine.Entities.States.Living
 
             List<ResourceEntity> list = ant.GetSurroundingEntities<ResourceEntity>();
 
-            foreach (ResourceEntity resourceEntity in list)
+            if (list.Count > 0)
             {
-                if (ant.PickUp(resourceEntity))
-                    stateEntity.State = Next(stateEntity);
-                else
-                    stateEntity.State = new TargetState(this, resourceEntity);
-
-                break;
+                ResourceEntity closest = list.Aggregate((
+                    r1, r2) => r1.Transform.GetDistance(ant.Transform) < r2.Transform.GetDistance(ant.Transform)
+                    ? r1
+                    : r2);
+                
+                if (closest != null)
+                {
+                    if (ant.PickUp(closest))
+                    {
+                        stateEntity.State = Next(stateEntity);
+                    }
+                    else
+                    {
+                        stateEntity.State = new TargetState(this, closest);
+                    }
+                }
             }
-
+            
             if (ant.LastEmitTime > ant.PheromoneEmissionDelay)
             {
                 ant.EmitHomePheromone();

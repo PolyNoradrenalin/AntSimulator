@@ -1,6 +1,8 @@
 using System;
 using System.Numerics;
 using AntEngine.Entities.Ants;
+using AntEngine.Entities.Colonies;
+using AntEngine.Entities.Pheromones;
 
 namespace AntEngine.Entities.States.Living
 {
@@ -32,6 +34,25 @@ namespace AntEngine.Entities.States.Living
             Vector2 dir = _target.Transform.Position - ant.Transform.Position;
 
             ant.Move(dir);
+            
+            if (ant.LastEmitTime > ant.PheromoneEmissionDelay)
+            {
+                switch (_target)
+                {
+                    case ResourceEntity:
+                        ant.EmitHomePheromone();
+                        break;
+                    case Colony:
+                        ant.EmitFoodPheromone();
+                        break;
+                }
+
+                ant.LastEmitTime = 0;
+            }
+            else
+            {
+                ant.LastEmitTime++;
+            }
 
             if (ant.Transform.GetDistance(_target.Transform) <= ThresholdDistance) ant.State = Next(stateEntity);
         }

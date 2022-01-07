@@ -19,6 +19,8 @@ namespace AntEngine.Entities.Colonies
 
         private readonly List<IColonyMember> _population;
 
+        private int _lastUpdateTick = 0;
+
         public Colony(World world, ColonySpawnMethod spawnMethod) : this(ColonyDefaultName, new Transform(), world,
             spawnMethod)
         {
@@ -52,9 +54,13 @@ namespace AntEngine.Entities.Colonies
         public ResourceInventory SpawnCost { get; }
 
         /// <summary>
-        ///     Distance of spawning from the colony center.
+        ///     Instructions to spawn an entity of the colony.
         /// </summary>
-        private float SpawnRadius { get; } = 1F;
+        public ColonySpawnMethod SpawnMethod { private get; set; }
+
+        public int SpawnDelay { get; set; } = 16;
+
+        public int SpawnBurst { get; set; } = 6;
 
         /// <summary>
         ///     Where an entity should spawn.
@@ -67,14 +73,27 @@ namespace AntEngine.Entities.Colonies
                 float x = MathF.Cos(angle);
                 float y = MathF.Sin(angle);
 
-                return Transform.Position + new Vector2(x, y) * SpawnRadius;
+                return Transform.Position + new Vector2(x, y) * SpawnRadius * Transform.Scale;
             }
         }
 
         /// <summary>
-        ///     Instructions to spawn an entity of the colony.
+        ///     Distance of spawning from the colony center.
         /// </summary>
-        public ColonySpawnMethod SpawnMethod { private get; set; }
+        private float SpawnRadius { get; } = 1F;
+
+        public override void Update()
+        {
+            if (_lastUpdateTick > SpawnDelay)
+            {
+                Spawn(SpawnBurst);
+                _lastUpdateTick = 0;
+            }
+            else
+            {
+                _lastUpdateTick++;
+            }
+        }
 
         /// <summary>
         ///     Spawn entities stopping when at count or when the stockpile no longer has enough resources.
@@ -86,8 +105,11 @@ namespace AntEngine.Entities.Colonies
             {
                 ConsumeResources();
 
-                // TODO : Spawn Transform scale, rotation, ...
-                IColonyMember pop = SpawnMethod("", new Transform(SpawnPosition, 0, Vector2.One * 10F), World, this);
+                Vector2 position = SpawnPosition;
+                Vector2 direction = Vector2.Normalize(position - Transform.Position);
+                float angle = MathF.Atan2(direction.Y, Vector2.Dot(direction, Vector2.UnitX));
+                
+                IColonyMember pop = SpawnMethod("", new Transform(position, angle, Vector2.One * 10F), World, this);
                 // TODO : REMOVE POP MEMBER
                 _population.Add(pop);
                 pop.Home = this;
