@@ -12,6 +12,7 @@ namespace AntEngine.Entities.Pheromones
         protected const int DefaultMaxTimeSpan = 100;
 
         public int Intensity;
+        public Colony ColonyOrigin;
 
         public Pheromone(World world, Colony colony) : this(DefaultPheromoneName, new Transform(), world, colony, DefaultMaxTimeSpan)
         {
@@ -24,6 +25,7 @@ namespace AntEngine.Entities.Pheromones
         public Pheromone(string name, Transform transform, World world, Colony colony, int maxTimeSpan) : base(name, transform, world)
         {
             Intensity = maxTimeSpan;
+            ColonyOrigin = colony;
         }
 
         public override void Update()
