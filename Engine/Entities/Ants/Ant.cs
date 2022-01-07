@@ -155,7 +155,7 @@ namespace AntEngine.Entities.Ants
 
             if (!ReinforceNearestPheromone<HomePheromone>(HomePheromoneTimeSpan, HomeMaxPheromoneTime))
             {
-                HomePheromone unused = new(Name, homeTransform, World, HomePheromoneTimeSpan);
+                HomePheromone unused = new(Name, homeTransform, World, Home, HomePheromoneTimeSpan);
             }
         }
 
@@ -167,7 +167,7 @@ namespace AntEngine.Entities.Ants
             Transform foodTransform = new(Transform.Position, 0, Vector2.One);
             if (!ReinforceNearestPheromone<FoodPheromone>(FoodPheromoneTimeSpan, FoodMaxPheromoneTime))
             {
-                FoodPheromone unused = new(Name, foodTransform, World, FoodPheromoneTimeSpan);
+                FoodPheromone unused = new(Name, foodTransform, World, Home, FoodPheromoneTimeSpan);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using AntEngine.Utils.Maths;
+﻿using AntEngine.Entities.Colonies;
+using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities.Pheromones
 {
@@ -12,15 +13,15 @@ namespace AntEngine.Entities.Pheromones
 
         public int Intensity;
 
-        public Pheromone(World world) : this(DefaultPheromoneName, new Transform(), world, DefaultMaxTimeSpan)
+        public Pheromone(World world, Colony colony) : this(DefaultPheromoneName, new Transform(), world, colony, DefaultMaxTimeSpan)
         {
         }
 
-        public Pheromone(World world, int maxTimeSpan) : this(DefaultPheromoneName, new Transform(), world, maxTimeSpan)
+        public Pheromone(World world, Colony colony, int maxTimeSpan) : this(DefaultPheromoneName, new Transform(), world, colony, maxTimeSpan)
         {
         }
 
-        public Pheromone(string name, Transform transform, World world, int maxTimeSpan) : base(name, transform, world)
+        public Pheromone(string name, Transform transform, World world, Colony colony, int maxTimeSpan) : base(name, transform, world)
         {
             Intensity = maxTimeSpan;
         }
