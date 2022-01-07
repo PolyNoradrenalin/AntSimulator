@@ -57,7 +57,7 @@ namespace AntEngine.Entities.States.Living
                 IList<Collider> collisions = new List<Collider>(
                     stateEntity.World.CircleCast(
                         stateEntity.Transform.Position + dir * obstacleDetectRadius,
-                        obstacleDetectRadius));
+                        obstacleDetectRadius, true));
 
                 collisions = collisions.Where(collider => collider is not CircleCollider).ToList();
                 if (collisions.Count > 0) perceptionMap.Weights[opposite] += 1 / 3F;
