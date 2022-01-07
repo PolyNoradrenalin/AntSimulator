@@ -60,6 +60,9 @@ namespace AntEngine
             }
         }
 
+        /// <summary>
+        /// Number of entities present in the world.
+        /// </summary>
         public int EntityCount
         {
             get
