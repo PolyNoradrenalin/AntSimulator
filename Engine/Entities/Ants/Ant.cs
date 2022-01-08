@@ -22,6 +22,8 @@ namespace AntEngine.Entities.Ants
 
         private const float DefaultMaxSpeed = 1F;
 
+        private static readonly Vector2 PheromoneScale = Vector2.One * 2;
+
         /// <summary>
         ///     The number of ticks since the ant emitted a pheromone
         /// </summary>
@@ -152,7 +154,7 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public void EmitHomePheromone()
         {
-            Transform homeTransform = new(Transform.Position, 0, Vector2.One);
+            Transform homeTransform = new(Transform.Position, 0, PheromoneScale);
 
             if (!ReinforceNearestPheromone<HomePheromone>(HomePheromoneTimeSpan, HomeMaxPheromoneTime))
             {
@@ -165,7 +167,7 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public void EmitFoodPheromone()
         {
-            Transform foodTransform = new(Transform.Position, 0, Vector2.One);
+            Transform foodTransform = new(Transform.Position, 0, PheromoneScale);
             if (!ReinforceNearestPheromone<FoodPheromone>(FoodPheromoneTimeSpan, FoodMaxPheromoneTime))
             {
                 FoodPheromone unused = new(Name, foodTransform, World, Home, FoodPheromoneTimeSpan);
