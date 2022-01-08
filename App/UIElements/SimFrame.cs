@@ -1,13 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+
 using AntEngine;
 using AntEngine.Colliders;
 using AntEngine.Entities;
 using AntEngine.Entities.Ants;
 using AntEngine.Entities.Colonies;
 using AntEngine.Resources;
+using AntEngine.Entities.Pheromones;
 using App.Renderers;
 using App.Renderers.EntityRenderers;
 using Microsoft.Xna.Framework;
@@ -25,7 +27,7 @@ namespace App.UIElements
         public static Texture2D EntityTexture;
         public static Texture2D AntTexture;
         public static Texture2D ColonyTexture;
-        public static Texture2D ResourceTexture;
+        public static Texture2D CircleTexture;
 
         private readonly IList<IRenderer> _renderers;
         private readonly PaintBrushSelection _paintBrushSelection;
@@ -149,10 +151,12 @@ namespace App.UIElements
         {
             IRenderer renderer = entity switch
             {
-                Ant ant => new AntRenderer(ant, AntTexture),
+                Ant ant => new AntRenderer(ant, AntTexture, Color.Black),
                 Colony colony => new ColonyRenderer(colony, ColonyTexture),
-                ResourceEntity resource => new EntityRenderer(resource, ResourceTexture),
-                _ => new EntityRenderer(entity, EntityTexture)
+                ResourceEntity resource => new EntityRenderer(resource, CircleTexture, Color.Green),
+                FoodPheromone foodPheromone => new EntityRenderer(foodPheromone, CircleTexture, Color.Red),
+                HomePheromone homePheromone => new EntityRenderer(homePheromone, CircleTexture, Color.Blue),
+                _ => new EntityRenderer(entity, EntityTexture, Color.White)
             };
 
             AddRenderer(renderer);

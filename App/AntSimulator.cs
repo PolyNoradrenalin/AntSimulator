@@ -30,7 +30,7 @@ namespace App
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            _world = new World(Vector2.One * 500);
+            _world = new World(Vector2.One * 1000);
             _renderers = new List<IRenderer>();
 
             TargetTps = _defaultTargetTps;
@@ -76,7 +76,8 @@ namespace App
             SimFrame.EntityTexture = Content.Load<Texture2D>("Entities/Entity");
             SimFrame.AntTexture = Content.Load<Texture2D>("Entities/Ant");
             SimFrame.ColonyTexture = Content.Load<Texture2D>("Entities/Colony");
-            SimFrame.ResourceTexture = Content.Load<Texture2D>("Entities/Resource");
+            SimFrame.CircleTexture = Content.Load<Texture2D>("Entities/Circle");
+            
             Button.DefaultTexture = Content.Load<Texture2D>("UIElements/Button");
             SpeedSlider.SpeedSliderSpriteSheet = Content.Load<Texture2D>("UIElements/SpeedSliderButtonSpriteSheet");
             PaintBrushSelection.PaintBrushSpriteSheet = Content.Load<Texture2D>("UIElements/PaintBrushButtonSpriteSheet");
