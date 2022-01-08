@@ -12,11 +12,8 @@ namespace AntEngine.Entities.States.Living
     /// <summary>
     ///     State of a Living Entity that searches for pheromones.
     /// </summary>
-    public class SearchState : LivingState
+    public class SearchState : WanderState<FoodPheromone>
     {
-        private const int ObstacleRayIndex = 4;
-        private const float WallAvoidanceFactor = 10000F;
-
         private static SearchState _instance;
 
         public new static SearchState Instance
@@ -32,40 +29,11 @@ namespace AntEngine.Entities.States.Living
         {
             base.OnStateUpdate(stateEntity);
             
-            // TODO: Add comments to this method in order to detail what each part does
-            
             Ant ant = (Ant) stateEntity;
-            PerceptionMap perceptionMap = ant.GetPerceptionMap<FoodPheromone>();
 
-            float obstacleDetectRadius = ant.Transform.Scale.Length() / 2F;
-            int maxDirIndex = ant.PerceptionMapPrecision;
-            float positiveRotation = ant.Transform.Rotation < 0
-                ? ant.Transform.Rotation + 2F * MathF.PI
-                : ant.Transform.Rotation;
+            HashSet<ResourceEntity> list = ant.GetSurroundingEntities<ResourceEntity>();
 
-            int[] dirs = new int[3];
-            dirs[0] = (int) MathF.Floor(positiveRotation / (2 * MathF.PI) * maxDirIndex);
-            dirs[1] = (dirs[0] + ObstacleRayIndex) % maxDirIndex;
-            dirs[2] = (dirs[0] + maxDirIndex - ObstacleRayIndex) % maxDirIndex;
-
-            foreach (int i in dirs)
-            {
-                Vector2 dir = perceptionMap.Weights.Keys.ElementAt(i);
-                Vector2 opposite = perceptionMap.Weights.Keys.ElementAt((i + maxDirIndex / 2) % maxDirIndex);
-
-                IList<Collider> collisions = new List<Collider>(
-                    stateEntity.World.CircleCast(
-                        stateEntity.Transform.Position + dir * obstacleDetectRadius,
-                        obstacleDetectRadius, true));
-
-                collisions = collisions.Where(collider => collider is not CircleCollider).ToList();
-                if (collisions.Count > 0) perceptionMap.Weights[opposite] += WallAvoidanceFactor;
-            }
-
-            ant.Move(ant.MovementStrategy.Move(perceptionMap));
-
-            List<ResourceEntity> list = ant.GetSurroundingEntities<ResourceEntity>();
-
+            // When the Ant detects some food, we select the closest one and try to pick it up.
             if (list.Count > 0)
             {
                 ResourceEntity closest = list.Aggregate((

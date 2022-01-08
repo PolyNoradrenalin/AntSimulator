@@ -181,7 +181,7 @@ namespace AntEngine
         /// <param name="radius">Radius of the range</param>
         /// <param name="onlyCheckWorld">If this boolean is true, the CircleCast will ignore all colliders that are not a world collider.</param>
         /// <returns>List of the colliders</returns>
-        public IEnumerable<Collider> CircleCast(Vector2 position, float radius, bool onlyCheckWorld)
+        public HashSet<Collider> CircleCast(Vector2 position, float radius, bool onlyCheckWorld)
         {
             CircleCollider circle = new(new Transform(position, 0, Vector2.One * radius));
             
@@ -191,11 +191,11 @@ namespace AntEngine
 
             if (onlyCheckWorld)
             {
-                return worldCollides ? new List<Collider> {Collider} : new List<Collider>();
+                return worldCollides ? new HashSet<Collider> {Collider} : new HashSet<Collider>();
             }
 
-            List<Entity> entities = CheckEntitiesInRegion<Entity>(x, y, radius);
-            List<Collider> colliders = (from e in entities where e.Collider != null select e.Collider).ToList();
+            HashSet<Entity> entities = CheckEntitiesInRegion<Entity>(x, y, radius);
+            HashSet<Collider> colliders = (from e in entities where e.Collider != null select e.Collider).ToHashSet();
             
             if (worldCollides) colliders.Add(Collider);
             return colliders;
@@ -209,9 +209,9 @@ namespace AntEngine
         /// <param name="radius">Radius that indicates how many regions we extend the list in each direction.</param>
         /// <typeparam name="T">Type of entity to get.</typeparam>
         /// <returns>A list of entities containing all entities belonging to the checked regions.</returns>
-        public List<T> CheckEntitiesInRegion<T>(int x, int y, int radius) where T : Entity
+        public HashSet<T> CheckEntitiesInRegion<T>(int x, int y, int radius) where T : Entity
         {
-            List<T> list = new();
+            HashSet<T> set = new();
 
             for (int i = 0; i <= 2 * radius; i++)
             for (int j = 0; j <= 2 * radius; j++)
@@ -223,14 +223,14 @@ namespace AntEngine
                 foreach (Entity e in Regions[xRegion][yRegion])
                 {
                     if (e is T entity)
-                        list.Add(entity);
+                        set.Add(entity);
                 }
             }
 
-            return list;
+            return set;
         }
 
-        public List<T> CheckEntitiesInRegion<T>(int x, int y, float radius) where T : Entity
+        public HashSet<T> CheckEntitiesInRegion<T>(int x, int y, float radius) where T : Entity
         {
             float minSize = MathF.Min(Size.X, Size.Y);
             return CheckEntitiesInRegion<T>(x, y, (int) (radius / minSize * WorldRegionDivision));

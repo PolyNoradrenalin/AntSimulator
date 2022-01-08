@@ -11,14 +11,8 @@ using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities.States.Living
 {
-    public class CarryState : LivingState
+    public class CarryState : WanderState<HomePheromone>
     {
-        /// <summary>
-        ///     Represents the total field of view in which the entity can detect obstacles.
-        /// </summary>
-        private const float ObstacleFieldOfView = 2F * MathF.PI / 3F;
-        private const float WallAvoidanceFactor = 10000F;
-
         private static CarryState _instance;
 
         public new static CarryState Instance
@@ -34,42 +28,11 @@ namespace AntEngine.Entities.States.Living
         {
             base.OnStateUpdate(stateEntity);
 
-            // TODO: Add comments to this method in order to detail what each part does
-
             Ant ant = (Ant) stateEntity;
-            PerceptionMap perceptionMap = ant.GetPerceptionMap<HomePheromone>();
-
-            float obstacleDetectRadius = ant.Transform.Scale.Length() / 2F;
-            int maxDirIndex = ant.PerceptionMapPrecision;
-            float positiveRotation = ant.Transform.Rotation < 0
-                ? ant.Transform.Rotation + 2F * MathF.PI
-                : ant.Transform.Rotation;
-
-            int obstacleRayIndex = (int) MathF.Floor(ObstacleFieldOfView / 2 / (2 * MathF.PI) * maxDirIndex);
-
-            int[] dirs = new int[3];
-            dirs[0] = (int) MathF.Floor(positiveRotation / (2 * MathF.PI) * maxDirIndex);
-            dirs[1] = (dirs[0] + obstacleRayIndex) % maxDirIndex;
-            dirs[2] = (dirs[0] + maxDirIndex - obstacleRayIndex) % maxDirIndex;
-
-            foreach (int i in dirs)
-            {
-                Vector2 dir = perceptionMap.Weights.Keys.ElementAt(i);
-                Vector2 opposite = perceptionMap.Weights.Keys.ElementAt((i + maxDirIndex / 2) % maxDirIndex);
-
-                IList<Collider> collisions = new List<Collider>(
-                    stateEntity.World.CircleCast(
-                        stateEntity.Transform.Position + dir * obstacleDetectRadius,
-                        obstacleDetectRadius, true));
-
-                collisions = collisions.Where(collider => collider is not CircleCollider).ToList();
-                if (collisions.Count > 0) perceptionMap.Weights[opposite] += WallAvoidanceFactor;
-            }
-
-            ant.Move(ant.MovementStrategy.Move(perceptionMap));
-
-            List<Colony> colonies = ant.GetSurroundingEntities<Colony>();
-
+            
+            HashSet<Colony> colonies = ant.GetSurroundingEntities<Colony>();
+            
+            // When we find a colony, we check if this is the Ant's colony and try to deposit all the resources.
             foreach (Colony c in colonies)
             {
                 if (ant.Home != c) continue;
@@ -91,6 +54,7 @@ namespace AntEngine.Entities.States.Living
                 break;
             }
 
+            
             if (ant.LastEmitTime > ant.PheromoneEmissionDelay)
             {
                 ant.EmitFoodPheromone();
