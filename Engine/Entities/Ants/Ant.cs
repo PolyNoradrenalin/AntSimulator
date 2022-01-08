@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using AntEngine.Colliders;
 using AntEngine.Entities.Colonies;
@@ -94,7 +95,7 @@ namespace AntEngine.Entities.Ants
         {
             List<float> weights = new(new float[PerceptionMapPrecision]);
 
-            List<T> entities = GetSurroundingEntities<T>();
+            IEnumerable<T> entities = GetSurroundingEntities<T>().Where(pheromone => pheromone.ColonyOrigin == Home);
 
             foreach (T e in entities)
             {
@@ -155,7 +156,7 @@ namespace AntEngine.Entities.Ants
 
             if (!ReinforceNearestPheromone<HomePheromone>(HomePheromoneTimeSpan, HomeMaxPheromoneTime))
             {
-                HomePheromone unused = new(Name, homeTransform, World, HomePheromoneTimeSpan);
+                HomePheromone unused = new(Name, homeTransform, World, Home, HomePheromoneTimeSpan);
             }
         }
 
@@ -167,7 +168,7 @@ namespace AntEngine.Entities.Ants
             Transform foodTransform = new(Transform.Position, 0, Vector2.One);
             if (!ReinforceNearestPheromone<FoodPheromone>(FoodPheromoneTimeSpan, FoodMaxPheromoneTime))
             {
-                FoodPheromone unused = new(Name, foodTransform, World, FoodPheromoneTimeSpan);
+                FoodPheromone unused = new(Name, foodTransform, World, Home, FoodPheromoneTimeSpan);
             }
         }
 

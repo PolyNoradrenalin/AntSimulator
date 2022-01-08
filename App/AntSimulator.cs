@@ -62,11 +62,19 @@ namespace App
 
             Resource food = new Resource("food", "Test Food");
 
-            Colony colony = new Colony(_world, (name, transform, world, _) => new Ant("Ant", transform, world));
+            Colony colony = new Colony(_world, (name, transform, world, _) => new Ant("AntTeam1", transform, world));
             colony.Transform.Position = Vector2.One * 250F;
             colony.Transform.Scale = Vector2.One * 20F;
             colony.SpawnCost.AddResource(food, 100);
             colony.Stockpile.AddResource(food, 1000);
+            colony.Spawn(10);
+            
+            Colony colony2 = new Colony(_world, (name, transform, world, _) => new Ant("AntTeam2", transform, world));
+            colony2.Transform.Position = Vector2.One * 420F;
+            colony2.Transform.Scale = Vector2.One * 20F;
+            colony2.SpawnCost.AddResource(food, 100);
+            colony2.Stockpile.AddResource(food, 1000);
+            colony2.Spawn(10);
 
             for (int i = 0; i < 100; i++)
             {
