@@ -20,11 +20,21 @@ namespace App.Renderers.EntityRenderers
             EntityCharset = entityCharset;
             _depthBuffer = depthBuffer;
         }
+        
+        public EntityRenderer(Entity e, Texture2D entityCharset, Color color, float depthBuffer = DefaultDepthBuffer)
+        {
+            Entity = e;
+            EntityCharset = entityCharset;
+            Color = color;
+            _depthBuffer = depthBuffer;
+        }
 
         public Entity Entity { get; }
 
         public Texture2D EntityCharset { get; set; }
 
+        public Color Color { get; set; } = Color.White;
+        
         public virtual void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             if (EntityCharset == null) return;
@@ -48,7 +58,7 @@ namespace App.Renderers.EntityRenderers
             spriteBatch.Draw(EntityCharset,
                 spritePos,
                 null,
-                Color.White,
+                Color,
                 -Entity.Transform.Rotation,
                 new Vector2(EntityCharset.Width, EntityCharset.Height) / 2f,
                 SpriteEffects.None,
