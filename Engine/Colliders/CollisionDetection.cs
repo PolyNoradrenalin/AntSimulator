@@ -104,12 +104,13 @@ namespace AntEngine.Colliders
             for (int y = minIndex.y; y <= maxIndex.y; y++)
             {
                 Vector2 pixelPos = new(
-                    (float) x / world.Subdivision * world.Size.X,
-                    (float) y / world.Subdivision * world.Size.Y);
+                    (x + 0.5f) / world.Subdivision * world.Size.X,
+                    (y + 0.5f) / world.Subdivision * world.Size.Y);
 
-                float distFromOrigin = Vector2.Distance(pixelPos, circle.ParentTransform.Position);
+                RectangleCollider rectCollider = new(new Transform(pixelPos, 0,
+                    new Vector2(world.Size.X / world.Subdivision, world.Size.Y / world.Subdivision)));
 
-                if (!(distFromOrigin <= circle.Radius)) continue;
+                if (!CircleAndRectangle(circle, rectCollider)) continue;
                 if (world.Matrix[y][x]) return true;
             }
 

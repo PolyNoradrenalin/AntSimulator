@@ -76,6 +76,7 @@ namespace App
             SimFrame.EntityTexture = Content.Load<Texture2D>("Entities/Entity");
             SimFrame.AntTexture = Content.Load<Texture2D>("Entities/Ant");
             SimFrame.ColonyTexture = Content.Load<Texture2D>("Entities/Colony");
+            SimFrame.ResourceTexture = Content.Load<Texture2D>("Entities/Resource");
             Button.DefaultTexture = Content.Load<Texture2D>("UIElements/Button");
             SpeedSlider.SpeedSliderSpriteSheet = Content.Load<Texture2D>("UIElements/SpeedSliderButtonSpriteSheet");
             PaintBrushSelection.PaintBrushSpriteSheet = Content.Load<Texture2D>("UIElements/PaintBrushButtonSpriteSheet");

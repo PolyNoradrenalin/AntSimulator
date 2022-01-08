@@ -25,6 +25,7 @@ namespace App.UIElements
         public static Texture2D EntityTexture;
         public static Texture2D AntTexture;
         public static Texture2D ColonyTexture;
+        public static Texture2D ResourceTexture;
 
         private readonly IList<IRenderer> _renderers;
         private readonly PaintBrushSelection _paintBrushSelection;
@@ -150,6 +151,7 @@ namespace App.UIElements
             {
                 Ant ant => new AntRenderer(ant, AntTexture),
                 Colony colony => new ColonyRenderer(colony, ColonyTexture),
+                ResourceEntity resource => new EntityRenderer(resource, ResourceTexture),
                 _ => new EntityRenderer(entity, EntityTexture)
             };
 
