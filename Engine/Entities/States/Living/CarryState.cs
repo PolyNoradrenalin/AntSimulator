@@ -31,7 +31,8 @@ namespace AntEngine.Entities.States.Living
             Ant ant = (Ant) stateEntity;
             
             HashSet<Colony> colonies = ant.GetSurroundingEntities<Colony>();
-
+            
+            // When we find a colony, we check if this is the Ant's colony and try to deposit all the resources.
             foreach (Colony c in colonies)
             {
                 if (ant.Home != c) continue;
@@ -53,6 +54,7 @@ namespace AntEngine.Entities.States.Living
                 break;
             }
 
+            
             if (ant.LastEmitTime > ant.PheromoneEmissionDelay)
             {
                 ant.EmitFoodPheromone();

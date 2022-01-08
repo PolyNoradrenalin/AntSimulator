@@ -18,11 +18,13 @@ namespace AntEngine.Entities.States.Living
         {
             base.OnStateUpdate(stateEntity);
             
-            // TODO: Add comments to this method in order to detail what each part does
             
             Ant ant = (Ant) stateEntity;
             PerceptionMap perceptionMap = ant.GetPerceptionMap<T>();
 
+            
+            // Detects obstacles in 3 directions in front of the ant.
+            // The ant will be attracted by the opposite direction to avoid the obstacles.
             float obstacleDetectRadius = ant.Transform.Scale.Length() / 2F;
             int maxDirIndex = ant.PerceptionMapPrecision;
             float positiveRotation = ant.Transform.Rotation < 0

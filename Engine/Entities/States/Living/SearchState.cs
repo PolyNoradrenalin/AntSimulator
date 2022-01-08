@@ -33,6 +33,7 @@ namespace AntEngine.Entities.States.Living
 
             HashSet<ResourceEntity> list = ant.GetSurroundingEntities<ResourceEntity>();
 
+            // When the Ant detects some food, we select the closest one and try to pick it up.
             if (list.Count > 0)
             {
                 ResourceEntity closest = list.Aggregate((
