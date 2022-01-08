@@ -15,9 +15,21 @@ namespace AntEngine
     {
         public const int WorldColliderDivision = 64;
         public const int WorldRegionDivision = 256;
+        
+        /// <summary>
+        ///     Size of the world.
+        /// </summary>
+        public readonly Vector2 Size;
+        
+        /// <summary>
+        ///     Stores entities into a region with all other entities in the same region.
+        /// </summary>
+        private readonly List<Entity>[][] Regions;
 
         private readonly IList<Entity> _entitiesAddedBuffer;
+
         private readonly IList<Entity> _entitiesRemovedBuffer;
+
         private readonly IList<Entity> _entitiesUpdatedBuffer;
 
         public World(Vector2 size)
@@ -79,19 +91,9 @@ namespace AntEngine
         }
 
         /// <summary>
-        ///     Size of the world.
-        /// </summary>
-        public Vector2 Size { get; }
-
-        /// <summary>
         ///     Collider of the world (the walls).
         /// </summary>
         public WorldCollider Collider { get; }
-
-        /// <summary>
-        ///     Stores entities into a region with all other entities in the same region.
-        /// </summary>
-        public List<Entity>[][] Regions { get; }
 
         /// <summary>
         ///     Called when an entity is spawned in the world.
