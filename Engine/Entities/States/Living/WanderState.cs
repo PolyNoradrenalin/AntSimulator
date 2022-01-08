@@ -39,12 +39,11 @@ namespace AntEngine.Entities.States.Living
                 Vector2 dir = perceptionMap.Weights.Keys.ElementAt(i);
                 Vector2 opposite = perceptionMap.Weights.Keys.ElementAt((i + maxDirIndex / 2) % maxDirIndex);
 
-                IList<Collider> collisions = new List<Collider>(
+                HashSet<Collider> collisions = new(
                     stateEntity.World.CircleCast(
                         stateEntity.Transform.Position + dir * obstacleDetectRadius,
                         obstacleDetectRadius, true));
 
-                collisions = collisions.Where(collider => collider is not CircleCollider).ToList();
                 if (collisions.Count > 0) perceptionMap.Weights[opposite] += WallAvoidanceFactor;
             }
 

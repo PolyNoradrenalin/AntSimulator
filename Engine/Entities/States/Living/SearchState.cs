@@ -31,7 +31,7 @@ namespace AntEngine.Entities.States.Living
             
             Ant ant = (Ant) stateEntity;
 
-            List<ResourceEntity> list = ant.GetSurroundingEntities<ResourceEntity>();
+            HashSet<ResourceEntity> list = ant.GetSurroundingEntities<ResourceEntity>();
 
             if (list.Count > 0)
             {

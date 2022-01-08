@@ -30,7 +30,7 @@ namespace AntEngine.Entities.States.Living
 
             Ant ant = (Ant) stateEntity;
             
-            List<Colony> colonies = ant.GetSurroundingEntities<Colony>();
+            HashSet<Colony> colonies = ant.GetSurroundingEntities<Colony>();
 
             foreach (Colony c in colonies)
             {

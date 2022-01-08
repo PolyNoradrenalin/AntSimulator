@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Numerics;
 using AntEngine.Colliders;
@@ -19,14 +20,16 @@ namespace AntEngine.Entities.Ants
     public class Ant : LivingEntity, IColonyMember
     {
         private const float PheromoneMergeDistance = 5F;
-
         private const float DefaultMaxSpeed = 1F;
 
         /// <summary>
         ///     The number of ticks since the ant emitted a pheromone
         /// </summary>
         public int LastEmitTime;
-
+        
+        private PerceptionMap _currentPerceptionMap;
+        private List<Vector2> _perceptionMapKeys;
+        
         public Ant(World world) : this("Ant", new Transform(), world)
         {
         }
@@ -45,6 +48,9 @@ namespace AntEngine.Entities.Ants
             Speed = MaxSpeed;
 
             MovementStrategy = new WandererStrategy(0.5f, Transform.GetDirectorVector(), 0.90f);
+            List<float> weights = new(new float[PerceptionMapPrecision]);
+            _currentPerceptionMap = new PerceptionMap(weights);
+            _perceptionMapKeys = _currentPerceptionMap.Weights.Keys.ToList();
         }
 
         /// <summary>
@@ -93,10 +99,13 @@ namespace AntEngine.Entities.Ants
         /// <returns>Perception Map</returns>
         public PerceptionMap GetPerceptionMap<T>() where T : Pheromone
         {
-            List<float> weights = new(new float[PerceptionMapPrecision]);
-
             IEnumerable<T> entities = GetSurroundingEntities<T>().Where(pheromone => pheromone.ColonyOrigin == Home);
 
+            foreach (Vector2 dir in _perceptionMapKeys)
+            {
+                _currentPerceptionMap.Weights[dir] = 0;
+            }
+            
             foreach (T e in entities)
             {
                 Vector2 antDir = Transform.GetDirectorVector();
@@ -110,13 +119,13 @@ namespace AntEngine.Entities.Ants
 
                 int weightListIndex = (int) Math.Min(PerceptionDistance-1, (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision)));
 
-                float weightSum = weights[weightListIndex];
+                float weightSum = _currentPerceptionMap.Weights[_perceptionMapKeys[weightListIndex]];
                 weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform)) *
                              GetWeightFactorFromRotation(angleDiff) * e.Intensity;
-                weights[weightListIndex] = weightSum;
+                _currentPerceptionMap.Weights[_perceptionMapKeys[weightListIndex]] = weightSum;
             }
 
-            return new PerceptionMap(weights);
+            return _currentPerceptionMap;
         }
 
         //TODO: Could be added to a higher level of entity. The only problem is that it depends on PerceptionDistance so maybe in LivingEntity?
@@ -125,10 +134,17 @@ namespace AntEngine.Entities.Ants
         ///     Generates a list of the entities that are in this Ant's perceptionDistance.
         /// </summary>
         /// <returns>List of the entities in the perception range of this Ant</returns>
-        public List<T> GetSurroundingEntities<T>() where T : Entity
+        public HashSet<T> GetSurroundingEntities<T>() where T : Entity
         {
-            return World.CheckEntitiesInRegion<T>(Region.X, Region.Y, PerceptionDistance)
-                .FindAll(e => e.Transform.GetDistance(Transform) <= PerceptionDistance);
+            HashSet<T> entities = World.CheckEntitiesInRegion<T>(Region.X, Region.Y, PerceptionDistance);
+            HashSet<T> filteredEntities = new();
+
+            foreach (T e in entities)
+            {
+                if (e.Transform.GetDistance(Transform) <= PerceptionDistance) filteredEntities.Add(e);
+            }
+
+            return filteredEntities;
         }
 
         /// <summary>
@@ -179,7 +195,7 @@ namespace AntEngine.Entities.Ants
         /// <returns>true if a pheromone has been reinforced, false otherwise</returns>
         private bool ReinforceNearestPheromone<T>(int intensity, int maxIntensity) where T : Pheromone
         {
-            List<T> pheromones = World.CheckEntitiesInRegion<T>(Region.X, Region.Y, PheromoneMergeDistance);
+            HashSet<T> pheromones = World.CheckEntitiesInRegion<T>(Region.X, Region.Y, PheromoneMergeDistance);
             if (pheromones.Count == 0) return false;
 
             (T pheromone, float distance) candidate = (null, float.MaxValue);
