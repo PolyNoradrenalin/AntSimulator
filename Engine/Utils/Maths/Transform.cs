@@ -9,6 +9,8 @@ namespace AntEngine.Utils.Maths
     /// </summary>
     public class Transform
     {
+        private readonly Vector2[] _rotationCoefficients = { new(1, 1), new(-1, 1), new(-1, -1), new(1, -1) };
+        
         private float _rotation;
 
         /// <summary>
@@ -88,17 +90,15 @@ namespace AntEngine.Utils.Maths
         {
             List<Vector2> verts = new();
 
-            Vector2[] rotationCoefficients = { new(1, 1), new(-1, 1), new(-1, -1), new(1, -1) };
-
             // Calculating each vertex
-            for (int index = 0; index < rotationCoefficients.Length; index++)
+            for (int index = 0; index < _rotationCoefficients.Length; index++)
             {
                 Vector2 vertex = new()
                 {
-                    X = Position.X + Scale.X / 2 * rotationCoefficients[index].X * MathF.Cos(Rotation) -
-                        rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Sin(Rotation),
-                    Y = Position.Y + Scale.X / 2 * rotationCoefficients[index].X * MathF.Sin(Rotation) +
-                        rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Cos(Rotation)
+                    X = Position.X + Scale.X / 2 * _rotationCoefficients[index].X * MathF.Cos(Rotation) -
+                        _rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Sin(Rotation),
+                    Y = Position.Y + Scale.X / 2 * _rotationCoefficients[index].X * MathF.Sin(Rotation) +
+                        _rotationCoefficients[index].Y * Scale.Y / 2 * MathF.Cos(Rotation)
                 };
 
                 verts.Add(vertex);
