@@ -173,19 +173,29 @@ namespace AntEngine
         }
 
         /// <summary>
-        ///     Returns all colliders in a range of a specific position.
+        ///     Returns all colliders and entities in a range of a specific position.
         /// </summary>
         /// <param name="position">Origin of the detection range</param>
         /// <param name="radius">Radius of the range</param>
+        /// <param name="onlyCheckWorld">If this boolean is true, the CircleCast will ignore all colliders that are not a world collider.</param>
         /// <returns>List of the colliders</returns>
-        public IEnumerable<Collider> CircleCast(Vector2 position, float radius)
+        public IEnumerable<Collider> CircleCast(Vector2 position, float radius, bool onlyCheckWorld)
         {
+            CircleCollider circle = new(new Transform(position, 0, Vector2.One * radius));
+            
             (int x, int y) = GetRegionFromPosition(position);
+
+            bool worldCollides = Collider.CheckCollision(circle);
+
+            if (onlyCheckWorld)
+            {
+                return worldCollides ? new List<Collider> {Collider} : new List<Collider>();
+            }
 
             List<Entity> entities = CheckEntitiesInRegion<Entity>(x, y, radius);
             List<Collider> colliders = (from e in entities where e.Collider != null select e.Collider).ToList();
-            CircleCollider circle = new(new Transform(position, 0, Vector2.One * radius));
-            if (Collider.CheckCollision(circle)) colliders.Add(Collider);
+            
+            if (worldCollides) colliders.Add(Collider);
             return colliders;
         }
 
