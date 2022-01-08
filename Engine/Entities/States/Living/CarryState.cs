@@ -17,6 +17,7 @@ namespace AntEngine.Entities.States.Living
         ///     Represents the total field of view in which the entity can detect obstacles.
         /// </summary>
         private const float ObstacleFieldOfView = 2F * MathF.PI / 3F;
+        private const float WallAvoidanceFactor = 10000F;
 
         private static CarryState _instance;
 
@@ -60,7 +61,7 @@ namespace AntEngine.Entities.States.Living
                         obstacleDetectRadius, true));
 
                 collisions = collisions.Where(collider => collider is not CircleCollider).ToList();
-                if (collisions.Count > 0) perceptionMap.Weights[opposite] += 1 / 3F;
+                if (collisions.Count > 0) perceptionMap.Weights[opposite] += WallAvoidanceFactor;
             }
 
             ant.Move(ant.MovementStrategy.Move(perceptionMap));
