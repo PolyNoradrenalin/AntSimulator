@@ -89,7 +89,7 @@ namespace App.UIElements
         {
             IRenderer renderer = entity switch
             {
-                Ant ant => new AntRenderer(ant, AntTexture),
+                Ant ant => new AntRenderer(ant, AntTexture, Color.Black),
                 Colony colony => new ColonyRenderer(colony, ColonyTexture),
                 ResourceEntity resource => new EntityRenderer(resource, CircleTexture, Color.Green),
                 FoodPheromone foodPheromone => new EntityRenderer(foodPheromone, CircleTexture, Color.Red),
