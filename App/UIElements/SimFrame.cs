@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using AntEngine;
 using AntEngine.Colliders;
 using AntEngine.Entities;
 using AntEngine.Entities.Ants;
 using AntEngine.Entities.Colonies;
+using AntEngine.Resources;
 using App.Renderers;
 using App.Renderers.EntityRenderers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Vector2 = System.Numerics.Vector2;
 
 namespace App.UIElements
 {
@@ -24,6 +27,15 @@ namespace App.UIElements
         public static Texture2D ColonyTexture;
 
         private readonly IList<IRenderer> _renderers;
+        private readonly PaintBrushSelection _paintBrushSelection;
+        private PaintBrushSelection.PaintBrushState _paintBrushState = PaintBrushSelection.PaintBrushState.Wall;
+
+        Resource _food = new Resource("food", "fruit");
+        Vector2 _colonyScale = Vector2.One * 20F;
+        private int _colonySpawnCost = 10;
+        private int _colonyStockpileQuantity = 50;
+        private Vector2 _foodScale = Vector2.One * 10F;
+        private int _foodValue = 50;
 
         public SimFrame(Rectangle rect, World world) : base(rect)
         {
@@ -32,29 +44,78 @@ namespace App.UIElements
             world.EntityAdded += OnEntityAdded;
             world.EntityRemoved += OnEntityRemoved;
             MouseHeld += OnMouseHeld;
+            MouseReleased += (arg1, arg2, arg3) => OnMouseReleased(arg1, arg2, arg3);
 
             WorldRenderer worldRenderer = new WorldRenderer(world.Collider, EntityTexture);
             _renderers.Add(worldRenderer);
             // TODO: Unsubscribe to allow GC.
+
+            Rectangle paintBrushSelectionRectangle = new Rectangle(rect.Width - 200, rect.Height / 2, 32, 32 * 3);
+
+            PaintBrushSelection paintBrushSelection =
+                new PaintBrushSelection(paintBrushSelectionRectangle, PaintBrushSelection.PaintBrushState.Wall);
+            _renderers.Add(paintBrushSelection);
+
+            paintBrushSelection.PaintBrushStateChange += OnBrushStateChange;
+        }
+
+        private void OnBrushStateChange(PaintBrushSelection.PaintBrushState state)
+        {
+            _paintBrushState = state;
         }
 
         private void OnMouseHeld(MouseState mouseState, UIElement arg2, Rectangle canvasOffset)
         {
             (int worldPixelWidth, int worldPixelHeight) = WorldRenderer.WorldPixelSize(canvasOffset, SimWorld.Size);
-            
-            (float mouseX, float mouseY) = mouseState.Position.ToVector2();
-            (float relativeX, float relativeY) = (mouseX - Position.X, Size.Height - (mouseY - Position.Y));
-            (float simX, float simY) = (SimWorld.Size.X * (relativeX / worldPixelWidth), SimWorld.Size.Y * (relativeY / worldPixelHeight));
-            (int worldDivX, int worldDivY) = (
-                (int) MathF.Round(relativeX / worldPixelWidth * SimWorld.Collider.Subdivision),
-                (int) MathF.Round(relativeY / worldPixelHeight * SimWorld.Collider.Subdivision));
+
+            (int worldDivX, int worldDivY) = GetWorldDivisionCoords(mouseState, worldPixelWidth, worldPixelHeight);
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                if (0 <= worldDivX && worldDivX < World.WorldColliderDivision &&
-                    0 <= worldDivY && worldDivY < World.WorldColliderDivision)
+                if (0 > worldDivX || worldDivX >= World.WorldColliderDivision || 0 > worldDivY ||
+                    worldDivY >= World.WorldColliderDivision)
+                    return;
+
+                switch (_paintBrushState)
                 {
-                    SimWorld.Collider.Matrix[worldDivY][worldDivX] = true;
+                    case PaintBrushSelection.PaintBrushState.Wall:
+                        SimWorld.Collider.Matrix[worldDivY][worldDivX] = true;
+                        SimWorld.ApplyEntityBuffers();
+                        break;
+                }
+            }
+        }
+
+        private void OnMouseReleased(MouseState mouseState, UIElement arg2, Rectangle canvasOffset)
+        {
+            (int worldPixelWidth, int worldPixelHeight) = WorldRenderer.WorldPixelSize(canvasOffset, SimWorld.Size);
+
+            (float simX, float simY) = GetWorldCoords(mouseState, worldPixelWidth, worldPixelHeight);
+
+            if (mouseState.LeftButton == ButtonState.Released)
+            {
+                if (0 > simX || simX >= SimWorld.Size.X || 0 > simY || simY >= SimWorld.Size.Y)
+                    return;
+
+                switch (_paintBrushState)
+                {
+                    case PaintBrushSelection.PaintBrushState.Colony:
+                        Colony colony = new Colony(SimWorld,
+                            (name, transform, world, _) => new Ant("Ant", transform, world))
+                        {
+                            Transform = {Position = new Vector2(simX, simY), Scale = _colonyScale}
+                        };
+                        colony.SpawnCost.AddResource(_food, _colonySpawnCost);
+                        colony.Stockpile.AddResource(_food, _colonyStockpileQuantity);
+                        SimWorld.ApplyEntityBuffers();
+                        break;
+                    case PaintBrushSelection.PaintBrushState.Food:
+                        ResourceEntity unused = new ResourceEntity(SimWorld, _foodValue, _food)
+                        {
+                            Transform = {Position = new Vector2(simX, simY), Scale = _foodScale}
+                        };
+                        SimWorld.ApplyEntityBuffers();
+                        break;
                 }
             }
         }
@@ -64,11 +125,12 @@ namespace App.UIElements
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             base.Render(spriteBatch, gdm, canvasOffset);
-            
+
             foreach (IRenderer r in _renderers)
             {
                 r.Render(spriteBatch, gdm,
-                    new Rectangle(Position.X + canvasOffset.Left, Position.Y + canvasOffset.Top, Size.Width, Size.Height));
+                    new Rectangle(Position.X + canvasOffset.Left, Position.Y + canvasOffset.Top, Size.Width,
+                        Size.Height));
             }
         }
 
@@ -102,6 +164,37 @@ namespace App.UIElements
 
                 if (entityRenderer.Entity.Equals(entity)) RemoveRenderer(renderer);
             }
+        }
+
+        /// <summary>
+        /// Returns the relative coordinates of the mouse.
+        /// Represents the value in pixels inside the SimFrame.
+        /// </summary>
+        private (float relativeX, float relativeY) GetRelativeCoords(MouseState mouseState)
+        {
+            (float mouseX, float mouseY) = mouseState.Position.ToVector2();
+            return (mouseX - Position.X, Size.Height - (mouseY - Position.Y));
+        }
+
+        /// <summary>
+        /// Returns the coordinates of the mouse in relation to the World.
+        /// </summary>
+        private (float X, float Y) GetWorldCoords(MouseState mouseState, int worldPixelWidth, int worldPixelHeight)
+        {
+            (float relativeX, float relativeY) = GetRelativeCoords(mouseState);
+
+            return (SimWorld.Size.X * (relativeX / worldPixelWidth), SimWorld.Size.Y * (relativeY / worldPixelHeight));
+        }
+
+        /// <summary>
+        /// Returns index of the mouse's position corresponding to WorldCollider array.
+        /// </summary>
+        private (int X, int Y) GetWorldDivisionCoords(MouseState mouseState, int worldPixelWidth, int worldPixelHeight)
+        {
+            (float relativeX, float relativeY) = GetRelativeCoords(mouseState);
+
+            return ((int) MathF.Round(relativeX / worldPixelWidth * SimWorld.Collider.Subdivision),
+                (int) MathF.Round(relativeY / worldPixelHeight * SimWorld.Collider.Subdivision));
         }
     }
 }
