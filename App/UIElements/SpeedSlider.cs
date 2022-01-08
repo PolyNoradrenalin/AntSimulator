@@ -36,10 +36,6 @@ namespace App.UIElements
             DecreaseButton.SpriteRectangle = DecreaseButtonPosition;
             PauseButton.SpriteRectangle = PlayButtonPosition;
             IncreaseButton.SpriteRectangle = IncreaseButtonPosition;
-            
-            DecreaseButton.Color = Color.White;
-            PauseButton.Color = Color.White;
-            IncreaseButton.Color = Color.White;
 
             DecreaseButton.MouseReleased += OnDecreaseMouseRelease;
             PauseButton.MouseReleased += OnPauseMouseRelease;

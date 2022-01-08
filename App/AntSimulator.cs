@@ -60,37 +60,13 @@ namespace App
             
             _renderers.Add(mainSimFrame);
 
-            Resource food = new Resource("food", "Test Food");
-
-            Colony colony = new Colony(_world, (name, transform, world, _) => new Ant("AntTeam1", transform, world));
-            colony.Transform.Position = Vector2.One * 500F;
-            colony.Transform.Scale = Vector2.One * 20F;
-            colony.SpawnCost.AddResource(food, 100);
-            colony.Stockpile.AddResource(food, 1000);
-            colony.Spawn(10);
-            
-            Colony colony2 = new Colony(_world, (name, transform, world, _) => new Ant("AntTeam2", transform, world));
-            colony2.Transform.Position = Vector2.One * 420F;
-            colony2.Transform.Scale = Vector2.One * 20F;
-            colony2.SpawnCost.AddResource(food, 100);
-            colony2.Stockpile.AddResource(food, 1000);
-            colony2.Spawn(10);
-
-            for (int i = 0; i < 5; i++)
-            {
-                ResourceEntity foodEntity = new ResourceEntity(_world, 100000, food);
-                foodEntity.Transform.Position = new Vector2(
-                    new Random().Next(100, 800),
-                    new Random().Next(100, 800));
-                foodEntity.Transform.Scale = Vector2.One * 10;
-            }
-
-            
-            SpeedSlider speedSlider = new SpeedSlider(new Rectangle(600, 20, 3 * 32, 32), 1, 1000000000);
+            SpeedSlider speedSlider = new SpeedSlider(new Rectangle(600, 20, 3 * 32, 32), 1, 16);
             
             _renderers.Add(speedSlider);
             
             speedSlider.SpeedChange += OnSpeedSliderChange;
+            
+            _world.ApplyEntityBuffers();
         }
 
         protected override void LoadContent()
@@ -104,6 +80,7 @@ namespace App
             
             Button.DefaultTexture = Content.Load<Texture2D>("UIElements/Button");
             SpeedSlider.SpeedSliderSpriteSheet = Content.Load<Texture2D>("UIElements/SpeedSliderButtonSpriteSheet");
+            PaintBrushSelection.PaintBrushSpriteSheet = Content.Load<Texture2D>("UIElements/PaintBrushButtonSpriteSheet");
             TextLabel.Font = Content.Load<SpriteFont>("UIElements/TextFont");
         }
 
