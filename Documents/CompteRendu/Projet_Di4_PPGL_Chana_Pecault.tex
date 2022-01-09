@@ -1,0 +1,164 @@
+%fichier : Projet_Di4_PPGL_Chana_Pecault.tex
+%Date : 21/09/2021
+%Version : 1.00
+%Modif : 21/09/2021
+
+\documentclass{EPUProjetDi}
+
+\makeindex
+
+%remplir les lignes suivantes avec les informations vous concernant :
+\title[Simulation d'une colonie de fourmis]{Simulation d'une colonie de fourmis}
+
+\projet{Projet de Programmation et Génie Logiciel}
+
+\author{
+Narvin Chana\\ %Attention : toujours écrire d'abord le prénom puis le nom (ne pas mettre tout le nom en majuscules)
+\noindent[\url{narvin.chana@etu.univ-tours.fr}]\\
+Noé Pécault\\ %Attention : toujours écrire d'abord le prénom puis le nom (ne pas mettre tout le nom en majuscules)
+\noindent[\url{noe.pecault@etu.univ-tours.fr}]}
+
+\encadrant{Nicolas Monmarché\\ %
+\noindent[\url{nicolas.monmarche@univ-tours.fr}]\\~\\
+Polytech Tours\\
+Département Informatique\\~ %
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\maketitle
+
+\pagenumbering{roman}
+\setcounter{page}{0}
+
+{
+%on réduit momentanément l'écart entre paragraphes pour ne pas trop aérer la table des matières
+\setlength{\parskip}{0em}
+
+\tableofcontents
+
+%\listoffigures
+%rq1 : si vous n'avez pratiquement pas de figures, laissez la ligne précédente en commentaire
+
+%\listoftables
+%rq1 : si vous n'avez pratiquement pas de tables, laissez la ligne précédente en commentaire
+}
+
+
+\start
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter*{Introduction}
+%le 2 lignes suivantes permettent d'ajouter l'introduction à la table des matières
+%et d'afficher "Introduction en haut des pages"
+\addcontentsline{toc}{chapter}{\numberline{}Introduction}
+\markboth{\hspace{0.5cm}Introduction}{}
+
+
+\chapter{Conception et décisions}
+
+\section{Objectifs et contraintes}
+
+\section{Engine}
+
+\subsection{Structure générale}
+
+\subsection{Entités}
+
+\subsection{World}
+
+\subsection{Colliders}
+
+\subsection{Fourmis}
+
+\subsubsection{Comportement d'une fourmi}
+
+\subsubsection{Colonie}
+
+\subsubsection{Ressources}
+
+\subsubsection{Pheromones}
+
+\subsubsection{Entité vivante qui se déplace}
+
+\subsubsection{Machine à états}
+
+\section{Application}
+
+\subsection{Présentation de la structure}
+
+\subsubsection{Elements d'interface}
+
+\chapter{Réalisation}
+
+\section{Choix des outils et technologies}
+
+\section{Engine}
+
+\section{Application}
+
+\section{Tests}
+
+\chapter{Résultats et perspectives}
+
+\section{Etat des lieux}
+
+\section{Apports}
+
+\section{Evolutions possibles}
+
+
+%--------------------------------------------------------------------------------
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{\numberline{}Conclusion}
+\markboth{Conclusion}{}
+ ultricies ut accumsan magna interdum. Nullam ut malesuada urna. Donec ut sem est. Curabitur ut neque elit. Sed aliquam sodales libero ut rutrum. Duis eu massa quam, rutrum posuere sapien. Suspendisse turpis nulla, eleifend ut faucibus consequat, laoreet varius tortor. Vestibulum accumsan sagittis hendrerit. Nunc tristique ligula quis ligula faucibus adipiscing. Aenean interdum, odio at volutpat interdum, justo nunc tristique elit, quis elementum nisi ante id arcu. Mauris commodo posuere cursus. Ut nec massa odio. Maecenas at eros arcu, quis rhoncus magna. Sed pellentesque dictum nulla nec pretium.
+
+%--------------------------------------------------------------------------------
+%exemple de bibliographie
+\begin{thebibliography}{99}
+\label{sec:biblio}
+\bibitem{ref1}  détail bibliographique de la ref1
+\bibitem{ref2}  détail bibliographique de la ref2
+\bibitem{ref3}  détail bibliographique de la ref3
+\bibitem{ref4}  détail bibliographique de la ref4
+\bibitem{ref5}  détail bibliographique de la ref5
+\end{thebibliography}
+
+
+%--------------------------------------------------------------------------------
+%si on donne des annexes :
+\appendix
+\addcontentsline{toc}{part}{\numberline{}Annexes}
+
+%--------------------------------------------------------------------------------
+
+\chapter{Liens utiles\label{sec:liens_utiles}}
+Voici une petite liste d'url intéressantes au sujet de ce projet :
+
+\begin{itemize}
+\item \url{www.polytech.univ-tours.fr}
+\end{itemize}
+
+%--------------------------------------------------------------------------------
+%index : attention, le fichier dindex .ind doit avoir le même nom que le fichier .tex
+%\printindex
+
+%--------------------------------------------------------------------------------
+%page du dos de couverture :
+
+\resume{Integer lorem purus, rutrum quis lacinia in, egestas ut urna. Donec elementum mi id nisi blandit quis ultricies risus semper. Nulla congue tincidunt diam, id tincidunt mauris euismod nec. Nullam faucibus dapibus eros, at consequat odio rutrum quis. Curabitur nisl sem, suscipit in mattis eu, varius a mauris. Ut a augue ac augue fringilla egestas. Etiam non augue felis, in convallis nisi. Maecenas id urna ut justo tempor laoreet in eu ligula. Duis non erat vitae eros rhoncus rutrum sit amet at lorem. Ut tempor cursus ligula, eu bibendum ligula adipiscing eu. Fusce feugiat aliquam dolor, nec interdum nisl convallis vitae.}
+
+\motcles{???, ????, ?????, ?????????, ??, ????}
+
+\abstract{Integer lorem purus, rutrum quis lacinia in, egestas ut urna. Donec elementum mi id nisi blandit quis ultricies risus semper. Nulla congue tincidunt diam, id tincidunt mauris euismod nec. Nullam faucibus dapibus eros, at consequat odio rutrum quis. Curabitur nisl sem, suscipit in mattis eu, varius a mauris. Ut a augue ac augue fringilla egestas. Etiam non augue felis, in convallis nisi. Maecenas id urna ut justo tempor laoreet in eu ligula. Duis non erat vitae eros rhoncus rutrum sit amet at lorem. Ut tempor cursus ligula, eu bibendum ligula adipiscing eu. Fusce feugiat aliquam dolor, nec interdum nisl convallis vitae.}
+
+\keywords{???, ????, ?????, ?????????, ??, ????}
+
+
+\makedernierepage
+
+
+\end{document}
+%%FIN du fichier
