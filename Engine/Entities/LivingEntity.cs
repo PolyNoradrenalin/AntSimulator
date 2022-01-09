@@ -65,7 +65,7 @@ namespace AntEngine.Entities
         /// <param name="dir"></param>
         public void Move(Vector2 dir)
         {
-            Transform.Rotation = dir.Angle(Vector2.UnitX);
+            Transform.Rotation = MathF.Atan2(dir.Y, Vector2.Dot(dir, Vector2.UnitX));
 
             Vector2 lastPos = Transform.Position;
             Vector2 movement = dir * Speed;
