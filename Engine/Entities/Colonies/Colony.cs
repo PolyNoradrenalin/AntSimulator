@@ -107,7 +107,7 @@ namespace AntEngine.Entities.Colonies
 
                 Vector2 position = SpawnPosition;
                 Vector2 direction = Vector2.Normalize(position - Transform.Position);
-                float angle = direction.Angle(Vector2.UnitX);
+                float angle = MathF.Atan2(direction.Y, Vector2.Dot(direction, Vector2.UnitX));
                 
                 IColonyMember pop = SpawnMethod("", new Transform(position, angle, Vector2.One * 10F), World, this);
                 // TODO : REMOVE POP MEMBER

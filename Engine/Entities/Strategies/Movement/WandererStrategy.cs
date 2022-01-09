@@ -25,13 +25,12 @@ namespace AntEngine.Entities.Strategies.Movement
         /// <param name="random"></param>
         /// <param name="oldDirFactor"></param>
         public WandererStrategy(float random, float oldDirFactor = DefaultOldDirFactor) : this(random, Vector2.Zero, oldDirFactor) { }
-
+        
         /// <summary>
         ///     Creates a wanderer strategy with a random factor between 0 (inclusive) and 1 (inclusive).
         ///     0 means that the direction will only be defined by the perception map and 1 only by the random direction.
         /// </summary>
         /// <param name="random"></param>
-        /// <param name="startDir"></param>
         /// <param name="oldDirFactor"></param>
         public WandererStrategy(float random, Vector2 startDir, float oldDirFactor = DefaultOldDirFactor)
         {
@@ -42,7 +41,7 @@ namespace AntEngine.Entities.Strategies.Movement
 
         public Vector2 Move(PerceptionMap map)
         {
-            float oldDirAngle = _dir.Angle(Vector2.UnitX);
+            float oldDirAngle = MathF.Atan2(_dir.Y, Vector2.Dot(_dir, Vector2.UnitX));
             
             float randomAngle = (float) new Random().NextDouble() * RandomAngleRange;
             float centeredAngle = randomAngle - RandomAngleRange / 2;

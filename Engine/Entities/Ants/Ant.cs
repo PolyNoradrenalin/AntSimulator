@@ -113,10 +113,11 @@ namespace AntEngine.Entities.Ants
                 Vector2 antDir = Transform.GetDirectorVector();
                 Vector2 pheromoneDirection = e.Transform.Position - Transform.Position;
 
-                float angle = antDir.Angle(Vector2.UnitX);
+                float angle = MathF.Atan2(pheromoneDirection.Y, Vector2.Dot(pheromoneDirection, Vector2.UnitX));
                 angle = angle < 0F ? angle + 2 * MathF.PI : angle;
 
-                float angleDiff = antDir.Angle(pheromoneDirection);
+                float angleDiff = MathF.Atan2(antDir.Y * pheromoneDirection.X - antDir.X * pheromoneDirection.X,
+                    antDir.X * pheromoneDirection.X + antDir.Y * pheromoneDirection.Y);
 
                 int weightListIndex = (int) Math.Min(PerceptionDistance-1, (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision)));
 
