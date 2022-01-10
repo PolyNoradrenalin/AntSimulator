@@ -4,6 +4,7 @@
 %Modif : 21/09/2021
 
 \documentclass{EPUProjetDi}
+\usepackage[bottom]{footmisc}
 
 \makeindex
 
@@ -84,21 +85,185 @@ et ce dont on en a tiré.
 
 \chapter{Conception et décisions}
 
+Ce chapitre traite des objectifs et contraintes du projet, de son architecture et des interactions entre les différents modules. 
+Nous y détaillons aussi les différentes entités et structures qui appartiennent à la simulation ainsi que la structure de la partie applicative.
+
 \section{Objectifs et contraintes}
+
+\subsection*{Système décentralisé}
+
+Un système décentralisé \footnote[1]{Page wikipedia \url{https://en.wikipedia.org/wiki/Decentralised_system}} est un système composé de sous-composants qui accomplissent des objectifs individuellement afin
+de réussir un objectif global.
+Les entités qui composent le système doivent interagir entre elles non pas via une intelligence globale mais par des moyens
+de communication plus locaux.
+
+Le problème de la simulation de colonie est une application typique de ce principe et se retrouve même dans la nature.
+Dans une vraie fourmilière, il n'y a aucune entité qui donne les ordres aux autres et donc chaque fourmi connaît sa mission
+pour faire prospérer la colonie. 
+
+Il est donc essentiel pour notre simulation de respecter cette architecture et chaque fourmi doit donc prendre ses décisions
+avec seulement les informations qui lui sont accessibles.
+
+\subsection*{Simulation personnalisable}
+
+La simulation doit aussi être un outil facile à utiliser afin de tester des configurations initiales différentes.
+Il en va de même pour les constantes de simulation comme la portée de perception des fourmis, leur vitesse et toutes les autres.
+
+Nous cherchons donc à avoir une interface graphique simple à utiliser qui permettra de placer les éléments de la simulation à la guise
+de l'utilisateur.
+
+\subsection*{Séparation Moteur et Application}
+
+Une des contraintes clés du projet est la séparation de la partie \textbf{Moteur de simulation} et \textbf{Application}.
+Cela permet de réutiliser ce moteur pour d'autres applications comme par exemple pour générer des trajectoires des fourmis 
+pour une animation.
+
+Cela nous contraint donc à faire en sorte que le moteur n'ait absolument aucune dépendance envers la partie application.
+
+\subsection*{Abstraction des entités pour l'évolutivité}
+
+Nous avons intérêt à garantir une certaine évolutivité de la simulation car le comportement des fourmis que nous avons conceptualisé
+n'est pas forcément exact et nous devions nous permettre de facilement le changer.
+
+Il est même aussi possible que nous souhaitions utiliser ce même moteur pour simuler des comportements autre que
+des fourmis ce qui force un certain niveau d'abstraction.
+
+\subsection*{Optimisation future}
+
+La simulation de colonie de fourmis est un problème très gourmand en termes de ressources de calcul car il est nécessaire de calculer les mouvements
+de chaque fourmi à une cadence assez élevé pour atteindre un taux de mise à jour par seconde proche suffisant pour que la simulation paraisse fluide 
+(60 images par secondes).
+
+Une piste d'optimisation dont nous avons eu conscience au moment de la conception est de paralléliser le calcul des fourmis tout en s'assurant de maintenir
+l'intégrité des résultats de la simulation (pas de problème de concurrence).
+
+Nous cherchons donc une architecture nous ouvrant la possibilité d'implémenter facilement une telle technique d'optimisation sans avoir à
+refaire l'architecture de 0. 
+
+\pagebreak
 
 \section{Moteur}
 
 \subsection{Structure générale}
 
+Le moteur de simulation est donc là où les calculs de trajectoire et de décisions des fourmis seront effectués.
+Sa structure est simple et est très largement inspiré de ce qu'on peut trouver dans le domaine du jeu vidéo et 
+cela n'est pas étonnant car notre simulation se rapporte beaucoup à un jeu vidéo.
+
+Tout d'abord, les individus de notre simulation sont des \textbf{Entités}. Une entité est un objet associé à un
+\textbf{Transform} qui représente un état physique dans le monde (position, rotation, taille) et aussi d'un comportement
+qui lui est défini dans une méthode Update() sous la forme d'une suite d'instructions.
+
+Cet objet Transform\footnote{Page du manuel d'Unity sur l'objet Transform \url{https://docs.unity3d.com/Manual/class-Transform.html}} 
+est une inspiration directe du jeu vidéo et plus précisément du moteur de jeu Unity
+
+On a l'objet qui sert de chef d'orchestre à la simulation qui est le \textbf{Monde}. Il possède les propriétés concernant 
+l'environnement des fourmis et contient aussi la totalité des entités présentent dans la simulation.
+Lorsqu'il est mis à jour, le monde doit donc mettre à jour la totalité des entités qu'il contient pour que chaque entité 
+puisse exécuter ses actions.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.8]{moteur_structuregenerale.png}
+    \caption{Flux de mise à jour}
+    \label{fig:flow_update}
+\end{figure}
+
+\autoref{fig:flow_update} montre le processus de mise à jour de la simulation qui commence  par le monde et 
+qui est distribuée à toutes les entités qu'il contient.
+
+\pagebreak
 \subsection{Entités}
 
+\subsubsection*{Définition}
+
+Ce que nous appelons \textbf{Entité} est un objet possédant un état physique qui est composé d'une position, une rotation et une taille (\textbf{Transform}) 
+ainsi que d'une logique interne que l'on appellera comportement.
+
+Cette association de position, rotation et d'une taille est ce qu'on appelle un \textbf{Transform} et caractérise l'existence dans le monde de l'entité.
+La définition de cet objet nous est utile car elle nous permet de manipuler l'état de l'entité dans une même structure et d'appliquer des transformations
+linéaires simplement dans le cas où l'on voudrait faire un système de coordonnées relatif à une autre entité.
+
+Les entités sont les briques essentielles à la simulation car elles représentent les objets de notre simulation. 
+
+\subsubsection*{Spécialisations des entités}
+
+La classe \textbf{Entity} est donc la version la plus abstraite d'un de ces objets et chacune de ses spécialisations
+représentera une entité au comportement différent pouvant exister dans la simulation.
+
+Les comportements ajoutés sont par exemple le système de vie, une machine à états ou même le comportement d'une fourmi.
+Le dernier composant présent dans chaque entité est le \textbf{Collider} qui est la boîte de collision d'une entité et peut se définir 
+de différentes formes selon les besoins. Il est utile dans le calcul des mouvements car il permet de tester si une entité ne cherche pas 
+à se déplacer dans un mur.
+
+\autoref{fig:struct_entities_spec} montre l'arborescence des entités avec ce que chacune apporte comme fonctionnalité.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{entities_specialisations.png}
+    \caption{Diagramme des spécialisations des entités avec leurs apports}
+    \label{fig:struct_entities_spec}
+\end{figure}
+
 \subsection{World}
+
+\subsubsection*{Définition}
+
+Le monde est l'espace dans lequel la simulation se déroule et possède donc les propriétés de taille de la simulation ainsi que le Collider
+gérant les murs de la simulation.
+C'est lui qui stocke toutes les entités présentent dans la simulation et s'occupe de les mettre à jour lorsqu'il est lui-même mis à jour. 
+\ref{fig:flow_update}
+
+Par souci d'optimisation, le monde est divisé en régions qui sont chacune une liste des entités présentes dans la région. 
+Cela permet de ne pas avoir à chercher des éléments parmi la liste complète de toutes les entités du monde.
+Le monde est donc responsable du maintient de la cohérence de ces régions et met à jour toutes ces listes en fonction des positions
+des entités à chaque instant T.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{world.png}
+    \caption{Schéma d'un monde avec ses régions}
+    \label{fig:world_scheme}
+\end{figure}
+
+Les murs de la simulation sont représentés par le WorldCollider qui est un second découpage (indépendant des régions) ayant pour but 
+de stocker les cases traversables ou non par les autres entités.
+Cette représentation des murs sous forme d'une matrice de booléens nous permet d'avoir une structure analogue à une image ayant pour chaque pixel
+une valeur \textbf{Vrai} pour représenter un mur ou \textbf{Faux} pour représenter une case traversable.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.4]{world_colliderdrawio.png}
+    \caption{Schéma d'un monde avec ses murs }
+    \label{fig:world_collider_scheme}
+\end{figure}
+
 
 \subsection{Colliders}
 
 \subsection{Fourmis}
 
 \subsubsection{Comportement d'une fourmi}
+
+\subsubsection{Machine à états}
+
+\paragraph{}
+Durant le projet, nous nous sommes inspirés des cours de génie logiciel afin d'utiliser des design patterns pour répondre à des problèmes.
+
+\paragraph{}
+Le premier réel problème de design que nous avons découvert était en relation avec la manière de mettre en code les différents états que la fourmi peut avoir.
+La solution "évidente" à ce problème est le design pattern \textit{State} (États).
+Cela nous a permis d'isoler les différents comportements que la fourmi peut avoir et donc de rendre plus facile la relecture de code et le debugging.
+Sans utiliser ce design pattern, le code serait très rapidement devenu illisible et il aurait été beaucoup plus compliqué de rajouter des états.
+
+\paragraph{}
+L'autre problème que nous avons relevé après la phase de conception initiale est par rapport aux mouvements de la fourmi. 
+Dans certains cas il peut être utile d'implémenter rapidement des stratégies différentes sans pour autant changer des gros morceaux de codes afin d'en faire une comparaison de leurs efficacité.
+C'est ici que le design pattern \textit{Strategy} (Stratégie) intervient. Il permet de rapidement comparer des méthodes de déplacement en attribuant à chaque colonie (ou même à un ensemble de fourmis) une
+stratégie de déplacement.
+Malheureusement, nous n'avons pas eu le temps d'implémenter des stratégies autres que LineStrategy\footnote{Déplacement dans la direction moyenne de la PerceptionMap.} 
+et WandererStrategy\footnote{Déplacement dans la direction dominante de la PerceptionMap influencée par une variable aléatoire.}.
+
 
 \subsubsection{Colonie}
 
@@ -108,7 +273,6 @@ et ce dont on en a tiré.
 
 \subsubsection{Entité vivante qui se déplace}
 
-\subsubsection{Machine à états}
 
 \section{Application}
 
@@ -179,7 +343,7 @@ Cela nous a permis de repérer des erreurs dans notre code car nous n'avions pas
 Le choix du langage de programmation à utiliser était une décision importante à prendre. Nous avons décidé de coder le projet en C\# car c'est un langage que nous
 n'avons pas encore pu utiliser dans un gros projet. Nous étions au courant du fait que le C\# était très proche du Java et donc il n'y avait pas
 d'inquiétudes sur notre capacité à l'apprendre. Le C\# reprend aussi les concepts de machine virtuelle qui existent en Java ce qui permettrait de build et lancer le projet
-sur n'importe quel système d'exploitation grâce à .net. 
+sur n'importe quel système d'exploitation grâce à .NET. 
 De plus, le C\# est un langage que nous avions pu utiliser lors de petit projets sur Unity mais jamais sur un gros projet comme celui-ci. 
 A l'intérieur de C\# le standard de documentation utilisé est XMLdoc\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/}.}.
 
