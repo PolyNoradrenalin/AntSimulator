@@ -55,12 +55,40 @@ Département Informatique\\~ %
 \addcontentsline{toc}{chapter}{\numberline{}Introduction}
 \markboth{\hspace{0.5cm}Introduction}{}
 
+\paragraph{}
+Le problème de la simulation et de l'optimisation d'une colonie de fourmis est un problème complexe 
+qui met en oeuvre des connaissances dans les domaines de la théorie des graphes, la recherche opérationelle 
+et dans les systèmes décentralisés. Chaque fourmi agi par elle même et l'ensemble des fourmis forme une intelligence
+à part entière qui n'a pas de cerveau centralisé.
+
+Ses applications sont vastes et interviennent dans des domaines tels que les problèmes d'ordonnancements, 
+de routage (ex: réseau Internet ou tournée de véhicules) ou encore le traitement d'image (ex: détection de bords).
+
+Ce problème de simulation de colonie de fourmis nous intéresse depuis longtemps et c'est donc pour cela que dans 
+le cadre du projet de programmation et génie logiciel nous avons choisi de proposer un sujet qui traite de celui-ci.
+
+Notre objectif pour ce projet était de créer une application permettant de simuler les interactions qu'une colonie 
+de fourmis peut avoir avec son environnement. Les fourmis doivent pouvoir explorer les alentours de leur colonie afin 
+de trouver de la nourriture et de la ramener à sa colonie. 
+Nous avions aussi imaginé d'autres fonctionnalités qui pourraient venir se greffer au projet si le temps nous le permettait
+comme des combats entre fourmilières et la possibilité de simuler plusieurs colonies.
+
+En revanche, il n'était pas dans nos objectifs de simuler l'intérieur de la colonie et n'est pas voué à être sur le long terme
+(nous ne prenions donc pas en compte la durée de vie des fourmis).
+
+Il nous était également très important de respecter les principes de génie logiciel qui nous ont été appris durant notre
+parcours à Polytech dans le but de développer une application robuste et facilement extensible.
+
+Au sein de ce rapport, nous présenterons notre démarche pour arriver aux objectifs fixés, le déroulement du projet ainsi que les résultats 
+et ce dont on en a tiré.
 
 \chapter{Conception et décisions}
 
 \section{Objectifs et contraintes}
 
-\section{Engine}
+
+
+\section{Moteur}
 
 \subsection{Structure générale}
 
@@ -94,7 +122,7 @@ Département Informatique\\~ %
 
 \section{Choix des outils et technologies}
 
-\section{Engine}
+\section{Moteur}
 
 \section{Application}
 
@@ -138,7 +166,7 @@ Département Informatique\\~ %
 Voici une petite liste d'url intéressantes au sujet de ce projet :
 
 \begin{itemize}
-\item \url{www.polytech.univ-tours.fr}
+\item {\url{https://github.com/PolyNoradrenalin/AntSimulator} Répertoire GitHub du projet}
 \end{itemize}
 
 %--------------------------------------------------------------------------------
