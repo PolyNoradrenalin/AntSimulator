@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using AntEngine.Colliders;
@@ -13,9 +14,9 @@ namespace AntEngine
     /// </summary>
     public class World
     {
-        public const int WorldColliderDivision = 64;
-        public const int WorldRegionDivision = 256;
-        
+        public readonly int WorldColliderDivision;
+        private readonly int WorldRegionDivision;
+
         /// <summary>
         ///     Size of the world.
         /// </summary>
@@ -32,8 +33,11 @@ namespace AntEngine
 
         private readonly IList<Entity> _entitiesUpdatedBuffer;
 
-        public World(Vector2 size)
+        public World(Vector2 size, int worldColliderDivision = 64, int worldRegionDivision = 256)
         {
+            WorldColliderDivision = worldColliderDivision;
+            WorldRegionDivision = worldRegionDivision;
+            
             Size = size;
             Regions = new List<Entity>[WorldRegionDivision][];
 
@@ -219,7 +223,7 @@ namespace AntEngine
                 int xRegion = x - radius + i;
                 int yRegion = y - radius + j;
 
-                if (xRegion is < 0 or >= WorldRegionDivision || yRegion is < 0 or >= WorldRegionDivision) continue;
+                if (xRegion < 0 || xRegion >= WorldRegionDivision || yRegion < 0 || yRegion >= WorldRegionDivision) continue;
                 foreach (Entity e in Regions[xRegion][yRegion])
                 {
                     if (e is T entity)

@@ -16,6 +16,8 @@ namespace App
 {
     public class AntSimulator : Game
     {
+        private const string PropertiesFileName = "simulator.properties";
+        
         private readonly GraphicsDeviceManager _graphics;
         private readonly List<IRenderer> _renderers;
 
@@ -25,14 +27,24 @@ namespace App
         private DateTime _lastTimeTick;
         private SpriteBatch _spriteBatch;
 
+        public static Properties Properties { get; private set; }
+        
         public AntSimulator()
         {
+            Properties = new Properties(PropertiesFileName);
+            Properties.Save();
+            
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            _world = new World(Vector2.One * 1000);
-            _renderers = new List<IRenderer>();
 
+            float worldX = float.Parse(Properties.Get("world_size_x", "1000"));
+            float worldY = float.Parse(Properties.Get("world_size_y", "1000"));
+            int worldCollider = int.Parse(Properties.Get("world_collider_div", "64"));
+            int worldRegion = int.Parse(Properties.Get("world_region_div", "256"));
+            _world = new World(new Vector2(worldX, worldY), worldCollider, worldRegion);
+            
+            _renderers = new List<IRenderer>();
             TargetTps = _defaultTargetTps;
         }
 
