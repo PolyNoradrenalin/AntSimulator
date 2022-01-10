@@ -8,7 +8,8 @@ namespace App
     /// <summary>
     /// Class used to store and load properties. It is used to
     /// </summary>
-    /// <author>Nick Rimmer (https://stackoverflow.com/questions/485659/can-net-load-and-parse-a-properties-file-equivalent-to-java-properties-class#answer-7696370</author>
+    /// <author> We used the code published by Nick Rimmer 
+    /// Link : (https://stackoverflow.com/questions/485659/can-net-load-and-parse-a-properties-file-equivalent-to-java-properties-class#answer-7696370 </author>
     public class Properties
     {
         private string filename;
