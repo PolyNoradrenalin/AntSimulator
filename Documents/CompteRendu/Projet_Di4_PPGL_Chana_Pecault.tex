@@ -57,7 +57,7 @@ Département Informatique\\~ %
 
 \paragraph{}
 Le problème de la simulation et de l'optimisation d'une colonie de fourmis est un problème complexe 
-qui met en oeuvre des connaissances dans les domaines de la théorie des graphes, la recherche opérationelle 
+qui met en oeuvre des connaissances dans les domaines de la théorie des graphes, la recherche opérationnelle 
 et dans les systèmes décentralisés. Chaque fourmi agi par elle même et l'ensemble des fourmis forme une intelligence
 à part entière qui n'a pas de cerveau centralisé.
 
@@ -85,8 +85,6 @@ et ce dont on en a tiré.
 \chapter{Conception et décisions}
 
 \section{Objectifs et contraintes}
-
-
 
 \section{Moteur}
 
@@ -120,9 +118,110 @@ et ce dont on en a tiré.
 
 \chapter{Réalisation}
 
+\paragraph{}
+Ce chapitre présente le déroulement du projet, les aléas qui sont apparus au cours du 
+développement et d'autres aspects de développement qu'il nous a semblé 
+utile de faire apparaître.
+
 \section{Choix des outils et technologies}
 
+\subsection{Outils de collaboration}
+
+\paragraph{}
+Lors des projets de 3ème année, nous avons beaucoup appris sur comment utiliser
+Git. Nous avons choisi d'utiliser GitHub en tant qu'outil de versionnage en raison de notre aise avec et
+car le site possède un grand nombre de fonctionnalités nous permettant de mieux communiquer entre
+nous.
+
+\paragraph{}
+Lors du projet nous avons adopté une méthode de travail basé sur le GitFlow 
+\footnote{Une méthode de travail où on sépare chaque feature ou fix dans une branche séparé.
+Ensuite une fois la feature finie, on fait un \textit{Merge Request} afin de demander la validation des autres développeurs.}. 
+Cela avait pour avantage de nous permettre de suivre les avancements de l'autre personne et de pouvoir 
+apporter des suggestions ou des commentaires sur ce qui a été fait. 
+En fin de compte l'utilisation de workflow nous a permis de posséder des connaissances sur 
+les parties de codes que l'autre à écrit et donc de pouvoir beaucoup avancer chacun de notre
+côté en ne laissant pas l'autre à l'abandon.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=.5]{MergeRequest.png}
+\caption{Exemple de commentaire sur un merge request pour l'ajout de la disparition des phéromones.}
+\label{fig:MergeRequest}
+\end{figure}
+
+\paragraph{}
+En plus des merge requests, GitHub nous permet de créer des \textit{issues}.
+Ces \textit{issues} peuvent être considérés comme des tâches qu'il reste à faire. Au sein de GitHub, nous
+pouvons à tout moment nous approprier une tâche afin d'indiquer qu'on a commencé à travailler dessus.
+
+\paragraph{}
+Ces issues apparaissent au sein du Kanban\footnote{Au sein de ce projet le Kanban était notre tableau de bord et nous permettait de suivre 
+l'avancement et de savoir ce qu'il restait à faire. Plus d'informations : \url{https://en.wikipedia.org/wiki/Kanban_(development)}.}
+intégré à GitHub. Nous avions deux Kanbans, un pour le côté Application et l'autre pour le moteur de simulation.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.4]{Kanban.png}
+\caption{Exemple du tableau de bord côté Application. 
+\\On voit les tâches qui sont en cours de développement et ceux qui sont prêts à être review.}
+\label{fig:Kanban}
+\end{figure}
+
+\paragraph{}
+Un autre élément que nous avons utilisé avec GitHub est la fonctionnalité d'intégration continue. En effet, nous avons configuré notre projet 
+pour lancer tous les tests unitaires à chaque commit effectué sur une branche.
+Cela nous a permis de repérer des erreurs dans notre code car nous n'avions pas le droit de merge une branche lorsque les tests n'étaient pas tous valides.
+
+\subsection{Langage et Langue}
+
+\paragraph{}
+Le choix du langage de programmation à utiliser était une décision importante à prendre. Nous avons décidé de coder le projet en C\# car c'est un langage que nous
+n'avons pas encore pu utiliser dans un gros projet. Nous étions au courant du fait que le C\# était très proche du Java et donc il n'y avait pas
+d'inquiétudes sur notre capacité à l'apprendre. Le C\# reprend aussi les concepts de machine virtuelle qui existent en Java ce qui permettrait de build et lancer le projet
+sur n'importe quel système d'exploitation grâce à .net. 
+De plus, le C\# est un langage que nous avions pu utiliser lors de petit projets sur Unity mais jamais sur un gros projet comme celui-ci. 
+A l'intérieur de C\# le standard de documentation utilisé est XMLdoc\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/}.}.
+
+\paragraph{}
+Pour ce qui est de la langue dans laquelle nous avons codé, nous avons décidé de tout faire en Anglais pour que le code soit facilement
+transmissible et exploitable par d'autres individus dans le monde.
+
+\subsection{Librairie de Tests}
+
+\paragraph{}
+Il existe plusieurs librairie de test au sein de l'environnement dotnet. Les plus utilisés sont XUnit, NUnit et MSTest.
+La bibliothèque que nous avons choisi d'utiliser est XUnit en raison du fait que Noé l'avait déjà utilisé au sein un autre projet.
+
+\subsection{Framework d'affichage}
+
+\paragraph{}
+Au lancement du projet, nous avons dû réfléchir à quel framework utiliser pour faire l'affichage de la simulation.
+Dans un premier temps, nous nous étions intéressé à Avalonia, un framework cross-platform qui est un successeur spirituel de WPF\footnote{WPF ou Windows Presentation Foundation est un framework permettant
+de faire une interface graphique. Aujourd'hui il a beaucoup vieilli et est en train d'être remplacé par des frameworks plus modernes.}.
+On s'est rendu compte qu'Avalonia n'était pas du tout ce qu'on recherchait comme il ne servait qu'à faire des interfaces graphiques et était très peu utilisable pour l'affichage de formes plus complexes.
+
+\paragraph{}
+Nous avons donc dû rechercher une solution alternative et c'est là que nous avons découvert MonoGame. 
+MonoGame est un framework graphique open-source utilisé principalement pour des jeux comme son nom l'indique et qui est basé
+sur le framework XNA (développé par Microsoft et abandonné depuis 2013). 
+Après avoir consulté la documentation MonoGame nous avons pris la décision d'utiliser ce framework. Il nous a permis de simplifier les aspects tels que l'importation et l'utilisation de textures
+et le dessin d'objets à l'écran.
+
+\paragraph{}
+En complément de MonoGame, l'ensemble des textures présent dans le projet ont été créé à la main par nous sur Piskel\footnote{Outil gratuit de dessin de PixelArt en-ligne. 
+Plus d'informations : \url{https://www.piskelapp.com/}.}. 
+
 \section{Moteur}
+
+\subsection{Abstraction des Colliders}
+
+\paragraph{}
+Lorsque nous avons codé les colliders, nous nous sommes rendu compte que la manière initiale dont nous l'avions conçu
+faisait qu'il y avait énormément de duplication de code et qu'il était difficilement maintenable.
+La solution à cela était de déplacer les méthodes de collision dans une classe statique et ensuite chaque collider fait appel à la méthode qu'il a besoin dans la classe statique.
+
+
 
 \section{Application}
 
@@ -130,11 +229,10 @@ et ce dont on en a tiré.
 
 \chapter{Résultats et perspectives}
 
-\section{Etat des lieux}
-
+\section{État des lieux}
 \section{Apports}
 
-\section{Evolutions possibles}
+\section{Évolutions possibles}
 
 
 %--------------------------------------------------------------------------------
