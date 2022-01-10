@@ -57,7 +57,7 @@ namespace AntEngine.Entities
         /// <summary>
         ///     Maximum speed of the ant.
         /// </summary>
-        public float MaxSpeed { get; protected set; }
+        public float MaxSpeed { get; set; }
 
         /// <summary>
         ///     Applies movement to ant's coordinates.

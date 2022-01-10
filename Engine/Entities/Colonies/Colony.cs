@@ -80,7 +80,7 @@ namespace AntEngine.Entities.Colonies
         /// <summary>
         ///     Distance of spawning from the colony center.
         /// </summary>
-        private float SpawnRadius { get; } = 0.1F;
+        public float SpawnRadius { get; set; } = 0.1F;
 
         public override void Update()
         {

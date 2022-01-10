@@ -19,7 +19,6 @@ namespace AntEngine.Entities.Ants
     /// </summary>
     public class Ant : LivingEntity, IColonyMember
     {
-        private const float PheromoneMergeDistance = 5F;
         private const float DefaultMaxSpeed = 1F;
 
         private static readonly Vector2 PheromoneScale = Vector2.One * 2;
@@ -28,10 +27,11 @@ namespace AntEngine.Entities.Ants
         ///     The number of ticks since the ant emitted a pheromone
         /// </summary>
         public int LastEmitTime;
-        
+
+
         private PerceptionMap _currentPerceptionMap;
         private List<Vector2> _perceptionMapKeys;
-        
+
         public Ant(World world) : this("Ant", new Transform(), world)
         {
         }
@@ -39,6 +39,7 @@ namespace AntEngine.Entities.Ants
         public Ant(string name, Transform transform, World world) : this(name, transform, world, new SearchState())
         {
         }
+
 
         //TODO: Some attributes/properties are not initialised with the constructor. Example : MovementStrategy.
 
@@ -58,39 +59,43 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         ///     The ant's current movement strategy.
         /// </summary>
-        public IMovementStrategy MovementStrategy { get; protected set; }
+        public IMovementStrategy MovementStrategy { get; set; }
 
         /// <summary>
         ///     Represents the ant's inventory.
         /// </summary>
-        public ResourceInventory ResourceInventory { get; protected set; } = new();
+        public ResourceInventory ResourceInventory { get; set; } = new();
 
         /// <summary>
         ///     The distance in which the ant can perceive another entity.
         /// </summary>
-        public float PerceptionDistance { get; protected set; } = 50F;
+        public float PerceptionDistance { get; set; } = 50F;
 
         /// <summary>
         ///     Precision that will determine the size of the weights list.
         /// </summary>
-        public int PerceptionMapPrecision { get; } = 24;
+        public int PerceptionMapPrecision { get; set; } = 24;
 
-        public int FoodPheromoneTimeSpan { get; protected set; } = 1200;
-        public int FoodMaxPheromoneTime { get; protected set; } = 1200;
-        public int HomePheromoneTimeSpan { get; protected set; } = 6000;
-        public int HomeMaxPheromoneTime { get; protected set; } = 10000;
+
+        public int FoodPheromoneTimeSpan { get; set; } = 1200;
+        public int FoodMaxPheromoneTime { get; set; } = 1200;
+        public int HomePheromoneTimeSpan { get; set; } = 6000;
+        public int HomeMaxPheromoneTime { get; set; } = 10000;
 
         /// <summary>
         ///     Distance from which an ant can pick up or depose ressources.
         /// </summary>
-        public float PickUpDistance { get; } = 5F;
+        public float PickUpDistance { get; set; } = 5F;
+
 
         public int PickUpCapacity { get; set; } = 15;
+
+        public float PheromoneMergeDistance { get; set; } = 5F;
 
         /// <summary>
         ///     Delay between each emission of a pheromone.
         /// </summary>
-        public int PheromoneEmissionDelay { get; protected set; } = 30;
+        public int PheromoneEmissionDelay { get; set; } = 30;
 
         public Colony Home { get; set; }
 

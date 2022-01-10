@@ -31,4 +31,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Engine\Engine.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Content Include="bin\Debug\net5.0\simulator.properties" />
+    </ItemGroup>
 </Project>
