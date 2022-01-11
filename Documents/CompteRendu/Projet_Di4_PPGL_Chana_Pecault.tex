@@ -338,7 +338,7 @@ qu'on retrouve directement intégré à GitHub. Nous avions deux Kanbans, un pou
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=.4]{kanban.png}
+\includegraphics[scale=.3]{kanban.png}
 \caption{Exemple du tableau de bord côté Application. 
 \\On voit les tâches qui sont en cours de développement et ceux qui sont prêts à être review.}
 \label{fig:Kanban}
@@ -359,7 +359,8 @@ n'avons pas encore pu utiliser au sein du parcours à Polytech. Nous étions au 
 d'inquiétudes sur notre capacité à l'apprendre rapidement. Le C\# reprend aussi les concepts de machine virtuelle qui existent en Java ce qui permettrait de build et lancer le projet
 sur n'importe quel système d'exploitation grâce à .NET.
 De plus, le C\# est un langage que nous avions pu utiliser lors de petit projets sur Unity mais jamais sur un gros projet comme celui-ci. 
-A l'intérieur de C\# le standard de \hyphenation{docu-ment-ation} utilisé est XMLdoc\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/}.}.
+A l'intérieur de C\# le standard de documentation utilisé est XMLdoc\footnote{Plus d'informations : 
+\url{https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/}.}.
 
 \paragraph{}
 Ensuite, il a fallu que nous nous décidions sur quelle convention de nommage nous allions utiliser. 
@@ -419,7 +420,7 @@ lié à une entité.
 Au début du projet, nous avions pour intention d'implémenter cela dans le moteur de simulation. 
 Un collider aurait donc un transform et s'il est rattaché à une entité, le transform du collider serait en coordonnées relatives (pour obtenir sa position réelle, il faudrait faire Entity.Transform + Collider.Transform).
 Il s'avère que cette solution ajoute beaucoup de complexité aux calculs de collision et ne serait même pas utile au sein de la simulation. Nous avons donc pris la décision d'enlever cette 
-fonctionnalité et de lier fortement les colliders aux entités en lui faisant prendre le transform de l'entité auquel il est rattaché.
+fonctionnalité et de lier fortement les colliders aux entités en leur faisant prendre le transform de l'entité à laquelle ils sont rattachés.
 
 \subsection{Temps de simulation ou temps réel ?}
 \paragraph{}
@@ -468,7 +469,40 @@ Nous avons implémenté ce découpage en permettant aux fourmis de récupérer l
 Cette optimisation nous a apporté un énorme gain en performances et a notamment rendu la présence d'un grand nombre de fourmis et de phéromone peu impactant sur les performances.
 
 \subsubsection{Structures de données}
-Un autre élément important dans l'optimisation de la simulation a été le choix des structures de données.
+\paragraph{}
+Un autre élément important dans l'optimisation de la simulation a été le choix des structures de données. 
+On s'est rendu compte que l'objet List<T> en C\# est très efficace lorsqu'on traite des liste de peu d'éléments
+mais, quand il y a un grand nombre d'éléments dans la liste, l'objet HashSet (objet dictionnaire) est beaucoup plus rapide à utiliser
+\footnote{Nous avons basé cette observation sur le poste suivant : \url{https://stackoverflow.com/a/10762995/15541425}} mais prend plus de mémoire.
+Dans notre cas la performance est critique donc nous avons introduit le HashSet là où il y avait des listes de grande taille, 
+c'est à dire principalement dans la récupération d'éléments pour former le perception map d'une fourmi.
+
+\paragraph{}
+On pourrait donc se demander pourquoi nous n'avons pas utilisé un HashSet pour le découpage du monde en régions ? 
+La réponse est simple, pour les objets qui seront accédé souvent le type primitif jagged array
+\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/arrays/jagged-arrays}}
+en C\# est ce qui est conseillé en raison de sa performance.
+
+\paragraph{}
+Enfin, la dernière optimisation que nous avons fait pour les structures de données est au niveau des Properties.
+Un Property\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/properties}}
+en C\# est un type de déclaration de variable qui permet de générer automatiquement les accesseurs d'une classe.
+Ce type permet de simplifier le code et d'éviter aux développeurs d'écrire des méthodes qui vont juste allonger le code pour pas-grand-chose.
+Nous avons remarqué que les properties, malgré leur intérêt évident, sont beaucoup plus lents que des attributs standards. 
+Il a donc été très avantageux pour nous de ne pas utiliser de Property pour les éléments qui sont utilisés fréquemment.
+
+\subsubsection{Fusion de phéromones}
+\paragraph{}
+Un autre problème que nous avons remarqué au même moment que nous avons fait le découpage des régions est le fait qu'après que la simulation soit ouverte depuis longtemps, les fourmis
+auront émis un grand nombre de phéromones. Cela mettait la simulation à genoux en raison du nombre d'entités qui existaient dans le monde. Il fallait donc trouver une solution pour permettre
+d'avoir un grand nombre de phéromones sans pour autant condamner la simulation à perdre en performances après un certain temps.
+Notre solution ici était de faire une fusion de phéromones si elles sont assez proches. La fusion de deux phéromones combine leur attirance pour les fourmis et donc permet de garder les informations
+tout en optimisant plus la simulation. Cette fusion avait une limite supérieure ce qui empêche d'avoir des phéromones qui persistent extrêmement longtemps.
+Cette optimisation, combinée avec le découpage en régions, nous a apporté la plus grande augmentation en vitesse de simulation.
+
+\subsubsection{Garbage Collector}
+\paragraph{}
+
 
 \section{Application}
 
