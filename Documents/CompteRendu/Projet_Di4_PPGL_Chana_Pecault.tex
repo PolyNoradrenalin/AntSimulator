@@ -292,24 +292,25 @@ utile de faire apparaître.
 \subsection{Outils de collaboration}
 
 \paragraph{}
-Lors des projets de 3ème année, nous avons beaucoup appris sur comment utiliser
-Git. Nous avons choisi d'utiliser GitHub en tant qu'outil de versionnage en raison de notre aise avec et
+Lors des projets de 3\textsuperscript{ème} année, nous avons beaucoup appris sur comment utiliser
+Git. Nous avons choisi d'utiliser \textbf{GitHub} en tant qu'outil de versionnage en raison de notre aise avec et
 car le site possède un grand nombre de fonctionnalités nous permettant de mieux communiquer entre
 nous.
 
 \paragraph{}
-Lors du projet nous avons adopté une méthode de travail basé sur le GitFlow 
-\footnote{Une méthode de travail où on sépare chaque feature ou fix dans une branche séparé.
-Ensuite une fois la feature finie, on fait un \textit{Merge Request} afin de demander la validation des autres développeurs.}. 
+Lors du projet nous avons adopté une méthode de travail basé sur le \textbf{GitFlow}\footnote{Une méthode de travail où on sépare chaque feature ou fix dans une branche séparée.
+Ensuite une fois la feature finie, on créé un \textit{Merge Request} afin de demander la validation des autres développeurs.} avec pour seule nuance que nous n'avions pas de branches \textit{dev} ou \textit{release}
+mais plutôt toute modification se fusionnait directement à la branche \textit{main}.
+
 Cela avait pour avantage de nous permettre de suivre les avancements de l'autre personne et de pouvoir 
 apporter des suggestions ou des commentaires sur ce qui a été fait. 
-En fin de compte l'utilisation de workflow nous a permis de posséder des connaissances sur 
-les parties de codes que l'autre à écrit et donc de pouvoir beaucoup avancer chacun de notre
-côté en ne laissant pas l'autre à l'abandon.
+En fin de compte l'utilisation de ce workflow nous a permis de connaître et comprendre 
+les parties de codes que l'autre écrit et donc de pouvoir beaucoup avancer chacun de notre
+côté en ne laissant pas l'autre personne à l'abandon.
 
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=.5]{MergeRequest.png}
+\includegraphics[scale=.5]{merge_request.png}
 \caption{Exemple de commentaire sur un merge request pour l'ajout de la disparition des phéromones.}
 \label{fig:MergeRequest}
 \end{figure}
@@ -317,16 +318,27 @@ côté en ne laissant pas l'autre à l'abandon.
 \paragraph{}
 En plus des merge requests, GitHub nous permet de créer des \textit{issues}.
 Ces \textit{issues} peuvent être considérés comme des tâches qu'il reste à faire. Au sein de GitHub, nous
-pouvons à tout moment nous approprier une tâche afin d'indiquer qu'on a commencé à travailler dessus.
+pouvons à tout moment nous approprier une tâche afin d'indiquer qu'on a commencé à travailler dessus. Cela 
+permet de bien savoir ce sur quoi l'autre personne travaille et également d'avoir un aperçu rapide de ce qu'il reste à faire dans le projet.
 
 \paragraph{}
-Ces issues apparaissent au sein du Kanban\footnote{Au sein de ce projet le Kanban était notre tableau de bord et nous permettait de suivre 
+Il est évident que le nombre d'issues que nous avions au début du projet n'est pas le même qu'à la fin. Au cours du projet nous
+pouvions découvrir des aspects du code à réparer (dans ce cas l'issue serait plutôt un \textit{bug report}) ou encore des fonctionnalités
+importantes auxquelles nous n'avions pas pensés.
+
+\paragraph{}
+Les issues nous ont également permis de débattre entre-nous sur quelle serait la meilleure solution à un problème. Essentiellement, toute utilisation
+de GitHub est dans l'objectif de faciliter la communication et le fait que tout soit bien répertorié nous assure de ne pas oublier des échanges que 
+nous aurions pu avoir.
+
+\paragraph{}
+Ces issues apparaissent au sein de Kanbans \footnote{Au sein de ce projet le Kanban était notre tableau de bord et nous permettait de suivre 
 l'avancement et de savoir ce qu'il restait à faire. Plus d'informations : \url{https://en.wikipedia.org/wiki/Kanban_(development)}.}
-intégré à GitHub. Nous avions deux Kanbans, un pour le côté Application et l'autre pour le moteur de simulation.
+qu'on retrouve directement intégré à GitHub. Nous avions deux Kanbans, un pour l'Application et l'autre pour le moteur de simulation comme ces deux éléments peuvent avancer très facilement en parallèle.
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=.4]{Kanban.png}
+\includegraphics[scale=.4]{kanban.png}
 \caption{Exemple du tableau de bord côté Application. 
 \\On voit les tâches qui sont en cours de développement et ceux qui sont prêts à être review.}
 \label{fig:Kanban}
@@ -335,45 +347,53 @@ intégré à GitHub. Nous avions deux Kanbans, un pour le côté Application et 
 \paragraph{}
 Un autre élément que nous avons utilisé avec GitHub est la fonctionnalité d'intégration continue. En effet, nous avons configuré notre projet 
 pour lancer tous les tests unitaires à chaque commit effectué sur une branche.
-Cela nous a permis de repérer des erreurs dans notre code car nous n'avions pas le droit de merge une branche lorsque les tests n'étaient pas tous valides.
+Cela nous a permis de repérer des erreurs dans notre code car nous avons configuré le repo GitHub pour ne pas avoir le droit de merge une branche lorsque les tests unitaires ne passent pas.
+En plus de cela, nous n'avions pas le droit de faire des commits directement sur la branche main et pour merge une branche il fallait la validation de l'autre personne.
+Tout cela nous a apporté une connaissance plus générale sur le projet.
 
-\subsection{Langage et Langue}
+\subsection{Langages et Langues}
 
 \paragraph{}
-Le choix du langage de programmation à utiliser était une décision importante à prendre. Nous avons décidé de coder le projet en C\# car c'est un langage que nous
-n'avons pas encore pu utiliser dans un gros projet. Nous étions au courant du fait que le C\# était très proche du Java et donc il n'y avait pas
-d'inquiétudes sur notre capacité à l'apprendre. Le C\# reprend aussi les concepts de machine virtuelle qui existent en Java ce qui permettrait de build et lancer le projet
-sur n'importe quel système d'exploitation grâce à .NET. 
+Le choix du langage de programmation à utiliser était une décision importante à prendre. Nous avons décidé de faire ce projet en C\# car c'est un langage que nous
+n'avons pas encore pu utiliser au sein du parcours à Polytech. Nous étions au courant du fait que le C\# était très proche du Java et donc il n'y avait pas
+d'inquiétudes sur notre capacité à l'apprendre rapidement. Le C\# reprend aussi les concepts de machine virtuelle qui existent en Java ce qui permettrait de build et lancer le projet
+sur n'importe quel système d'exploitation grâce à .NET.
 De plus, le C\# est un langage que nous avions pu utiliser lors de petit projets sur Unity mais jamais sur un gros projet comme celui-ci. 
-A l'intérieur de C\# le standard de documentation utilisé est XMLdoc\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/}.}.
+A l'intérieur de C\# le standard de \hyphenation{docu-ment-ation} utilisé est XMLdoc\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/}.}.
+
+\paragraph{}
+Ensuite, il a fallu que nous nous décidions sur quelle convention de nommage nous allions utiliser. 
+Malgré notre envie d'utiliser celle présenté par notre enseignant en cours de C++ en 3\textsuperscript{ème} année, nous avons découvert la convention 
+proposée par Microsoft pour le C\#\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions}} qui nous a particulièrement plu.
+Dans une volonté de vouloir rester polyvalent et malléable en terme de méthodes de travail, nous avons décidé d'adopter cette convention.
 
 \paragraph{}
 Pour ce qui est de la langue dans laquelle nous avons codé, nous avons décidé de tout faire en Anglais pour que le code soit facilement
-transmissible et exploitable par d'autres individus dans le monde.
+transmissible et exploitable par d'autres individus dans le monde, chose qui dans le contexte de la mondialisation reste très important.
 
 \subsection{Librairie de Tests}
 
 \paragraph{}
-Il existe plusieurs librairie de test au sein de l'environnement dotnet. Les plus utilisés sont XUnit, NUnit et MSTest.
-La bibliothèque que nous avons choisi d'utiliser est XUnit en raison du fait que Noé l'avait déjà utilisé au sein un autre projet.
+Il existe plusieurs librairies de test au sein de l'environnement .NET. Les plus utilisés sont XUnit, NUnit et MSTest.
+La bibliothèque que nous avons choisi d'utiliser est XUnit en raison du fait que Noé l'avait déjà utilisé au sein d'un projet personnel.
 
 \subsection{Framework d'affichage}
 
 \paragraph{}
 Au lancement du projet, nous avons dû réfléchir à quel framework utiliser pour faire l'affichage de la simulation.
-Dans un premier temps, nous nous étions intéressé à Avalonia, un framework cross-platform qui est un successeur spirituel de WPF\footnote{WPF ou Windows Presentation Foundation est un framework permettant
-de faire une interface graphique. Aujourd'hui il a beaucoup vieilli et est en train d'être remplacé par des frameworks plus modernes.}.
+Dans un premier temps, nous nous étions intéressé à Avalonia, un framework cross-platform qui est un successeur spirituel de WPF\footnote{WPF ou Windows Presentation Foundation est un framework 
+utilisé pour la création d'interfaces graphique. Aujourd'hui ce framework a beaucoup vieilli et est en train d'être remplacé par des frameworks plus modernes tels que Avalonia.}.
 On s'est rendu compte qu'Avalonia n'était pas du tout ce qu'on recherchait comme il ne servait qu'à faire des interfaces graphiques et était très peu utilisable pour l'affichage de formes plus complexes.
 
 \paragraph{}
 Nous avons donc dû rechercher une solution alternative et c'est là que nous avons découvert MonoGame. 
 MonoGame est un framework graphique open-source utilisé principalement pour des jeux comme son nom l'indique et qui est basé
-sur le framework XNA (développé par Microsoft et abandonné depuis 2013). 
-Après avoir consulté la documentation MonoGame nous avons pris la décision d'utiliser ce framework. Il nous a permis de simplifier les aspects tels que l'importation et l'utilisation de textures
-et le dessin d'objets à l'écran.
+sur XNA (un framework développé par Microsoft et abandonné depuis 2013). 
+Après avoir consulté la documentation et avoir fait des recherches dessus, MonoGame est le framework que nous avons décidé d'utiliser. 
+Il nous a permis de rendre plus simple certains aspects tels que l'importation et l'utilisation de textures.
 
 \paragraph{}
-En complément de MonoGame, l'ensemble des textures présent dans le projet ont été créé à la main par nous sur Piskel\footnote{Outil gratuit de dessin de PixelArt en-ligne. 
+En complément de MonoGame, l'ensemble des textures présents dans le projet ont été créé à la main avec Piskel\footnote{Outil gratuit de dessin de PixelArt en-ligne. 
 Plus d'informations : \url{https://www.piskelapp.com/}.}. 
 
 \section{Moteur}
@@ -382,10 +402,73 @@ Plus d'informations : \url{https://www.piskelapp.com/}.}.
 
 \paragraph{}
 Lorsque nous avons codé les colliders, nous nous sommes rendu compte que la manière initiale dont nous l'avions conçu
-faisait qu'il y avait énormément de duplication de code et qu'il était difficilement maintenable.
-La solution à cela était de déplacer les méthodes de collision dans une classe statique et ensuite chaque collider fait appel à la méthode qu'il a besoin dans la classe statique.
+faisait qu'il y avait énormément de duplication de code ce qui le rendait difficilement maintenable.
 
+Exemple : Pour tester la collision entre un cercle et un rectangle il y a deux cas. Premier cas : le cercle appelle sa méthode CheckCollision en passant le rectangle en paramètre.
+Second cas : 
 
+La solution à cela était de déplacer les méthodes de collision dans une classe statique et qu'ensuite chaque collider fasse appel à la méthode qu'il a besoin dans la classe statique.
+
+\subsection{Transforms et Colliders}
+\paragraph{}
+Comme indiqué précédemment, l'objet Transform que nous avons utilisé est inspiré de celui qu'on retrouve en Unity. Un autre concept que nous avons voulu reprendre de Unity est le fait qu'un
+collider puisse posséder son propre transform ce qui lui permet d'avoir une position autre que celle de l'entité à la quelle il est attaché. Ca permet aussi aux colliders d'exister sans être forcément
+lié à une entité.
+
+\paragraph{}
+Au début du projet, nous avions pour intention d'implémenter cela dans le moteur de simulation. 
+Un collider aurait donc un transform et s'il est rattaché à une entité, le transform du collider serait en coordonnées relatives (pour obtenir sa position réelle, il faudrait faire Entity.Transform + Collider.Transform).
+Il s'avère que cette solution ajoute beaucoup de complexité aux calculs de collision et ne serait même pas utile au sein de la simulation. Nous avons donc pris la décision d'enlever cette 
+fonctionnalité et de lier fortement les colliders aux entités en lui faisant prendre le transform de l'entité auquel il est rattaché.
+
+\subsection{Temps de simulation ou temps réel ?}
+\paragraph{}
+Une erreur gigantesque que nous avons commises est le fait que nous avons ajouté des éléments qui dépendaient du temps réel dans le moteur de simulation (un exemple serait le temps de disparition des phéromones).
+Le problème ici vient du fait que nous voulions permettre aux utilisateurs de ralentir, accélérer ou mettre en pause la simulation.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=1]{ticks_secondes.png}
+    \caption{Exemple d'appels de la méthode Update en temps réel et en temps de simulation.}
+    \label{fig:ticks_secondes}
+\end{figure}
+
+Les lignes rouges dans \ref{fig:ticks_secondes} représentent des appels à Update. On voit que la méthode update n'est pas appelé de manière uniforme ce qui cause des décalages si on tente de changer la vitesse de la simulation.
+
+Malheureusement, mettre en pause la simulation ne met pas en pause la vrai vie ! Il y a donc une désynchronisation qui se déroule et qui peut causer des problèmes de cohérence et d'intégrité.
+La solution à ce problème est évidente, il faut décompter tout en nombre de \textit{ticks}, c'est à dire, de fois où la méthode Update du World est appelée. 
+Cela fait que chaque phéromone possède un compteur pour sa disparition qui décroît de un à chaque Update. Cela permet de garder la cohérence dans le cas de modification de la vitesse de la simulation.
+
+\subsection{Optimisation}
+
+\paragraph{}
+La problématique de l'optimisation de la simulation a été un enjeu très important pour nous tout au long du projet. Nous avons dû réfléchir sur les implémentations qui ont été faites afin de vérifier qu'elles ne 
+faisaient pas chuter les performances. Que ce soit au niveau de quel type d'objet nous utilisions du C\# ou encore vérifier qu'on ne remplissait pas inutilement le garbage collector 
+\footnote{Le garbage collector est un gestionnaire de mémoire qui supprime et désalloue automatiquement des objets quand ils ne sont plus référencés par le programme. 
+Plus d'informations sur comment il fonctionne en .NET : \url{https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals}}.
+Quand on parle de simuler une quantité de fourmis qui peut aller dans les milliers, sachant que chaque fourmi doit évaluer son environnement et prendre des décisions, la performance chute très rapidement.
+
+Nous présenterons dans cette partie les principales optimisations que nous avons effectués pour augmenter au maximum le nombre de fourmis que le simulateur peut supporter.
+
+\subsubsection{Découpage par régions}
+\paragraph{}
+Le découpage par régions est l'optimisation la plus "simple" mais évidente que nous avons ajouté.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=1]{decoupage_region.png}
+    \caption{Exemple de cas où l'optimisation par découpage en régions est très utile.}
+    \label{fig:decoupage_region}
+\end{figure}
+
+\paragraph{}
+Dans la figure \ref{fig:decoupage_region} on observe que la plupart des entités sont loin de l'individu au centre, l'optimisation par régions permet de ne pas les prendre en compte et donc de ne faire des calculs
+de collision avec que les objets dans la zone de perception de l'individu.
+Nous avons implémenté ce découpage en permettant aux fourmis de récupérer les entités qui sont dans une certaine zone autour d'eux (en nombre de régions ou en distance réel dans le monde).
+Cette optimisation nous a apporté un énorme gain en performances et a notamment rendu la présence d'un grand nombre de fourmis et de phéromone peu impactant sur les performances.
+
+\subsubsection{Structures de données}
+Un autre élément important dans l'optimisation de la simulation a été le choix des structures de données.
 
 \section{Application}
 
