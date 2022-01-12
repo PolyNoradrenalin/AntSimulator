@@ -533,6 +533,44 @@ possibles qui sont:
     \label{fig:button_example}
 \end{figure}
 
+\pagebreak
+
+\paragraph{Sélecteur de vitesse}
+
+Le sélecteur de vitesse permet à l'utilisateur de choisir la vitesse de simulation cible à laquelle le moteur doit
+aller. Il est composé de trois boutons:
+\begin{itemize}
+    \item Ralentir
+    \item Accélérer
+    \item Mettre en pause / Reprendre
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.3]{speedslider.png}
+    \caption{Sélecteur de vitesse dans l'application}
+    \label{fig:speedslider_example}
+\end{figure}
+
+
+\paragraph{SimFrame}
+
+La fenêtre de simulation et les éléments qui la composent (les EntityRenderer) doivent répondre à une problématique supplémentaire.
+Le monde de la simulation étant dans un système de coordonnées totalement indépendant des pixels dans lequel les éléments graphiques sont
+rendus, il faut faire une adaptation de ces coordonnées pour qu'à partir de coordonnées dans le monde, nous sachions où afficher l'objet sur l'écran.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.7]{simframe.png}
+    \caption{Représentation des différents systèmes de coordonnées concurrents dans l'application}
+    \label{fig:simframe}
+\end{figure}
+
+Il est aussi nécessaire de garder le ratio d'affichage initial du monde pour éviter les déformations. Cela veut dire qu'un monde carré 
+doit être affiché sous la forme d'un carré et ne peut donc pas juste simplement remplir toute la fenêtre. Nous avons aussi fait le choix 
+d'inverser l'axe vertical de rendu car, comme dans beaucoup de frameworks de rendu graphique, l'axe vertical est du haut vers le bas et non du 
+haut vers le bas.
+
 \chapter{Réalisation}
 
 \paragraph{}
