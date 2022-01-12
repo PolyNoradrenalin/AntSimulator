@@ -270,8 +270,20 @@ Dans cette partie nous allons détailler comment nous avons imaginé une représ
 \subsubsection{Comportement d'une fourmi}
 
 L'objectif final de la fourmi est simple, elle veut trouver de la nourriture pour la ramener à sa colonie. Cependant, nous ne pouvons pas seulement
-faire marcher la fourmi au hasard dans la simulation en espérant qu'elle atteigne ce but. La fourmi doit être capable de sentir son environnement proche
-pour prendre des décisions et les exécuter.
+faire marcher la fourmi au hasard dans la simulation en espérant qu'elle atteigne ce but. 
+
+Les fourmis sont indépendantes mais ont un objectif commun et doivent donc pouvoir communiquer entre elles pour parvenir à accomplir cet objectif.
+Dans la vraie vie, le principe d'une fourmi est très complexe et varie énormément entre les espèces mais nous pouvons le vulgariser très simplement.
+
+Une fourmi va partir de sa colonie à la recherche de nourriture tout en déposant des phéromones pour indiquer le chemin vers sa colonie. Lorsqu'elle 
+trouvera de la nourriture, elle la récupérera et suivra les phéromones laissés précédemment pour retrouver le chemin menant à sa colonie tout en laissant
+des phéromones menant à la nourriture qu'elle vient de trouver.  Les phéromones servent certes à la fourmi mais servent aussi à ses congénères car, 
+cela leur permet de eux-mêmes aller à la source de nourriture que la fourmi a trouvé. En d'autres termes, cela leur permet de \textbf{communiquer}.
+La fourmi doit donc être capable de sentir son environnement proche à la recherche de phéromones ou d'obstacles pour prendre des décisions et les exécuter.
+
+Ce comportement est largement simplifié par rapport à la vraie vie car les fourmis ont un sens de l'orientation ou peuvent même communiquer visuellement 
+(et sûrement beaucoup d'autres choses que nous ne savons pas) mais malgré cela, il est normalement suffisant pour atteindre notre objectif. 
+
 
 \subsubsection{Perception d'une fourmi}
 
@@ -284,7 +296,7 @@ Une perception map va donc donner à la fourmi l'information de la direction la 
 
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.9]{perceptionmap.png}
+    \includegraphics[scale=0.5]{perceptionmap.png}
     \caption{Schéma d'une représentation de la perception map d'une fourmi}
     \label{fig:perception_map}
 \end{figure}
@@ -292,7 +304,6 @@ Une perception map va donc donner à la fourmi l'information de la direction la 
 \autoref{fig:perception_map} montre ce que "voit" une fourmi qui chercherait la direction vers laquelle elle trouverait le plus de phéromones verts.
 Dans ce schéma, plus une zone est coloriée en rouge, plus elle a de l'importance pour la fourmi.
 
-\pagebreak
 
 Dans le calcul de cette perception map, il intervient 3 facteurs différents:
 \begin{itemize}
@@ -405,13 +416,48 @@ utilisant son Collider à la nouvelle position.
 
 \subsubsection{Colonie}
 
-Chaque fourmi est issue d'une seule et unique colonie qui sera là où elle déposera la nourriture qu'elle trouvera. La colonie tente à chaque tick de
-faire apparaître un certain nombre de fourmis en utilisant les ressources qui ont été déposées.
+Chaque fourmi est issue d'une seule et unique colonie qui sera l'endroit où elle déposera la nourriture qu'elle trouvera. La colonie tente à chaque tick de
+faire apparaître un certain nombre de fourmis en utilisant les ressources qui ont été déposées. C'est une entité très simple dans sa conception car elle
+ne sert que "d'usine à fabrication" de fourmis et cela vient aussi du fait que nous ne simulons pas l'intérieur de la colonie.
+
+La colonie a donc a plan de fabrication d'une fourmi ou autrement dit, une liste des ressources nécessaires à la création d'une fourmi et un stock
+des ressources qui sont apportés par les fourmis de la colonie.
 
 \subsubsection{Pheromones}
 
+Les phéromones sont le moyen de communication unique des fourmis de notre simulation. Il en existe deux types différents qui sont diffusés par
+les fourmis selon l'état dans lequel elles sont:
+\begin{itemize}
+    \item Les phéromones de maison
+    \item Les phéromones de nourriture
+\end{itemize}
+
+Ces deux phéromones permettent donc aux fourmis, selon leur état, de savoir dans quelle direction se trouve leur objectif (colonie ou nourriture).
+
+Il est cependant nécessaire pour les phéromones de ne pas être infini car les fourmis pourraient s'intéresser à des phéromones inutiles car trop anciens, 
+nous obligeant donc à implémenter un système de minuteur qui à sa fin déclencherait la suppression du phéromone.
+
+Nous avons donc fait en sorte que lorsqu'une fourmi émet un phéromone, elle lui donne son intensité et cette intensité sera la valeur qui servira de décompte
+pour le phéromone. En effet, nous décrémentons l'intensité à chaque tick jusqu'à atteindre 0 et lorsque l'intensité est nulle il est effectivement normal 
+de supprimer le phéromone de la simulation car il n'a plus aucun impact sur la simulation.
+
+Il a cependant fallu faire attention à la durée entre les deux types de phéromones car nous avons remarqué que ceux amenant à la nourriture n'avait 
+pas autant d'intérêt à rester longtemps comparés à ceux menant à la colonie car contrairement à la celle-ci, la nourriture est plus susceptible de 
+disparaître et il est donc contre-productif de garder des phéromones amenant à une source de nourriture épuisée.
+
+Pour améliorer les performances de la simulation, nous avons implémenté un système de fusion de phéromones lorsqu'ils sont trop proches car malgré 
+le fait qu'ils comptaient pour deux entités différentes, la fourmi ne pouvait pas faire la distinction entre deux phéromones à seulement quelques 
+nanomètres d'écart.
+
 \subsubsection{Ressources}
 
+Les ressources sont l'objectif des fourmis en état de recherche. Nous avons cependant une distinction entre les objets \textbf{Ressource} et 
+\textbf{Entité de ressource}. Pour donner un exemple, imaginons une ressource de pomme dans le monde de la simulation. Ici, la \textbf{Ressource}
+serait l'idée d'une ressource pomme tandis que l'\textbf{Entité de ressource} serait la pomme réellement posée dans la simulation, récupérable par 
+les fourmis.
+
+Cette distinction nous permet d'avoir plusieurs dépôts de ressources représentant la même ressource. Mis à part cela ces objets sont très simples
+et n'ont aucune comportement propre.
 
 \section{Application}
 
