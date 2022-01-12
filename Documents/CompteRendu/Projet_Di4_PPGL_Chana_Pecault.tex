@@ -718,7 +718,7 @@ MGCB\footnote{MonoGame Content Builder(MGCB) est un utilitaire qui permet de sim
 
 \paragraph{}
 Malgré notre envie d'écrire des tests, nous nous sommes rendu compte que dans notre projet, il était facile de tester les classes simples comme les colliders ou les transforms
-mais, dès qu'on voulait tester des choses plus avancées comme le comportement des fourmis, il était difficile d'écrire des tests qui n'étaient pas juste une perte de temps ou redondants.
+mais, dès qu'on voulait tester des choses plus avancées comme le comportement des fourmis, il était difficile d'en écrire qui n'étaient pas juste une perte de temps ou redondants.
 C'est pourquoi nous n'avons pas pu écrire autant de tests que ce qu'on visait au départ. De plus, la partie application du projet ne contient aucun test, nous avons testé à la main les interfaces comme il n'y
 avait pas beaucoup de possibilités à tester.
 
@@ -728,13 +728,70 @@ En revanche, les choses que nous avons testées nous ont permis de détecter des
 
 \chapter{Résultats et perspectives}
 
-
-
 \section{État des lieux}
+
+\paragraph{}
+Après 6 mois de travail, nous avons abouti sur un logiciel qui peut simuler des colonies de fourmis et leurs interactions avec leur environnement.
+Notre simulateur nous permet de placer des murs, des colonies et de la nourriture. 
+Les fourmis ont le comportement que nous avions prévu, c'est à dire, elles cherchent la nourriture et une fois trouvée, elles ramènent à la colonie et elles avertissent les 
+autres fourmis de ce qu'elle a trouvé par le biais des phéromones.
+L'application accompli également son rôle d'interface entre le simulateur et l'utilisateur. On peut ensuite régler la vitesse de la simulation qui sera limitée par la vitesse de l'ordinateur quand on l'augmente.
+Nous pensons avoir écrit du code qui permet d'ajouter de fonctionnalités en plus à la simulation sans poser de problèmes.
+
+En tout, nous pensons avoir bien réussi à accomplir les objectifs initiaux du projet.
+
 \section{Apports}
 
 \section{Évolutions possibles}
 
+\paragraph{}
+Bien que nous soyons fiers de notre simulation, il y a une multitude d'améliorations et d'évolutions qui sont possibles.
+
+\subsection{Comportement des fourmis}
+\paragraph{}
+Une amélioration conséquente que nous pourrions faire serait de réparer les problèmes qui existent avec le comportement des fourmis.
+
+\subsubsection{Bouclage}
+
+\paragraph{}
+Un problème avec le comportement actuel est le fait que certaines fourmis vont faire du Bouclage. Pour plus détailler, il s'agit du cas
+où une fourmi a trouvé de la nourriture et elle commence à suivre une fourmi qui cherche de la nourriture. 
+Les fourmis ont un risque de commencer une boucle où elles vont chacune se suivre et ne jamais pouvoir en sortir.
+Bien que ce phénomène existe dans la vrai vie\footnote{Voir : \url{https://youtu.be/LEKwQxO4EZU}}, ce n'est pas censé arriver aussi fréquemment que dans notre simulation.
+Une solution serait de faire en sorte que la fourmi puisse abandonner sa recherche ce qui sortirait les fourmis du cycle.
+
+\subsubsection{Les Murs}
+\paragraph{}
+Un autre problème est le fait que les fourmis voient les phéromones à travers des murs. Il peut arriver qu'elles se ciblent sur un morceau de 
+nourriture en particulier de l'autre côté d'un mur et donc qu'elles soient bloquées.
+Il faudrait donc vérifier la présence d'un mur avant de passer en TargetState et permettre à la fourmi d'avancer sur la nourriture qu'elle voit.
+
+\subsubsection{Phéromones}
+\paragraph{}
+Enfin, la dernière amélioration en lien avec le comportement des fourmis est le fait que parfois les fourmis ont du mal à remonter la trace des phéromones qui les mènerait à la bonne destination et elles finissent par
+se perdre en chemin de leur colonie. Ca peut arriver qu'elles prennent un chemin de food pheromones dans la mauvaise direction (et donc que ça les conduise à leur colonie et non pas de la nourriture).
+
+\subsection{Properties}
+\paragraph{}
+Comme énoncé précédemment, il serait possible de rajouter un endroit à l'intérieur de la simulation qui permet de modifier les règles de la simulation.
+On pourrait aussi rajouter de la personnalisation en plus dans l'application (liste non-exhaustive) : 
+\begin{list}{}
+    \item - Déterminer quelle quantité de nourriture est dans l'entité qu'on pose
+    \item - Pouvoir placer des colonies qui ont des propriétés différentes
+    \item - Pouvoir modifier la couleur des fourmis d'une colonie
+    \item - Une brosse pour poser des éléments plus gros (une plus grosse colonie ou un plus gros mur par exemple)
+    \item - La possibilité de pouvoir zoomer dans la simulation pour que la taille de monde maximum ne dépende pas de la taille de son écran
+\end{list}
+
+\subsection{Optimisation}
+\paragraph{}
+Une autre fonctionnalité intéressante dont nous sommes déçus de ne pas avoir pu ajouter est le multithreading. En effet l'ajout du multithreading (CPU ou GPU) dans les calculs permettrait d'afficher 
+encore plus d'entités dans la simulation. On pourrait envisager une distribution du travail par régions 
+(chose qui se rapprocherait du calcul d'une fractale de Mandelbrot\footnote{Plus d'informations : \url{https://fr.wikipedia.org/wiki/Ensemble_de_Mandelbrot}} par exemple).
+
+\paragraph{}
+Enfin, malgré le fait que nous sommes contents d'avoir pu apprendre le C\#, il est fort probable que si nous avions fait le projet en C++ 
+ou dans un autre langage qui est plus proche de la machine, l'application aurait été plus rapide.
 
 %--------------------------------------------------------------------------------
 \chapter*{Conclusion}
