@@ -5,7 +5,7 @@
 
 \documentclass{EPUProjetDi}
 \usepackage[bottom]{footmisc}
-
+\usepackage{txfonts}
 \makeindex
 
 %remplir les lignes suivantes avec les informations vous concernant :
@@ -162,6 +162,8 @@ l'environnement des fourmis et contient aussi la totalité des entités présent
 Lorsqu'il est mis à jour, le monde doit donc mettre à jour la totalité des entités qu'il contient pour que chaque entité 
 puisse exécuter ses actions.
 
+Nous appelons la mise à jour de ce monde et des entités qui le compose un \textbf{tick}.
+
 \begin{figure}[h]
     \centering
     \includegraphics[scale=0.8]{moteur_structuregenerale.png}
@@ -169,7 +171,7 @@ puisse exécuter ses actions.
     \label{fig:flow_update}
 \end{figure}
 
-\autoref{fig:flow_update} montre le processus de mise à jour de la simulation qui commence  par le monde et 
+\autoref{fig:flow_update} montre le processus de mise à jour de la simulation qui commence par le monde et 
 qui est distribuée à toutes les entités qu'il contient.
 
 \pagebreak
@@ -212,7 +214,7 @@ de différentes formes selon les besoins. Il est utile dans le calcul des mouvem
 Le monde est l'espace dans lequel la simulation se déroule et possède donc les propriétés de taille de la simulation ainsi que le Collider
 gérant les murs de la simulation.
 C'est lui qui stocke toutes les entités présentent dans la simulation et s'occupe de les mettre à jour lorsqu'il est lui-même mis à jour. 
-\ref{fig:flow_update}
+(voir \autoref{fig:flow_update})
 
 Par souci d'optimisation, le monde est divisé en régions qui sont chacune une liste des entités présentes dans la région. 
 Cela permet de ne pas avoir à chercher des éléments parmi la liste complète de toutes les entités du monde.
@@ -233,45 +235,182 @@ une valeur \textbf{Vrai} pour représenter un mur ou \textbf{Faux} pour représe
 
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.4]{world_colliderdrawio.png}
+    \includegraphics[scale=0.4]{world_collider.png}
     \caption{Schéma d'un monde avec ses murs }
     \label{fig:world_collider_scheme}
 \end{figure}
 
-
 \subsection{Colliders}
+
+Pour notre simulation, nous avons prévu trois types de boîtes de collision différents. Ces types de collisions
+peuvent tous les trois être testés entre eux afin de savoir si oui ou non ils sont superposés (s'ils sont en collision).
+
+\subsubsection*{Cercle - Monde}
+
+Dans la collision entre un cercle et un monde, on procède en trois étapes:
+\begin{itemize}
+    \item Créer un carré imaginaire dans lequel le cercle est inscrit.
+    \item Récupérer le sous-ensemble des cases du WorldCollider que ce carré superpose.
+    \item Tester si chaque case de ce sous-ensemble est superposée au cercle d'origine.
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.6]{world_collider_circle.png}
+    \caption{Schéma de la collision d'un cercle et du monde}
+    \label{fig:world_collider_circle}
+\end{figure}
+
+\pagebreak
 
 \subsection{Fourmis}
 
+Dans cette partie nous allons détailler comment nous avons imaginé une représentation du comportement de la colonie, des fourmis et des phéromones.
+
 \subsubsection{Comportement d'une fourmi}
+
+L'objectif final de la fourmi est simple, elle veut trouver de la nourriture pour la ramener à sa colonie. Cependant, nous ne pouvons pas seulement
+faire marcher la fourmi au hasard dans la simulation en espérant qu'elle atteigne ce but. La fourmi doit être capable de sentir son environnement proche
+pour prendre des décisions et les exécuter.
+
+\subsubsection{Perception d'une fourmi}
+
+Les décisions les plus importantes des fourmis étant les mouvements, nous avons décidé que la perception de l'environnement de la fourmi avait du sens
+d'être basé sur des directions.
+Plus précisément, à chacune de ces directions est attribuée un score qui représenterait la volonté qu'a la fourmi d'aller dans cette direction.
+On considère donc une structure que nous avons appelé PerceptionMap qui remplit cette objectif d'associer un vecteur 2D à un réel.
+
+Une perception map va donc donner à la fourmi l'information de la direction la plus intéressante selon le phéromone qu'elle recherche à un moment donné.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.9]{perceptionmap.png}
+    \caption{Schéma d'une représentation de la perception map d'une fourmi}
+    \label{fig:perception_map}
+\end{figure}
+
+\autoref{fig:perception_map} montre ce que "voit" une fourmi qui chercherait la direction vers laquelle elle trouverait le plus de phéromones verts.
+Dans ce schéma, plus une zone est coloriée en rouge, plus elle a de l'importance pour la fourmi.
+
+\pagebreak
+
+Dans le calcul de cette perception map, il intervient 3 facteurs différents:
+\begin{itemize}
+    \item La distance $d$ de la fourmi au phéromone et la distance de perception $\alpha$ (propriété de la fourmi). \eqref{eq:dist_pheromone}
+    \item L'angle $\Delta$ entre le vecteur directeur\footnote{Le vecteur directeur est le vecteur associé à l'angle de la fourmi ou
+    autrement dit, la direction dans laquelle elle regarde.} et la direction du phéromone. \eqref{eq:rot_pheromone}
+    \item L'intensité du phéromone. $e_p$ (avec $p$ le phéromone)
+\end{itemize}
+
+\begin{subequations}
+\begin{align}
+    f(d)=\frac{1}{(1 + e^{\frac{\alpha}{2} - d})} && d,\alpha > 0 \label{eq:dist_pheromone}\\
+    r(\Delta)= \frac{1-\left\lvert \Delta\right\rvert}{\pi} && \Delta \label{eq:rot_pheromone}> 0
+\end{align}
+\end{subequations}
+
+Ces différents facteurs nous permettent de calculer un score $\mu_{p}$ pour chaque phéromone qui représente 
+son attractivité pour la fourmi. \eqref{eq:total_pheromone}
+
+\begin{equation}
+    \mu_{p} = \sum_{p}{} f(d) \times r(\Delta) \times e_{p}
+    \label{eq:total_pheromone}
+\end{equation}
+
+Finalement, à chaque direction $u$ nous pouvons récupérer les scores de chaque phéromone $p_{u}$ présent dans cette direction
+et les sommer pour obtenir le score total de cette direction qu'on nommera $\lambda_{u}$. \eqref{eq:total_direction}
+
+\begin{equation}
+    \lambda_{u} = \sum_{p_{u}}{} \mu_{p_{u}}
+    \label{eq:total_direction}
+\end{equation}
+
+On peut ainsi attribuer un score d'attractivité qui permettra à la fourmi de savoir quelle direction est la plus intéressante de suivre.
+Dans le cas où l'on voudrait que la fourmi soit repoussé par quelque chose, il suffit de faire en sorte que la direction opposée de ce quelque chose
+soit intéressante, elle serait donc plus intéressée par la fuite. 
+
+\subsubsection{Prise de décision de la fourmi}
+
+Maintenant que la fourmi est capable de sentir son environnement proche, il lui faut une manière de modéliser son comportement.
+Pour cela, nous avons considérer que la fourmi n'avait que deux phases différentes pour accomplir son objectif:
+\begin{enumerate}
+    \item La fourmi recherche de la nourriture en suivant éventuellement les phéromones amenant à de la nourriture tout en déposant ceux qui amènent à la colonie.
+    \item La fourmi recherche sa colonie en suivant les phéromones la ramenant à sa colonie.
+\end{enumerate}
+
+Ces deux phases se répéteront à l'infini de manière successives avec chacune une phase intermédiaire où la fourmi a trouvé ce qu'elle cherchait
+et s'y dirige directement. 
+
+\pagebreak
 
 \subsubsection{Machine à états}
 
-\paragraph{}
-Durant le projet, nous nous sommes inspirés des cours de génie logiciel afin d'utiliser des design patterns pour répondre à des problèmes.
+Nous avons donc décidé de modéliser cette succession d'états par une machine à états. En effet, cette modélisation nous permet de faire évoluer 
+le comportement de la fourmi sans problème. La solution "évidente" à ce problème est le design pattern \textit{State} (États) qui répond
+directement à cette problématique et permet de renforcer notre souhait d'avoir un comportement qui peut évoluer facilement.
 
-\paragraph{}
-Le premier réel problème de design que nous avons découvert était en relation avec la manière de mettre en code les différents états que la fourmi peut avoir.
-La solution "évidente" à ce problème est le design pattern \textit{State} (États).
-Cela nous a permis d'isoler les différents comportements que la fourmi peut avoir et donc de rendre plus facile la relecture de code et le debugging.
-Sans utiliser ce design pattern, le code serait très rapidement devenu illisible et il aurait été beaucoup plus compliqué de rajouter des états.
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.4]{statemachine.png}
+    \caption{Schéma de la machine à états}
+    \label{fig:state_machine}
+\end{figure}
 
-\paragraph{}
-L'autre problème que nous avons relevé après la phase de conception initiale est par rapport aux mouvements de la fourmi. 
-Dans certains cas il peut être utile d'implémenter rapidement des stratégies différentes sans pour autant changer des gros morceaux de codes afin d'en faire une comparaison de leurs efficacité.
-C'est ici que le design pattern \textit{Strategy} (Stratégie) intervient. Il permet de rapidement comparer des méthodes de déplacement en attribuant à chaque colonie (ou même à un ensemble de fourmis) une
-stratégie de déplacement.
-Malheureusement, nous n'avons pas eu le temps d'implémenter des stratégies autres que LineStrategy\footnote{Déplacement dans la direction moyenne de la PerceptionMap.} 
+Le design pattern \textit{State} est pratique car à chaque état du comportement, nous pouvons y associer du code à exécuter pour la fourmi via la méthode 
+Update vue précédemment mais aussi lorsque la fourmi rentre ou quitte cet état ouvrant ainsi un large panel de possibilités pour les comportements. 
+
+\subsubsection{Entité vivante qui se déplace}
+
+La fourmi ayant pris une décision pour sa direction, il ne reste plus que de s'y déplacer. Cependant, il existe beaucoup de manières de se déplacer
+d'un point A à un point B. La fourmi peut par exemple s'y rendre en ligne droite ou alors en ondulant de gauche à droite l'essentiel étant que nous
+ne voulons là encore pas nous rendre la vie compliqué plus tard si nous voulons changer cette manière de déplacement.
+
+Nous avons suivi la même philosophie et avons réfléchi à garder une certaine modularité et c'est ici que le design pattern 
+\textit{Strategy} (Stratégie) intervient. Il permet de rapidement comparer des méthodes de déplacement en attribuant à chaque colonie 
+(ou même à un ensemble de fourmis) une stratégie de déplacement.
+Malheureusement, nous n'avons pas eu le temps d'implémenter des stratégies autres que LineStrategy\footnote{Déplacement dans la direction dominante de la PerceptionMap.} 
 et WandererStrategy\footnote{Déplacement dans la direction dominante de la PerceptionMap influencée par une variable aléatoire.}.
 
+Pour formuler ça mathématiquement, nous cherchons à chaque tick à calculer la prochaine position $\vec{r_{n+1}}$ de la fourmi à partir
+d'une direction dominante $\vec{v}$ qui est donnée par la PerceptionMap calculée précédemment.
+
+La stratégie de déplacement va donc utiliser cette direction $\vec{v}$ pour calculer la vraie direction dans laquelle la fourmi doit aller 
+pour respecter la stratégie.
+
+Les fourmis utilisent principalement la stratégie de déplacement WandererStrategy car elle leur permet d'explorer leur environnement tout en prenant
+en compte ce qu'elles perçoivent (leur PerceptionMap). Elle utilise deux facteurs en plus: 
+\begin{itemize}
+    \item $\alpha$ qui représente la part d'aléatoire souhaitée.
+    \item $\beta$ qui représente l'influence de l'ancienne direction \footnote{Ce facteur peut aussi être compris comme l'inertie qu'a une fourmi.
+    Si on augmente ce facteur, la fourmi aura plus de mal à changer de direction et inversement.}
+\end{itemize}
+
+La formule permettant de calculer $\vec{d_{n+1}}$, la direction dans laquelle la fourmi avancera en fonction de ces paramètres est donnée par:
+
+\begin{subequations}
+    \begin{align}
+        \vec{u}=\alpha \vec{x} + (1 - \alpha) \vec{v} && \text{$\vec{x}$ une direction aléatoire} \\
+        \tag{1.4}\vec{d_{n+1}}=\beta \vec{d_{n}} + (1-\beta)u &&  0\leqslant \alpha,\beta \leqslant 1
+    \end{align}
+\end{subequations}
+
+Ainsi, à chaque tick de la simulation on calcule la nouvelle position $\vec{r_{n+1}}$:
+
+\begin{equation}
+    \vec{r_{n+1}} = \vec{r_{n}} + \text{Speed} * \vec{d_{n+1}}
+\end{equation}
+
+Après avoir calculé cette nouvelle position, il est tout de même nécessaire de vérifier si la fourmi ne serait pas en collision avec un obstacle en
+utilisant son Collider à la nouvelle position. 
 
 \subsubsection{Colonie}
 
-\subsubsection{Ressources}
+Chaque fourmi est issue d'une seule et unique colonie qui sera là où elle déposera la nourriture qu'elle trouvera. La colonie tente à chaque tick de
+faire apparaître un certain nombre de fourmis en utilisant les ressources qui ont été déposées.
 
 \subsubsection{Pheromones}
 
-\subsubsection{Entité vivante qui se déplace}
+\subsubsection{Ressources}
 
 
 \section{Application}
