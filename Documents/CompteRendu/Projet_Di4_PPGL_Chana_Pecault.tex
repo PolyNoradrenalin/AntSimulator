@@ -461,9 +461,77 @@ et n'ont aucune comportement propre.
 
 \section{Application}
 
+Maintenant que nous avons présenté la partie moteur de simulation de notre application, nous allons expliquer l'architecture de la partie applicative du projet.
+Pour rappel, le projet était principalement centré sur le moteur de simulation mais la partie applicative était importante car c'est elle qui permet à l'utilisateur 
+d'interagir simplement avec le moteur. 
+
 \subsection{Présentation de la structure}
 
+L'application utilise donc le framework MonoGame (anciennement XNA) et bien que ce framework est très simple d'utilisation, cela ne nous a 
+pas empêché de devoir concevoir une structure robuste pour permettre d'afficher de multiples objets différents à l'écran.
+Nous avons grossièrement deux catégories d'éléments à afficher à l'écran:
+\begin{itemize}
+    \item Les entités de la simulation
+    \item Les éléments de l'interface
+\end{itemize}
+
+Ces deux types d'objets sont certes différents mais il est possible de trouver propriétés communes aux objets de rendu de chacun.
+
+Nous avons pour cela créer un adaptateur des objets de la simulation pour qu'ils soient compatibles avec nos méthodes de rendu 
+utilisant MonoGame. Ainsi, les entités sont munis d'un analogue Renderer dans la partie application qui est chargé d'afficher la dite 
+entité à l'écran.
+
+Par souci de simplicité, nous avons fait en sorte que chaque composant serait lui même responsable de s'afficher sur l'écran en utilisant les
+objets de rendu qu'il a à disposition (SpriteBatch\footnote{Element donné par MonoGame pour dessiner des Sprites (des images) à l'écran. 
+\url{https://docs.monogame.net/api/Microsoft.Xna.Framework.Graphics.SpriteBatch.html}} et GraphicsDeviceManager\footnote{API graphique plus
+bas niveau que SpriteBatch mis à disposition par MonoGame. Permet de dessiner directement sous la forme de vertex, plus proche d'une manière "à la 
+OpenGL". \url{https://docs.monogame.net/api/Microsoft.Xna.Framework.GraphicsDeviceManager.html}"}).
+
+Chaque Renderer utilisera donc ces objets avec des informations lui indiquant la position sur l'écran à laquelle il doit s'afficher pour
+lui même se rendre. D'autres applications font la méthode inverse où un objet de rendu principal utilise les informations qui lui sont 
+données pour afficher tous les objets.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.8]{application_draw.png}
+    \caption{Schéma de la chaîne de rendu}
+    \label{fig:draw_chain}
+\end{figure}
+
+\autoref{fig:draw_chain} montre comment la méthode \textit{Draw} de MonoGame est distribuée parmi tous les objets à afficher pour qu'eux-
+mêmes s'affichent.
+Il y a cependant un élément en particulier qui est très important qui n'est autre que l'espace de rendu de la simulation nommée \textbf{SimFrame}.
+Cet élément est particulier car sa méthode Draw ne fait que transmettre la cascade d'appel à la méthode de rendu aux Renderers des entités
+de la simulation.
+
+Ainsi, avec chaque renderer qui est associé à une entité à afficher de la simulation, nous avons une représentation lisible de ce qu'il
+se passe dans la simulation. Le fait qu'il existe un renderer pour une entité nous permet si nous le souhaitons de faire un rendu différent
+sur des entités possédant une classe de rendu similaire (des couleurs différentes pour des fourmis).
+
 \subsubsection{Elements d'interface}
+
+Pour ce qui est de l'interface utilisateur, nous avons implémenté quelques classes d'éléments pour l'application.
+
+\paragraph{Label}
+Cet élément permet d'afficher du texte là où nous voulons sur l'écran pour donner à l'utilisateur des informations supplémentaires.
+
+\paragraph{Bouton}
+
+Nous avons évidemment implémenté un système de boutons qui nous permet de rajouter la possibilité à l'utilisateur de déclencher des actions à l'aide d'un 
+simple clic. Nous avons là encore fait en sorte de nous ouvrir le plus de possibilités pour des extensions futures et avons donc mis le plus d'évènements 
+possibles qui sont:
+\begin{itemize}
+    \item Début de clic sur le bouton
+    \item Bouton cliqué (maintenu)
+    \item Clic relevé
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{button.png}
+    \caption{Exemple des boutons dans l'application}
+    \label{fig:button_example}
+\end{figure}
 
 \chapter{Réalisation}
 
@@ -764,7 +832,7 @@ MGCB\footnote{MonoGame Content Builder(MGCB) est un utilitaire qui permet de sim
 
 \paragraph{}
 Malgré notre envie d'écrire des tests, nous nous sommes rendu compte que dans notre projet, il était facile de tester les classes simples comme les colliders ou les transforms
-mais, dès qu'on voulait tester des choses plus avancées comme le comportement des fourmis, il était difficile d'en écrire qui n'étaient pas juste une perte de temps ou redondants.
+mais, dès qu'on voulait tester des choses plus avancées comme le comportement des fourmis, il était difficile d'écrire des tests qui n'étaient pas juste une perte de temps ou redondants.
 C'est pourquoi nous n'avons pas pu écrire autant de tests que ce qu'on visait au départ. De plus, la partie application du projet ne contient aucun test, nous avons testé à la main les interfaces comme il n'y
 avait pas beaucoup de possibilités à tester.
 
@@ -774,18 +842,9 @@ En revanche, les choses que nous avons testées nous ont permis de détecter des
 
 \chapter{Résultats et perspectives}
 
+
+
 \section{État des lieux}
-
-\paragraph{}
-Après 6 mois de travail, nous avons abouti sur un logiciel qui peut simuler des colonies de fourmis et leurs interactions avec leur environnement.
-Notre simulateur nous permet de placer des murs, des colonies et de la nourriture. 
-Les fourmis ont le comportement que nous avions prévu, c'est à dire, elles cherchent la nourriture et une fois trouvée, elles ramènent à la colonie et elles avertissent les 
-autres fourmis de ce qu'elle a trouvé par le biais des phéromones.
-L'application accompli également son rôle d'interface entre le simulateur et l'utilisateur. On peut ensuite régler la vitesse de la simulation qui sera limitée par la vitesse de l'ordinateur quand on l'augmente.
-Nous pensons avoir écrit du code qui permet d'ajouter de fonctionnalités en plus à la simulation sans poser de problèmes.
-
-En tout, nous pensons avoir bien réussi à accomplir les objectifs initiaux du projet.
-
 \section{Apports}
 
 \section{Évolutions possibles}
