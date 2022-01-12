@@ -821,29 +821,39 @@ se perdre en chemin de leur colonie. Ca peut arriver qu'elles prennent un chemin
 \paragraph{}
 Comme énoncé précédemment, il serait possible de rajouter un endroit à l'intérieur de la simulation qui permet de modifier les règles de la simulation.
 On pourrait aussi rajouter de la personnalisation en plus dans l'application (liste non-exhaustive) : 
-\begin{list}{}
-    \item - Déterminer quelle quantité de nourriture est dans l'entité qu'on pose
-    \item - Pouvoir placer des colonies qui ont des propriétés différentes
-    \item - Pouvoir modifier la couleur des fourmis d'une colonie
-    \item - Une brosse pour poser des éléments plus gros (une plus grosse colonie ou un plus gros mur par exemple)
-    \item - La possibilité de pouvoir zoomer dans la simulation pour que la taille de monde maximum ne dépende pas de la taille de son écran
-\end{list}
+\begin{itemize}
+    \item Déterminer quelle quantité de nourriture est dans l'entité qu'on pose.
+    \item Pouvoir placer des colonies qui ont des propriétés différentes.
+    \item Pouvoir modifier la couleur des fourmis d'une colonie.
+    \item Une brosse pour poser des éléments plus gros (une plus grosse colonie ou un plus gros mur par exemple).
+    \item La possibilité de pouvoir zoomer dans la simulation pour que la taille de monde maximum ne dépende pas de la taille de son écran.
+\end{itemize}
 
 \subsection{Optimisation}
 \paragraph{}
 Une autre fonctionnalité intéressante dont nous sommes déçus de ne pas avoir pu ajouter est le multithreading. En effet l'ajout du multithreading (CPU ou GPU) dans les calculs permettrait d'afficher 
 encore plus d'entités dans la simulation. On pourrait envisager une distribution du travail par régions 
 (chose qui se rapprocherait du calcul d'une fractale de Mandelbrot\footnote{Plus d'informations : \url{https://fr.wikipedia.org/wiki/Ensemble_de_Mandelbrot}} par exemple).
+Il faudrait donc rajouter des protections contre les problèmes de concurrence et rendre le logiciel thread-safe. 
 
 \paragraph{}
 Enfin, malgré le fait que nous sommes contents d'avoir pu apprendre le C\#, il est fort probable que si nous avions fait le projet en C++ 
-ou dans un autre langage qui est plus proche de la machine, l'application aurait été plus rapide.
+ou dans un autre langage qui est plus proche de la machine, l'application aurait été plus rapide et moins complexe à optimiser.
+
+\subsection{Fonctionnalités liés au monde}
+\paragraph{}
+Ensuite, une autre addition qui pourrait être intéressante est le fait de pouvoir importer et exporter le monde en son état actuel ainsi que les paramètres qu'on aurait modifié dans l'application.
+Pour les paramètres c'est techniquement possible actuellement car on peut partager notre fichier .properties avec quelqu'un d'autre mais il faut le modifier à la main. 
+Par contre, pour ce qui est de l'état actuel du monde, il faudrait qu'on détermine un format de sérialisation qui serait assez robuste pour contenir toutes les données.
+En plus, ça pourrait être intéressant d'avoir une fonctionnalité qui fait apparaître de la nourriture aléatoirement dans le monde afin de pouvoir faire des simulations sur le plus long terme.
+En complément du point précédent, il serait intéressant que les fourmis puissent mourir et se reproduire même si cela rajouterait un niveau de complexité en plus à la simulation. 
+Elles pourraient également rentrer en conflit avec des colonies voisines pour contester des ressources. On pourrait imaginer une fourmi guerrière qui aurait pour rôle de protéger sa colonie et ses fourmis.
 
 %--------------------------------------------------------------------------------
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{\numberline{}Conclusion}
 \markboth{Conclusion}{}
- ultricies ut accumsan magna interdum. Nullam ut malesuada urna. Donec ut sem est. Curabitur ut neque elit. Sed aliquam sodales libero ut rutrum. Duis eu massa quam, rutrum posuere sapien. Suspendisse turpis nulla, eleifend ut faucibus consequat, laoreet varius tortor. Vestibulum accumsan sagittis hendrerit. Nunc tristique ligula quis ligula faucibus adipiscing. Aenean interdum, odio at volutpat interdum, justo nunc tristique elit, quis elementum nisi ante id arcu. Mauris commodo posuere cursus. Ut nec massa odio. Maecenas at eros arcu, quis rhoncus magna. Sed pellentesque dictum nulla nec pretium.
+
 
 %--------------------------------------------------------------------------------
 %exemple de bibliographie
