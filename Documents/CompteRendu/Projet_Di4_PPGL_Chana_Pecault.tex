@@ -263,6 +263,42 @@ Dans la collision entre un cercle et un monde, on procède en trois étapes:
 
 \pagebreak
 
+\subsubsection*{Rectangle - Rectangle}
+\paragraph{}
+La collision entre un rectangle et un autre rectangle semble simple mais quand on rend possible la rotation de ces rectangles l'algorithme devient légèrement plus complexe.
+Pour faire cela on utilise le \textbf{Separating Axis Theorem (SAT)}\footnote{} qui énonce le suivant :
+
+\textit{Deux objets convexes ne se superposent pas s'il existe un axe sur lequel la projection des points de ces deux objets ne se superposent pas.}
+
+L'avantage de ce théorème est qu'il est extrêmement rapide à s'executer (lorsqu'on voit qu'une projection sur un de leurs axes ne sont pas superposés on peut arrêter l'algorithme).
+Voici quelques exemples pour illustrer : 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.6]{rectangle_collider_rectangle_1.png}
+    \caption{Schéma de deux rectangles qui ont une projection sur un de leurs axes qui collisionne pas.}
+    \label{fig:rectangle_collider_rectangle_1}
+\end{figure}
+
+\paragraph{}
+Dans la figure \ref{fig:rectangle_collider_rectangle_1}, on voit que les deux objets ne se superposent pas en raison de la non intersection des segments rouge et bleu.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.6]{rectangle_collider_rectangle_2.png}
+    \caption{Schéma de deux rectangles qui ont une projection sur un de leurs axes qui collisionne.}
+    \label{fig:rectangle_collider_rectangle_2}
+\end{figure}
+
+\paragraph{}
+Dans la figure \ref{fig:rectangle_collider_rectangle_2}, on doit tester toutes les autres axes des deux objets car les segments rouge et bleu se superposent.
+Si toutes les projections collisionnent, alors, les deux objets se superposent.
+
+\subsubsection*{Rectangle - Cercle}
+\paragraph{}
+La collision entre un rectangle et un cercle peut utiliser l'algorithme précédent et 
+le cercle prendra en axe, la droite formée par le centre du cercle et le point du rectangle qui est la plus proche.
+
 \subsection{Fourmis}
 
 Dans cette partie nous allons détailler comment nous avons imaginé une représentation du comportement de la colonie, des fourmis et des phéromones.
@@ -284,7 +320,6 @@ La fourmi doit donc être capable de sentir son environnement proche à la reche
 Ce comportement est largement simplifié par rapport à la vraie vie car les fourmis ont un sens de l'orientation ou peuvent même communiquer visuellement 
 (et sûrement beaucoup d'autres choses que nous ne savons pas) mais malgré cela, il est normalement suffisant pour atteindre notre objectif. 
 
-
 \subsubsection{Perception d'une fourmi}
 
 Les décisions les plus importantes des fourmis étant les mouvements, nous avons décidé que la perception de l'environnement de la fourmi avait du sens
@@ -303,7 +338,6 @@ Une perception map va donc donner à la fourmi l'information de la direction la 
 
 \autoref{fig:perception_map} montre ce que "voit" une fourmi qui chercherait la direction vers laquelle elle trouverait le plus de phéromones verts.
 Dans ce schéma, plus une zone est coloriée en rouge, plus elle a de l'importance pour la fourmi.
-
 
 Dans le calcul de cette perception map, il intervient 3 facteurs différents:
 \begin{itemize}
