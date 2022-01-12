@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 
@@ -86,30 +87,30 @@ namespace App.UIElements
 
             paintBrushSelection.PaintBrushStateChange += OnBrushStateChange;
             
-            _colonyScale = Vector2.One * float.Parse(AntSimulator.Properties.Get("colony_scale", "20.0"));
+            _colonyScale = Vector2.One * float.Parse(AntSimulator.Properties.Get("colony_scale", "20"), CultureInfo.InvariantCulture);
             _colonySpawnCost = int.Parse(AntSimulator.Properties.Get("colony_spawncost", "10"));
             _colonyStockpileStart = int.Parse(AntSimulator.Properties.Get("colony_stockpilestart", "50"));
             _colonySpawnDelay = int.Parse(AntSimulator.Properties.Get("colony_spawn_delay", "16"));
-            _colonySpawnBurst = int.Parse(AntSimulator.Properties.Get("colony_spawn_burst", "6"));
-            _colonySpawnRadius = float.Parse(AntSimulator.Properties.Get("colony_spawn_radius", "0.1"));
+            _colonySpawnBurst = int.Parse(AntSimulator.Properties.Get("colony_spawn_burst", "1"));
+            _colonySpawnRadius = float.Parse(AntSimulator.Properties.Get("colony_spawn_radius", "0.1"), CultureInfo.InvariantCulture);
 
             _food = new Resource("food", "fruit");
-            _foodScale = Vector2.One * float.Parse(AntSimulator.Properties.Get("food_scale", "10.0"));
+            _foodScale = Vector2.One * float.Parse(AntSimulator.Properties.Get("food_scale", "10"), CultureInfo.InvariantCulture);
             _foodValue = int.Parse(AntSimulator.Properties.Get("food_value", "50"));
 
-            _antMoveRandom = float.Parse(AntSimulator.Properties.Get("ant_move_random", "0.5"));
-            _antMoveOldDir = float.Parse(AntSimulator.Properties.Get("ant_move_olddir", "0.9"));
-            _antPerceptionDistance = float.Parse(AntSimulator.Properties.Get("ant_perception_dist", "50.0"));
+            _antMoveRandom = float.Parse(AntSimulator.Properties.Get("ant_move_random", "0.5"), CultureInfo.InvariantCulture);
+            _antMoveOldDir = float.Parse(AntSimulator.Properties.Get("ant_move_olddir", "0.9"), CultureInfo.InvariantCulture);
+            _antPerceptionDistance = float.Parse(AntSimulator.Properties.Get("ant_perception_dist", "50.0"), CultureInfo.InvariantCulture);
             _antPerceptionPrecision = int.Parse(AntSimulator.Properties.Get("ant_perception_precision", "24"));
-            _antPheromoneFoodEmit = int.Parse(AntSimulator.Properties.Get("ant_pheromone_food_emit", "1200"));
-            _antPheromoneFoodMax = int.Parse(AntSimulator.Properties.Get("ant_pheromone_food_max", "1200"));
-            _antPheromoneHomeEmit = int.Parse(AntSimulator.Properties.Get("ant_pheromone_home_emit", "6000"));
-            _antPheromoneHomeMax = int.Parse(AntSimulator.Properties.Get("ant_pheromone_home_max", "1200"));
-            _antPheromoneMergeDistance = float.Parse(AntSimulator.Properties.Get("ant_pheromone_mergedist", "5.0"));
+            _antPheromoneFoodEmit = int.Parse(AntSimulator.Properties.Get("ant_pheromone_food_emit", "2400"));
+            _antPheromoneFoodMax = int.Parse(AntSimulator.Properties.Get("ant_pheromone_food_max", "2400"));
+            _antPheromoneHomeEmit = int.Parse(AntSimulator.Properties.Get("ant_pheromone_home_emit", "12000"));
+            _antPheromoneHomeMax = int.Parse(AntSimulator.Properties.Get("ant_pheromone_home_max", "20000"));
+            _antPheromoneMergeDistance = float.Parse(AntSimulator.Properties.Get("ant_pheromone_mergedist", "5.0"), CultureInfo.InvariantCulture);
             _antPheromoneDelay = int.Parse(AntSimulator.Properties.Get("ant_pheromone_delay", "30"));
-            _antPickupDistance = float.Parse(AntSimulator.Properties.Get("ant_pickup_distance", "5.0"));
+            _antPickupDistance = float.Parse(AntSimulator.Properties.Get("ant_pickup_distance", "5.0"), CultureInfo.InvariantCulture);
             _antPickupCapacity = int.Parse(AntSimulator.Properties.Get("ant_pickup_capacity", "15"));
-            _antMaxSpeed = float.Parse(AntSimulator.Properties.Get("ant_maxspeed", "1.0"));
+            _antMaxSpeed = float.Parse(AntSimulator.Properties.Get("ant_maxspeed", "1.0"), CultureInfo.InvariantCulture);
             
         }
 
@@ -158,7 +159,7 @@ namespace App.UIElements
                             (name, transform, world, _) => new Ant("Ant", transform, world)
                             {
                                 MaxSpeed = _antMaxSpeed,
-                                MovementStrategy = new WandererStrategy(_antMoveRandom, _antMoveOldDir),
+                                MovementStrategy = new WandererStrategy(_antMoveRandom, transform.GetDirectorVector(), _antMoveOldDir),
                                 PerceptionDistance = _antPerceptionDistance,
                                 PerceptionMapPrecision = _antPerceptionPrecision,
                                 FoodPheromoneTimeSpan = _antPheromoneFoodEmit,
