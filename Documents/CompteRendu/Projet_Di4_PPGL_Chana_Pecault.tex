@@ -634,18 +634,90 @@ Il a donc été très avantageux pour nous de ne pas utiliser de Property pour l
 \paragraph{}
 Un autre problème que nous avons remarqué au même moment que nous avons fait le découpage des régions est le fait qu'après que la simulation soit ouverte depuis longtemps, les fourmis
 auront émis un grand nombre de phéromones. Cela mettait la simulation à genoux en raison du nombre d'entités qui existaient dans le monde. Il fallait donc trouver une solution pour permettre
-d'avoir un grand nombre de phéromones sans pour autant condamner la simulation à perdre en performances après un certain temps.
-Notre solution ici était de faire une fusion de phéromones si elles sont assez proches. La fusion de deux phéromones combine leur attirance pour les fourmis et donc permet de garder les informations
+d'avoir beaucoup de phéromones sans pour autant condamner la simulation à perdre en performances après un certain temps.
+Notre solution ici était de faire une fusion de phéromones s'ils sont assez proches. La fusion de deux phéromones combine leur attirance pour les fourmis et donc permet de garder les informations
 tout en optimisant plus la simulation. Cette fusion avait une limite supérieure ce qui empêche d'avoir des phéromones qui persistent extrêmement longtemps.
 Cette optimisation, combinée avec le découpage en régions, nous a apporté la plus grande augmentation en vitesse de simulation.
 
 \subsubsection{Garbage Collector}
 \paragraph{}
+Nous avons également dû travailler sur l'optimisation du garbage collector. Si trop d'objets sont créés et supprimés, le garbage collector va devoir travailler plus souvent pour les allouer et les désallouer
+ce qui influe beaucoup sur les performances.  
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=1]{garbage_collector.png}
+    \caption{Mémoire allouée par la méthode main après 10 minutes de simulation (avant les optimisations).}
+    \label{fig:garbage_collector}
+\end{figure}
+
+\paragraph{}
+On voit sur la figure \ref{fig:garbage_collector} qu'après très peu de temps, la mémoire qu'aura alloué le simulateur est très grand.
+Afin de résoudre ce problème, nous avons utilisé les outils de profiling de mémoire qu'on retrouve dans notre IDE
+\footnote{Pour ce projet, nous avons utilisé Rider qui est un IDE pour le C\# développé par JetBrains.}.
+\paragraph{}
+L'optimisation ici est simple, il nous a suffit de prioriser la réutilisation de variables et éviter de les déclarer et détruire trop souvent.
+Un exemple pertinent de cela est pour l'objet PerceptionMap qui avant, était recrée à chaque mise à jour du monde. Après l'optimisation, la perception map est stockée dans la fourmi
+et est simplement vidé à chaque mise à jour du monde. 
+\paragraph{}
+Il existe également d'autres méthodes qui initialisaient des listes inutilement. Nous avons modifié cela pour que ça ne soit plus le cas.
+Suite à ces optimisations, l'outil de vérification de mémoire dans Rider ne nous affichait plus d'avertissements et donc nous pensons avoir totalement résous le problème.
 
 \section{Application}
 
+\subsection{Renderers}
+\paragraph{}
+Une autre hésitation que nous avons eue durant le projet était au niveau de comment gérer la structure de rendu dans l'application et comment 
+faire l'association entre une entité du moteur et ce qu'on dessine à l'écran. Au début, nous avions pensé à créer une classe qui s'occuperait de faire le rendu des
+entités en parcourant la liste présente dans l'objet World (voir la figure \ref{fig:renderer_logic_1}). 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{renderer_logic_1.png}
+    \caption{La structure initiale que nous avions prévu d'utiliser (one-to-all). L'objet Renderer serait rapidement devenu peu pratique à utiliser et à modifier.}
+    \label{fig:renderer_logic_1}
+\end{figure}
+
+\paragraph{}
+En fin de compte, nous avons trouvé que cette solution était peu pratique car si nous voulions un comportement 
+de rendu différent pour des objets d'une classe particulière, il aurait fallu faire une disjonction de cas par rapport au type. Cela nous aurait fait finir avec
+une méthode très longue qui aurait été un véritable cauchemar à gérer. 
+
+\paragraph{}
+Nous avons donc pris la décision logique de plutôt créer des renderers génériques pour les entités n'ayant pas besoin de comportement 
+en plus et dans le cas d'entités comme les fourmis ou la colonie qui avaient des textures ou comportements différents, nous pouvions créer un renderer
+précis juste pour eux (voir la figure \ref{fig:renderer_logic_2}).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{renderer_logic_2.png}
+    \caption{La structure finale que nous avons utilisé (one-to-one). Elle permet facilement d'aller modifier ce qu'on a besoin pour l'affichage d'un type d'objet précis.}
+    \label{fig:renderer_logic_2}
+\end{figure}
+
+\subsection{Fichier de propriétés}
+\paragraph{}
+Afin de faciliter la configuration de la simulation, nous avons utilisons un fichier properties
+\footnote{Nous avons utilisé une implémentation de gestion de fichier properties postée sur StackOverflow car en Java il existe une implémentation native qu'on ne retrouve pas en C\# : 
+\url{https://stackoverflow.com/questions/485659/can-net-load-and-parse-a-properties-file-equivalent-to-java-properties-class\#answer-7696370}}
+qui permet de spécifier les changements qu'on veut ajouter comme par exemple la vitesse des fourmis
+ou les ressources nécessaires pour qu'une colonie fasse apparaître une fourmi. A l'origine, nous avions prévu de permettre la configuration de ces options directement dans la simulation, mais,
+le fait d'utiliser MonoGame nous a imposé de créer les objets de saisie de texte à la main. Nous avons décidé que cela serait une trop grosse perte de temps et ne rentrait pas dans 
+le cadre du projet. Le fichier Properties a été donc un gain de temps énorme pour nous, comparé à l'alternatif.
+
+\subsection{Pipeline de contenu}
+\paragraph{}
+Un des avantages de MonoGame était le principe d'importation de textures (ou content pipeline) qui était très pratique à utiliser. Pour importer une texture dans la simulation nous devions ouvrir l'éditeur 
+MGCB\footnote{MonoGame Content Builder(MGCB) est un utilitaire qui permet de simplifier l'importation de textures dans le framework MonoGame. Plus d'informations : \url{https://docs.monogame.net/articles/tools/mgcb_editor.html}}
+.Cet éditeur nous permettait de simplement spécifier un fichier .png et une fois que nous avions build le projet, le texture serait ajouté au projet et pouvait être exploité en l'important en une ligne : 
+\begin{verbatim}
+    Texture2D maTexture = Content.Load<Texture2D>("chemin/vers/texture");
+\end{verbatim}
+
 \section{Tests}
+
+\paragraph{}
+Malgré notre envie d'écrire des tests, nous nous sommes rendu comptes que dans notre projet il était facile de tester les classes individuelles 
 
 \chapter{Résultats et perspectives}
 
