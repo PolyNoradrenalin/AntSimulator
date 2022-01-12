@@ -717,9 +717,18 @@ MGCB\footnote{MonoGame Content Builder(MGCB) est un utilitaire qui permet de sim
 \section{Tests}
 
 \paragraph{}
-Malgré notre envie d'écrire des tests, nous nous sommes rendu comptes que dans notre projet il était facile de tester les classes individuelles 
+Malgré notre envie d'écrire des tests, nous nous sommes rendu compte que dans notre projet, il était facile de tester les classes simples comme les colliders ou les transforms
+mais, dès qu'on voulait tester des choses plus avancées comme le comportement des fourmis, il était difficile d'écrire des tests qui n'étaient pas juste une perte de temps ou redondants.
+C'est pourquoi nous n'avons pas pu écrire autant de tests que ce qu'on visait au départ. De plus, la partie application du projet ne contient aucun test, nous avons testé à la main les interfaces comme il n'y
+avait pas beaucoup de possibilités à tester.
+
+\paragraph{}
+En revanche, les choses que nous avons testées nous ont permis de détecter des problèmes qui auraient été compliqués à trouver sinon (comme par exemple des problèmes avec nos formules de collision)
+\footnote{La liste des tests qui ont été faits peut être trouvée en annexe.}.
 
 \chapter{Résultats et perspectives}
+
+
 
 \section{État des lieux}
 \section{Apports}
