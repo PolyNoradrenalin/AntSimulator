@@ -6,6 +6,7 @@
 \documentclass{EPUProjetDi}
 \usepackage[bottom]{footmisc}
 \usepackage{txfonts}
+\usepackage{float}
 \makeindex
 
 %remplir les lignes suivantes avec les informations vous concernant :
@@ -611,69 +612,63 @@ utile de faire apparaître.
 
 \subsection{Outils de collaboration}
 
-\paragraph{}
 Lors des projets de 3\textsuperscript{ème} année, nous avons beaucoup appris sur comment utiliser
 Git. Nous avons choisi d'utiliser \textbf{GitHub} en tant qu'outil de versionnage en raison de notre aise avec et
 car le site possède un grand nombre de fonctionnalités nous permettant de mieux communiquer entre
 nous.
 
-\paragraph{}
 Lors du projet nous avons adopté une méthode de travail basé sur le \textbf{GitFlow}\footnote{Une méthode de travail où on sépare chaque feature ou fix dans une branche séparée.
 Ensuite une fois la feature finie, on créé un \textit{Merge Request} afin de demander la validation des autres développeurs.} avec pour seule nuance que nous n'avions pas de branches \textit{dev} ou \textit{release}
 mais plutôt toute modification se fusionnait directement à la branche \textit{main}.
 
 Cela avait pour avantage de nous permettre de suivre les avancements de l'autre personne et de pouvoir 
-apporter des suggestions ou des commentaires sur ce qui a été fait. 
+apporter des suggestions ou des commentaires sur ce qui avait été fait. 
 En fin de compte l'utilisation de ce workflow nous a permis de connaître et comprendre 
-les parties de codes que l'autre écrit et donc de pouvoir beaucoup avancer chacun de notre
+les parties de codes que l'autre écrivait et donc de pouvoir beaucoup avancer chacun de notre
 côté en ne laissant pas l'autre personne à l'abandon.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=.5]{merge_request.png}
-\caption{Exemple de commentaire sur un merge request pour l'ajout de la disparition des phéromones.}
+\caption{Exemple de commentaire sur une merge request pour l'ajout de la disparition des phéromones.}
 \label{fig:MergeRequest}
 \end{figure}
 
-\paragraph{}
-En plus des merge requests, GitHub nous permet de créer des \textit{issues}.
-Ces \textit{issues} peuvent être considérés comme des tâches qu'il reste à faire. Au sein de GitHub, nous
+En plus des merge requests, GitHub nous permet de créer des \textit{issues}\footnote{Ici fait référence 
+au mot anglais issue qui signifie un problème à résoudre.}.
+Ces \textit{issues} peuvent être considérées comme des tâches qu'il reste à faire. Au sein de GitHub, nous
 pouvons à tout moment nous approprier une tâche afin d'indiquer qu'on a commencé à travailler dessus. Cela 
 permet de bien savoir ce sur quoi l'autre personne travaille et également d'avoir un aperçu rapide de ce qu'il reste à faire dans le projet.
 
-\paragraph{}
 Il est évident que le nombre d'issues que nous avions au début du projet n'est pas le même qu'à la fin. Au cours du projet nous
 pouvions découvrir des aspects du code à réparer (dans ce cas l'issue serait plutôt un \textit{bug report}) ou encore des fonctionnalités
-importantes auxquelles nous n'avions pas pensés.
+importantes auxquelles nous n'avions pas pensé.
 
-\paragraph{}
-Les issues nous ont également permis de débattre entre-nous sur quelle serait la meilleure solution à un problème. Essentiellement, toute utilisation
+Les issues nous ont également permis de débattre entre nous sur quelle serait la meilleure solution à un problème. Essentiellement, toute utilisation
 de GitHub est dans l'objectif de faciliter la communication et le fait que tout soit bien répertorié nous assure de ne pas oublier des échanges que 
 nous aurions pu avoir.
 
-\paragraph{}
 Ces issues apparaissent au sein de Kanbans \footnote{Au sein de ce projet le Kanban était notre tableau de bord et nous permettait de suivre 
 l'avancement et de savoir ce qu'il restait à faire. Plus d'informations : \url{https://en.wikipedia.org/wiki/Kanban_(development)}.}
-qu'on retrouve directement intégré à GitHub. Nous avions deux Kanbans, un pour l'Application et l'autre pour le moteur de simulation comme ces deux éléments peuvent avancer très facilement en parallèle.
+qu'on retrouve directement intégré à GitHub. Nous avions deux Kanbans, un pour l'application et l'autre pour le moteur de simulation comme ces deux éléments peuvent avancer très facilement en parallèle.
+
+Dans \autoref{fig:Kanban} on peut voir les tâches qui sont en cours de développement et ceux qui sont prêts à être review.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=.3]{kanban.png}
-\caption{Exemple du tableau de bord côté Application. 
-\\On voit les tâches qui sont en cours de développement et ceux qui sont prêts à être review.}
+\caption{Exemple du tableau de bord côté Application}
 \label{fig:Kanban}
 \end{figure}
 
-\paragraph{}
 Un autre élément que nous avons utilisé avec GitHub est la fonctionnalité d'intégration continue. En effet, nous avons configuré notre projet 
 pour lancer tous les tests unitaires à chaque commit effectué sur une branche.
-Cela nous a permis de repérer des erreurs dans notre code car nous avons configuré le repo GitHub pour ne pas avoir le droit de merge une branche lorsque les tests unitaires ne passent pas.
-En plus de cela, nous n'avions pas le droit de faire des commits directement sur la branche main et pour merge une branche il fallait la validation de l'autre personne.
-Tout cela nous a apporté une connaissance plus générale sur le projet.
+Cela nous permettait de tout de suite nous rendre compte qu'une régression sur le programme était apparue et nous évitait d'accumuler des erreurs.
+Ainsi, pour fusionner les changements il était nécessaire que d'une part nous ayons la totalité des tests unitaires qui réussissent et en plus de cela,
+d'avoir l'approbation de l'autre personne pour pouvoir procéder à la fusion dans le main.
 
 \subsection{Langages et Langues}
 
-\paragraph{}
 Le choix du langage de programmation à utiliser était une décision importante à prendre. Nous avons décidé de faire ce projet en C\# car c'est un langage que nous
 n'avons pas encore pu utiliser au sein du parcours à Polytech. Nous étions au courant du fait que le C\# était très proche du Java et donc il n'y avait pas
 d'inquiétudes sur notre capacité à l'apprendre rapidement. Le C\# reprend aussi les concepts de machine virtuelle qui existent en Java ce qui permettrait de build et lancer le projet
@@ -682,38 +677,31 @@ De plus, le C\# est un langage que nous avions pu utiliser lors de petit projets
 A l'intérieur de C\# le standard de documentation utilisé est XMLdoc\footnote{Plus d'informations : 
 \url{https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/}.}.
 
-\paragraph{}
-Ensuite, il a fallu que nous nous décidions sur quelle convention de nommage nous allions utiliser. 
-Malgré notre envie d'utiliser celle présenté par notre enseignant en cours de C++ en 3\textsuperscript{ème} année, nous avons découvert la convention 
+Ensuite, il a fallu que nous nous décidions quelle convention de nommage nous allions utiliser. 
+Malgré notre envie d'utiliser celle présentée par notre enseignant en cours de C++ en 3\textsuperscript{ème} année, nous avons découvert la convention 
 proposée par Microsoft pour le C\#\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions}} qui nous a particulièrement plu.
 Dans une volonté de vouloir rester polyvalent et malléable en terme de méthodes de travail, nous avons décidé d'adopter cette convention.
 
-\paragraph{}
 Pour ce qui est de la langue dans laquelle nous avons codé, nous avons décidé de tout faire en Anglais pour que le code soit facilement
-transmissible et exploitable par d'autres individus dans le monde, chose qui dans le contexte de la mondialisation reste très important.
+transmissible et exploitable par d'autres personnes dans le monde, chose qui dans le contexte de la mondialisation reste très important.
 
-\subsection{Librairie de Tests}
+\subsection{Librairie de tests unitaires}
 
-\paragraph{}
 Il existe plusieurs librairies de test au sein de l'environnement .NET. Les plus utilisés sont XUnit, NUnit et MSTest.
-La bibliothèque que nous avons choisi d'utiliser est XUnit en raison du fait que Noé l'avait déjà utilisé au sein d'un projet personnel.
+La bibliothèque que nous avons choisi d'utiliser est XUnit en raison du fait que l'un d'entre nous l'avait déjà utilisé au sein d'un projet personnel.
 
 \subsection{Framework d'affichage}
 
-\paragraph{}
 Au lancement du projet, nous avons dû réfléchir à quel framework utiliser pour faire l'affichage de la simulation.
 Dans un premier temps, nous nous étions intéressé à Avalonia, un framework cross-platform qui est un successeur spirituel de WPF\footnote{WPF ou Windows Presentation Foundation est un framework 
 utilisé pour la création d'interfaces graphique. Aujourd'hui ce framework a beaucoup vieilli et est en train d'être remplacé par des frameworks plus modernes tels que Avalonia.}.
-On s'est rendu compte qu'Avalonia n'était pas du tout ce qu'on recherchait comme il ne servait qu'à faire des interfaces graphiques et était très peu utilisable pour l'affichage de formes plus complexes.
+On s'est rendu compte qu'Avalonia n'était pas du tout ce qu'on recherchait comme il ne servait qu'à faire des interfaces graphiques type Swing et 
+était très peu utilisable pour l'affichage en temps réel (jeu vidéo ou simulation).
 
-\paragraph{}
 Nous avons donc dû rechercher une solution alternative et c'est là que nous avons découvert MonoGame. 
 MonoGame est un framework graphique open-source utilisé principalement pour des jeux comme son nom l'indique et qui est basé
 sur XNA (un framework développé par Microsoft et abandonné depuis 2013). 
 Après avoir consulté la documentation et avoir fait des recherches dessus, MonoGame est le framework que nous avons décidé d'utiliser. 
-Il nous a permis de rendre plus simple certains aspects tels que l'importation et l'utilisation de textures.
-
-\paragraph{}
 En complément de MonoGame, l'ensemble des textures présents dans le projet ont été créé à la main avec Piskel\footnote{Outil gratuit de dessin de PixelArt en-ligne. 
 Plus d'informations : \url{https://www.piskelapp.com/}.}. 
 
@@ -721,30 +709,32 @@ Plus d'informations : \url{https://www.piskelapp.com/}.}.
 
 \subsection{Abstraction des Colliders}
 
-\paragraph{}
 Lorsque nous avons codé les colliders, nous nous sommes rendu compte que la manière initiale dont nous l'avions conçu
 faisait qu'il y avait énormément de duplication de code ce qui le rendait difficilement maintenable.
 
-Exemple : Pour tester la collision entre un cercle et un rectangle il y a deux cas. Premier cas : le cercle appelle sa méthode CheckCollision en passant le rectangle en paramètre.
-Second cas : 
+Exemple : Pour tester la collision entre un cercle et un rectangle il y a deux cas. 
+\begin{itemize}
+    \item Premier cas : le cercle appelle sa méthode CheckCollision en passant le rectangle en paramètre.
+    \item Second cas : le rectangle appelle sa méthode CheckCollision en passant cette fois-ci le cercle en paramètre.
+\end{itemize}
 
-La solution à cela était de déplacer les méthodes de collision dans une classe statique et qu'ensuite chaque collider fasse appel à la méthode qu'il a besoin dans la classe statique.
+La solution à cela était de déplacer les méthodes de collision dans une méthode statique et qu'ensuite chaque collider fasse appel à la méthode
+qu'il a besoin.
 
 \subsection{Transforms et Colliders}
-\paragraph{}
-Comme indiqué précédemment, l'objet Transform que nous avons utilisé est inspiré de celui qu'on retrouve en Unity. Un autre concept que nous avons voulu reprendre de Unity est le fait qu'un
-collider puisse posséder son propre transform ce qui lui permet d'avoir une position autre que celle de l'entité à la quelle il est attaché. Ca permet aussi aux colliders d'exister sans être forcément
+
+Comme indiqué précédemment, l'objet Transform que nous avons utilisé est inspiré de celui qu'on retrouve sur Unity. Un autre concept que nous avons voulu reprendre d'Unity est le fait qu'un
+collider puisse posséder son propre transform ce qui lui permet d'avoir une position autre que celle de l'entité à laquelle il est attaché. Ca permet aussi aux colliders d'exister sans être forcément
 lié à une entité.
 
-\paragraph{}
 Au début du projet, nous avions pour intention d'implémenter cela dans le moteur de simulation. 
 Un collider aurait donc un transform et s'il est rattaché à une entité, le transform du collider serait en coordonnées relatives (pour obtenir sa position réelle, il faudrait faire Entity.Transform + Collider.Transform).
 Il s'avère que cette solution ajoute beaucoup de complexité aux calculs de collision et ne serait même pas utile au sein de la simulation. Nous avons donc pris la décision d'enlever cette 
 fonctionnalité et de lier fortement les colliders aux entités en leur faisant prendre le transform de l'entité à laquelle ils sont rattachés.
 
 \subsection{Temps de simulation ou temps réel ?}
-\paragraph{}
-Une erreur gigantesque que nous avons commises est le fait que nous avons ajouté des éléments qui dépendaient du temps réel dans le moteur de simulation (un exemple serait le temps de disparition des phéromones).
+
+Une erreur gigantesque que nous avons commise est le fait que nous avons ajouté des éléments qui dépendaient du temps réel dans le moteur de simulation (un exemple serait le temps de disparition des phéromones).
 Le problème ici vient du fait que nous voulions permettre aux utilisateurs de ralentir, accélérer ou mettre en pause la simulation.
 
 \begin{figure}[h]
@@ -754,25 +744,47 @@ Le problème ici vient du fait que nous voulions permettre aux utilisateurs de r
     \label{fig:ticks_secondes}
 \end{figure}
 
-Les lignes rouges dans \ref{fig:ticks_secondes} représentent des appels à Update. On voit que la méthode update n'est pas appelé de manière uniforme ce qui cause des décalages si on tente de changer la vitesse de la simulation.
+Les lignes rouges dans \ref{fig:ticks_secondes} représentent des appels à Update. On voit que la méthode n'est pas appelé de manière uniforme ce qui cause des décalages si on tente de changer la vitesse de la simulation.
 
 Malheureusement, mettre en pause la simulation ne met pas en pause la vrai vie ! Il y a donc une désynchronisation qui se déroule et qui peut causer des problèmes de cohérence et d'intégrité.
 La solution à ce problème est évidente, il faut décompter tout en nombre de \textit{ticks}, c'est à dire, de fois où la méthode Update du World est appelée. 
-Cela fait que chaque phéromone possède un compteur pour sa disparition qui décroît de un à chaque Update. Cela permet de garder la cohérence dans le cas de modification de la vitesse de la simulation.
+Cela fait que chaque phéromone possède un compteur pour sa disparition qui décroît d'une unité à chaque tick. Cela permet de garder la cohérence dans le cas de modification de la vitesse de la simulation.
 
 \subsection{Optimisation}
 
-\paragraph{}
 La problématique de l'optimisation de la simulation a été un enjeu très important pour nous tout au long du projet. Nous avons dû réfléchir sur les implémentations qui ont été faites afin de vérifier qu'elles ne 
 faisaient pas chuter les performances. Que ce soit au niveau de quel type d'objet nous utilisions du C\# ou encore vérifier qu'on ne remplissait pas inutilement le garbage collector 
 \footnote{Le garbage collector est un gestionnaire de mémoire qui supprime et désalloue automatiquement des objets quand ils ne sont plus référencés par le programme. 
 Plus d'informations sur comment il fonctionne en .NET : \url{https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals}}.
-Quand on parle de simuler une quantité de fourmis qui peut aller dans les milliers, sachant que chaque fourmi doit évaluer son environnement et prendre des décisions, la performance chute très rapidement.
+Quand on parle de simuler une quantité de fourmis qui peut aller dans les milliers, sachant que chaque fourmi doit évaluer son environnement et prendre des décisions, les performances chute très rapidement.
 
 Nous présenterons dans cette partie les principales optimisations que nous avons effectués pour augmenter au maximum le nombre de fourmis que le simulateur peut supporter.
 
+\subsubsection{Structures de données}
+Un autre élément important dans l'optimisation de la simulation a été le choix des structures de données. 
+On s'est rendu compte que l'objet List<T> en C\# est très efficace lorsqu'on traite des liste de peu d'éléments
+mais, quand il y a un grand nombre d'éléments dans la liste, l'objet HashSet (objet dictionnaire) est beaucoup plus rapide à utiliser
+\footnote{Nous avons basé cette observation sur le poste suivant : \url{https://stackoverflow.com/a/10762995/15541425}} mais prend plus de mémoire.
+Dans notre cas la performance est critique donc nous avons introduit le HashSet là où il y avait des listes de grande taille, 
+c'est à dire principalement dans la récupération d'éléments pour former le perception map d'une fourmi.
+
+On pourrait donc se demander pourquoi nous n'avons pas utilisé un HashSet pour le découpage du monde en régions ? 
+La réponse est simple, pour les objets qui seront accédé souvent le type primitif jagged array
+\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/arrays/jagged-arrays}}
+en C\# est ce qui est conseillé en raison de sa performance.
+
+Enfin, la dernière optimisation que nous avons fait pour les structures de données est au niveau des Properties.
+Un Property\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/properties}}
+en C\# est un type de déclaration de variable qui permet de générer automatiquement les accesseurs d'une classe.
+Ce type permet de simplifier le code et d'éviter aux développeurs d'écrire des méthodes qui vont juste allonger le code pour pas grand-chose.
+
+Nous avons aussi remarqué que les properties\footnote{Documentation C\# sur les Properties : \url{https://docs.microsoft.com/fr-fr/dotnet/csharp/programming-guide/classes-and-structs/properties}}, malgré leur intérêt évident, sont beaucoup plus lentes que des attributs standards
+du fait qu'elles ne sont que des manières de générer les getter et setter. 
+Il a donc été très avantageux pour nous de ne pas utiliser de Property pour les éléments qui sont utilisés fréquemment.
+
+
 \subsubsection{Découpage par régions}
-\paragraph{}
+
 Le découpage par régions est l'optimisation la plus "simple" mais évidente que nous avons ajouté.
 
 \begin{figure}[h]
@@ -782,46 +794,23 @@ Le découpage par régions est l'optimisation la plus "simple" mais évidente qu
     \label{fig:decoupage_region}
 \end{figure}
 
-\paragraph{}
 Dans la figure \ref{fig:decoupage_region} on observe que la plupart des entités sont loin de l'individu au centre, l'optimisation par régions permet de ne pas les prendre en compte et donc de ne faire des calculs
-de collision avec que les objets dans la zone de perception de l'individu.
+de collision qu'avec les objets dans la zone de perception de l'individu.
 Nous avons implémenté ce découpage en permettant aux fourmis de récupérer les entités qui sont dans une certaine zone autour d'eux (en nombre de régions ou en distance réel dans le monde).
 Cette optimisation nous a apporté un énorme gain en performances et a notamment rendu la présence d'un grand nombre de fourmis et de phéromone peu impactant sur les performances.
 
-\subsubsection{Structures de données}
-\paragraph{}
-Un autre élément important dans l'optimisation de la simulation a été le choix des structures de données. 
-On s'est rendu compte que l'objet List<T> en C\# est très efficace lorsqu'on traite des liste de peu d'éléments
-mais, quand il y a un grand nombre d'éléments dans la liste, l'objet HashSet (objet dictionnaire) est beaucoup plus rapide à utiliser
-\footnote{Nous avons basé cette observation sur le poste suivant : \url{https://stackoverflow.com/a/10762995/15541425}} mais prend plus de mémoire.
-Dans notre cas la performance est critique donc nous avons introduit le HashSet là où il y avait des listes de grande taille, 
-c'est à dire principalement dans la récupération d'éléments pour former le perception map d'une fourmi.
 
-\paragraph{}
-On pourrait donc se demander pourquoi nous n'avons pas utilisé un HashSet pour le découpage du monde en régions ? 
-La réponse est simple, pour les objets qui seront accédé souvent le type primitif jagged array
-\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/arrays/jagged-arrays}}
-en C\# est ce qui est conseillé en raison de sa performance.
-
-\paragraph{}
-Enfin, la dernière optimisation que nous avons fait pour les structures de données est au niveau des Properties.
-Un Property\footnote{Plus d'informations : \url{https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/properties}}
-en C\# est un type de déclaration de variable qui permet de générer automatiquement les accesseurs d'une classe.
-Ce type permet de simplifier le code et d'éviter aux développeurs d'écrire des méthodes qui vont juste allonger le code pour pas-grand-chose.
-Nous avons remarqué que les properties, malgré leur intérêt évident, sont beaucoup plus lents que des attributs standards. 
-Il a donc été très avantageux pour nous de ne pas utiliser de Property pour les éléments qui sont utilisés fréquemment.
+\pagebreak
 
 \subsubsection{Fusion de phéromones}
-\paragraph{}
-Un autre problème que nous avons remarqué au même moment que nous avons fait le découpage des régions est le fait qu'après que la simulation soit ouverte depuis longtemps, les fourmis
-auront émis un grand nombre de phéromones. Cela mettait la simulation à genoux en raison du nombre d'entités qui existaient dans le monde. Il fallait donc trouver une solution pour permettre
+Un autre problème que nous avons remarqué au même moment que nous avons fait le découpage des régions est le fait qu'après avoir laissé la simulation ouverte pendant longtemps, les fourmis
+auront émis un grand nombre de phéromones. Cela ralentissait énormément la simulation en raison du nombre d'entités qui existaient dans le monde. Il fallait donc trouver une solution permettant
 d'avoir beaucoup de phéromones sans pour autant condamner la simulation à perdre en performances après un certain temps.
-Notre solution ici était de faire une fusion de phéromones s'ils sont assez proches. La fusion de deux phéromones combine leur attirance pour les fourmis et donc permet de garder les informations
+Notre solution ici était de faire une fusion de phéromones si elles sont assez proches. La fusion de deux phéromones combine leur attirance pour les fourmis et donc permet de garder les informations
 tout en optimisant plus la simulation. Cette fusion avait une limite supérieure ce qui empêche d'avoir des phéromones qui persistent extrêmement longtemps.
 Cette optimisation, combinée avec le découpage en régions, nous a apporté la plus grande augmentation en vitesse de simulation.
 
 \subsubsection{Garbage Collector}
-\paragraph{}
 Nous avons également dû travailler sur l'optimisation du garbage collector. Si trop d'objets sont créés et supprimés, le garbage collector va devoir travailler plus souvent pour les allouer et les désallouer
 ce qui influe beaucoup sur les performances.  
 
@@ -832,22 +821,19 @@ ce qui influe beaucoup sur les performances.
     \label{fig:garbage_collector}
 \end{figure}
 
-\paragraph{}
-On voit sur la figure \ref{fig:garbage_collector} qu'après très peu de temps, la mémoire qu'aura alloué le simulateur est très grand.
+On voit sur la figure \ref{fig:garbage_collector} qu'après très peu de temps, la mémoire qu'aura alloué le simulateur est très élevée.
 Afin de résoudre ce problème, nous avons utilisé les outils de profiling de mémoire qu'on retrouve dans notre IDE
 \footnote{Pour ce projet, nous avons utilisé Rider qui est un IDE pour le C\# développé par JetBrains.}.
-\paragraph{}
+
 L'optimisation ici est simple, il nous a suffit de prioriser la réutilisation de variables et éviter de les déclarer et détruire trop souvent.
-Un exemple pertinent de cela est pour l'objet PerceptionMap qui avant, était recrée à chaque mise à jour du monde. Après l'optimisation, la perception map est stockée dans la fourmi
-et est simplement vidé à chaque mise à jour du monde. 
-\paragraph{}
-Il existe également d'autres méthodes qui initialisaient des listes inutilement. Nous avons modifié cela pour que ça ne soit plus le cas.
-Suite à ces optimisations, l'outil de vérification de mémoire dans Rider ne nous affichait plus d'avertissements et donc nous pensons avoir totalement résous le problème.
+Un exemple pertinent de cela est pour l'objet PerceptionMap qui avant, était recréé à chaque mise à jour du monde. Après l'optimisation, la perception map est stockée dans la fourmi
+et est simplement remise à zéro à chaque mise à jour du monde. 
+
+Suite à ces optimisations, l'outil de vérification de mémoire dans Rider ne nous affichait plus d'avertissements et donc nous pensons avoir totalement résolu le problème.
 
 \section{Application}
 
 \subsection{Renderers}
-\paragraph{}
 Une autre hésitation que nous avons eue durant le projet était au niveau de comment gérer la structure de rendu dans l'application et comment 
 faire l'association entre une entité du moteur et ce qu'on dessine à l'écran. Au début, nous avions pensé à créer une classe qui s'occuperait de faire le rendu des
 entités en parcourant la liste présente dans l'objet World (voir la figure \ref{fig:renderer_logic_1}). 
@@ -855,39 +841,38 @@ entités en parcourant la liste présente dans l'objet World (voir la figure \re
 \begin{figure}[h]
     \centering
     \includegraphics[scale=0.5]{renderer_logic_1.png}
-    \caption{La structure initiale que nous avions prévu d'utiliser (one-to-all). L'objet Renderer serait rapidement devenu peu pratique à utiliser et à modifier.}
+    \caption{La structure initiale que nous avions prévu d'utiliser (one-to-all). }
     \label{fig:renderer_logic_1}
 \end{figure}
 
-\paragraph{}
+Avec l'architecture montrée dans \autoref{fig:renderer_logic_1}, on voit que l'objet Renderer serait rapidement devenu peu pratique 
+à utiliser et à modifier.
+
 En fin de compte, nous avons trouvé que cette solution était peu pratique car si nous voulions un comportement 
 de rendu différent pour des objets d'une classe particulière, il aurait fallu faire une disjonction de cas par rapport au type. Cela nous aurait fait finir avec
 une méthode très longue qui aurait été un véritable cauchemar à gérer. 
 
-\paragraph{}
 Nous avons donc pris la décision logique de plutôt créer des renderers génériques pour les entités n'ayant pas besoin de comportement 
 en plus et dans le cas d'entités comme les fourmis ou la colonie qui avaient des textures ou comportements différents, nous pouvions créer un renderer
 précis juste pour eux (voir la figure \ref{fig:renderer_logic_2}).
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
-    \includegraphics[scale=0.5]{renderer_logic_2.png}
+    \includegraphics[scale=0.3]{renderer_logic_2.png}
     \caption{La structure finale que nous avons utilisé (one-to-one). Elle permet facilement d'aller modifier ce qu'on a besoin pour l'affichage d'un type d'objet précis.}
     \label{fig:renderer_logic_2}
 \end{figure}
 
 \subsection{Fichier de propriétés}
-\paragraph{}
-Afin de faciliter la configuration de la simulation, nous avons utilisons un fichier properties
+Afin de faciliter la configuration de la simulation, nous avons utilisé un fichier properties
 \footnote{Nous avons utilisé une implémentation de gestion de fichier properties postée sur StackOverflow car en Java il existe une implémentation native qu'on ne retrouve pas en C\# : 
 \url{https://stackoverflow.com/questions/485659/can-net-load-and-parse-a-properties-file-equivalent-to-java-properties-class\#answer-7696370}}
 qui permet de spécifier les changements qu'on veut ajouter comme par exemple la vitesse des fourmis
 ou les ressources nécessaires pour qu'une colonie fasse apparaître une fourmi. A l'origine, nous avions prévu de permettre la configuration de ces options directement dans la simulation, mais,
 le fait d'utiliser MonoGame nous a imposé de créer les objets de saisie de texte à la main. Nous avons décidé que cela serait une trop grosse perte de temps et ne rentrait pas dans 
-le cadre du projet. Le fichier Properties a été donc un gain de temps énorme pour nous, comparé à l'alternatif.
+le cadre du projet. Le fichier Properties a été donc un gain de temps énorme pour nous, comparé à l'alternative.
 
 \subsection{Pipeline de contenu}
-\paragraph{}
 Un des avantages de MonoGame était le principe d'importation de textures (ou content pipeline) qui était très pratique à utiliser. Pour importer une texture dans la simulation nous devions ouvrir l'éditeur 
 MGCB\footnote{MonoGame Content Builder(MGCB) est un utilitaire qui permet de simplifier l'importation de textures dans le framework MonoGame. Plus d'informations : \url{https://docs.monogame.net/articles/tools/mgcb_editor.html}}
 .Cet éditeur nous permettait de simplement spécifier un fichier .png et une fois que nous avions build le projet, le texture serait ajouté au projet et pouvait être exploité en l'important en une ligne : 
@@ -897,13 +882,11 @@ MGCB\footnote{MonoGame Content Builder(MGCB) est un utilitaire qui permet de sim
 
 \section{Tests}
 
-\paragraph{}
 Malgré notre envie d'écrire des tests, nous nous sommes rendu compte que dans notre projet, il était facile de tester les classes simples comme les colliders ou les transforms
 mais, dès qu'on voulait tester des choses plus avancées comme le comportement des fourmis, il était difficile d'écrire des tests qui n'étaient pas juste une perte de temps ou redondants.
 C'est pourquoi nous n'avons pas pu écrire autant de tests que ce qu'on visait au départ. De plus, la partie application du projet ne contient aucun test, nous avons testé à la main les interfaces comme il n'y
 avait pas beaucoup de possibilités à tester.
 
-\paragraph{}
 En revanche, les choses que nous avons testées nous ont permis de détecter des problèmes qui auraient été compliqués à trouver sinon (comme par exemple des problèmes avec nos formules de collision)
 \footnote{La liste des tests qui ont été faits peut être trouvée en annexe.}.
 
@@ -911,7 +894,6 @@ En revanche, les choses que nous avons testées nous ont permis de détecter des
 
 \section{État des lieux}
 
-\paragraph{}
 Après 6 mois de travail, nous avons abouti sur un logiciel qui peut simuler des colonies de fourmis et leurs interactions avec leur environnement.
 Notre simulateur nous permet de placer des murs, des colonies et de la nourriture. 
 Les fourmis ont le comportement que nous avions prévu, c'est à dire, elles cherchent la nourriture et une fois trouvée, elles ramènent à la colonie et elles avertissent les 
@@ -923,37 +905,41 @@ En tout, nous pensons avoir bien réussi à accomplir les objectifs initiaux du 
 
 \section{Apports}
 
+%c#
+%configuration de projet
+%git
+%conduite de projet
+%optimisation de code
+%utilisation des outils de debug et profiler
+%connaissances sur les fourmis
+
+
 \section{Évolutions possibles}
 
-\paragraph{}
 Bien que nous soyons fiers de notre simulation, il y a une multitude d'améliorations et d'évolutions qui sont possibles.
 
 \subsection{Comportement des fourmis}
-\paragraph{}
+
 Une amélioration conséquente que nous pourrions faire serait de réparer les problèmes qui existent avec le comportement des fourmis.
 
 \subsubsection{Bouclage}
 
-\paragraph{}
 Un problème avec le comportement actuel est le fait que certaines fourmis vont faire du Bouclage. Pour plus détailler, il s'agit du cas
-où une fourmi a trouvé de la nourriture et elle commence à suivre une fourmi qui cherche de la nourriture. 
+où une fourmi a trouvé de la nourriture et elle commence à suivre une fourmi qui cherche de la nourriture ou tout simplement un circuit de phéromones. 
 Les fourmis ont un risque de commencer une boucle où elles vont chacune se suivre et ne jamais pouvoir en sortir.
 Bien que ce phénomène existe dans la vrai vie\footnote{Voir : \url{https://youtu.be/LEKwQxO4EZU}}, ce n'est pas censé arriver aussi fréquemment que dans notre simulation.
 Une solution serait de faire en sorte que la fourmi puisse abandonner sa recherche ce qui sortirait les fourmis du cycle.
 
 \subsubsection{Les Murs}
-\paragraph{}
 Un autre problème est le fait que les fourmis voient les phéromones à travers des murs. Il peut arriver qu'elles se ciblent sur un morceau de 
-nourriture en particulier de l'autre côté d'un mur et donc qu'elles soient bloquées.
+nourriture en particulier de l'autre côté d'un mur et soient donc bloquées contre le mur.
 Il faudrait donc vérifier la présence d'un mur avant de passer en TargetState et permettre à la fourmi d'avancer sur la nourriture qu'elle voit.
 
 \subsubsection{Phéromones}
-\paragraph{}
 Enfin, la dernière amélioration en lien avec le comportement des fourmis est le fait que parfois les fourmis ont du mal à remonter la trace des phéromones qui les mènerait à la bonne destination et elles finissent par
-se perdre en chemin de leur colonie. Ca peut arriver qu'elles prennent un chemin de food pheromones dans la mauvaise direction (et donc que ça les conduise à leur colonie et non pas de la nourriture).
+se perdre sur le chemin du retour à leur colonie. Il peut aussi arriver qu'une fourmi suive des phéromones dans la mauvaise direction et donc les conduire à leur colonie et non pas à la nourriture (ou inversement).
 
 \subsection{Properties}
-\paragraph{}
 Comme énoncé précédemment, il serait possible de rajouter un endroit à l'intérieur de la simulation qui permet de modifier les règles de la simulation.
 On pourrait aussi rajouter de la personnalisation en plus dans l'application (liste non-exhaustive) : 
 \begin{itemize}
@@ -965,22 +951,21 @@ On pourrait aussi rajouter de la personnalisation en plus dans l'application (li
 \end{itemize}
 
 \subsection{Optimisation}
-\paragraph{}
 Une autre fonctionnalité intéressante dont nous sommes déçus de ne pas avoir pu ajouter est le multithreading. En effet l'ajout du multithreading (CPU ou GPU) dans les calculs permettrait d'afficher 
 encore plus d'entités dans la simulation. On pourrait envisager une distribution du travail par régions 
 (chose qui se rapprocherait du calcul d'une fractale de Mandelbrot\footnote{Plus d'informations : \url{https://fr.wikipedia.org/wiki/Ensemble_de_Mandelbrot}} par exemple).
 Il faudrait donc rajouter des protections contre les problèmes de concurrence et rendre le logiciel thread-safe. 
 
-\paragraph{}
 Enfin, malgré le fait que nous sommes contents d'avoir pu apprendre le C\#, il est fort probable que si nous avions fait le projet en C++ 
 ou dans un autre langage qui est plus proche de la machine, l'application aurait été plus rapide et moins complexe à optimiser.
 
+\pagebreak
+
 \subsection{Fonctionnalités liés au monde}
-\paragraph{}
 Ensuite, une autre addition qui pourrait être intéressante est le fait de pouvoir importer et exporter le monde en son état actuel ainsi que les paramètres qu'on aurait modifié dans l'application.
 Pour les paramètres c'est techniquement possible actuellement car on peut partager notre fichier .properties avec quelqu'un d'autre mais il faut le modifier à la main. 
 Par contre, pour ce qui est de l'état actuel du monde, il faudrait qu'on détermine un format de sérialisation qui serait assez robuste pour contenir toutes les données.
-En plus, ça pourrait être intéressant d'avoir une fonctionnalité qui fait apparaître de la nourriture aléatoirement dans le monde afin de pouvoir faire des simulations sur le plus long terme.
+De plus, il pourrait être intéressant d'avoir une fonctionnalité qui fait apparaître de la nourriture aléatoirement dans le monde afin de pouvoir faire des simulations sur le plus long terme.
 En complément du point précédent, il serait intéressant que les fourmis puissent mourir et se reproduire même si cela rajouterait un niveau de complexité en plus à la simulation. 
 Elles pourraient également rentrer en conflit avec des colonies voisines pour contester des ressources. On pourrait imaginer une fourmi guerrière qui aurait pour rôle de protéger sa colonie et ses fourmis.
 
@@ -988,6 +973,7 @@ Elles pourraient également rentrer en conflit avec des colonies voisines pour c
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{\numberline{}Conclusion}
 \markboth{Conclusion}{}
+
 
 
 %--------------------------------------------------------------------------------
