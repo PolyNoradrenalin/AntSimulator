@@ -194,7 +194,7 @@ La classe \textbf{Entity} est donc la version la plus abstraite d'un de ces obje
 représentera une entité au comportement différent pouvant exister dans la simulation.
 
 Les comportements ajoutés sont par exemple le système de vie, une machine à états ou même le comportement d'une fourmi.
-Le dernier composant présent dans chaque entité est le \textbf{Collider} qui est la boîte de collision d'une entité et qui peut se définir 
+Le dernier composant présent dans chaque entité est le \textbf{Collider} qui est la boîte de collision d'une entité et peut se définir 
 de différentes formes selon les besoins. Il est utile dans le calcul des mouvements car il permet de tester si une entité ne cherche pas 
 à se déplacer dans un mur.
 
@@ -243,7 +243,7 @@ une valeur \textbf{Vrai} pour représenter un mur ou \textbf{Faux} pour représe
 \subsection{Colliders}
 
 Pour notre simulation, nous avons prévu trois types de boîtes de collision différents. Ces types de collisions
-peuvent tous les trois être testés entre eux afin de savoir s'ils sont superposés(ou en collision).
+peuvent tous les trois être testés entre eux afin de savoir si oui ou non ils sont superposés (s'ils sont en collision).
 
 \subsubsection*{Cercle - Monde}
 
@@ -280,7 +280,6 @@ Voici quelques exemples pour illustrer :
     \label{fig:rectangle_collider_rectangle_1}
 \end{figure}
 
-\paragraph{}
 Dans la figure \ref{fig:rectangle_collider_rectangle_1}, on voit que les deux objets ne se superposent pas en raison de la non intersection des segments rouge et bleu.
 
 \begin{figure}[h]
@@ -290,12 +289,10 @@ Dans la figure \ref{fig:rectangle_collider_rectangle_1}, on voit que les deux ob
     \label{fig:rectangle_collider_rectangle_2}
 \end{figure}
 
-\paragraph{}
-Dans la figure \ref{fig:rectangle_collider_rectangle_2}, on doit tester toutes les autres axes des deux objets car les segments rouge et bleu se superposent.
+Dans la figure \ref{fig:rectangle_collider_rectangle_2}, on doit tester tous les autres axes des deux objets car les segments rouge et bleu se superposent.
 Si toutes les projections collisionnent, alors, les deux objets se superposent.
 
 \subsubsection*{Rectangle - Cercle}
-\paragraph{}
 La collision entre un rectangle et un cercle peut utiliser l'algorithme précédent et 
 le cercle prendra en axe, la droite formée par le centre du cercle et le point du rectangle qui est la plus proche.
 
@@ -313,21 +310,21 @@ Dans la vraie vie, le principe d'une fourmi est très complexe et varie énormé
 
 Une fourmi va partir de sa colonie à la recherche de nourriture tout en déposant des phéromones pour indiquer le chemin vers sa colonie. Lorsqu'elle 
 trouvera de la nourriture, elle la récupérera et suivra les phéromones laissés précédemment pour retrouver le chemin menant à sa colonie tout en laissant
-des phéromones menant à la nourriture qu'elle vient de trouver.  Les phéromones servent certes à la fourmi, mais servent aussi à ses congénères, car, 
-cela leur permet d'aller d'elles-mêmes à la source de nourriture que la fourmi a trouvée. En d'autres termes, cela leur permet de \textbf{communiquer}.
+des phéromones menant à la nourriture qu'elle vient de trouver.  Les phéromones servent certes à la fourmi mais servent aussi à ses congénères car, 
+cela leur permet de eux-mêmes aller à la source de nourriture que la fourmi a trouvé. En d'autres termes, cela leur permet de \textbf{communiquer}.
 La fourmi doit donc être capable de sentir son environnement proche à la recherche de phéromones ou d'obstacles pour prendre des décisions et les exécuter.
 
-Ce comportement est largement simplifié par rapport à la vraie vie, car les fourmis ont un sens de l'orientation ou peuvent même communiquer visuellement 
+Ce comportement est largement simplifié par rapport à la vraie vie car les fourmis ont un sens de l'orientation ou peuvent même communiquer visuellement 
 (et sûrement beaucoup d'autres choses que nous ne savons pas) mais malgré cela, il est normalement suffisant pour atteindre notre objectif. 
 
 \subsubsection{Perception d'une fourmi}
 
 Les décisions les plus importantes des fourmis étant les mouvements, nous avons décidé que la perception de l'environnement de la fourmi avait du sens
 d'être basé sur des directions.
-Plus précisément, à chacune de ces directions, est attribué un score qui représente la volonté qu'a la fourmi d'aller dans cette direction.
-On considère donc une structure que nous avons appelé PerceptionMap qui remplit cet objectif d'associer un vecteur 2D à un réel.
+Plus précisément, à chacune de ces directions est attribuée un score qui représenterait la volonté qu'a la fourmi d'aller dans cette direction.
+On considère donc une structure que nous avons appelé PerceptionMap qui remplit cette objectif d'associer un vecteur 2D à un réel.
 
-Une perception map va donc donner à la fourmi l'information de la direction la plus intéressante selon la phéromone qu'elle recherche à un moment donné.
+Une perception map va donc donner à la fourmi l'information de la direction la plus intéressante selon le phéromone qu'elle recherche à un moment donné.
 
 \begin{figure}[h]
     \centering
@@ -341,10 +338,10 @@ Dans ce schéma, plus une zone est coloriée en rouge, plus elle a de l'importan
 
 Dans le calcul de cette perception map, il intervient 3 facteurs différents:
 \begin{itemize}
-    \item La distance $d$ de la fourmi à la phéromone et la distance de perception $\alpha$ (propriété de la fourmi). \eqref{eq:dist_pheromone}
+    \item La distance $d$ de la fourmi au phéromone et la distance de perception $\alpha$ (propriété de la fourmi). \eqref{eq:dist_pheromone}
     \item L'angle $\Delta$ entre le vecteur directeur\footnote{Le vecteur directeur est le vecteur associé à l'angle de la fourmi ou
-    autrement dit, la direction dans laquelle elle regarde.} et la direction de la phéromone. \eqref{eq:rot_pheromone}
-    \item L'intensité du phéromone. $e_p$ (avec $p$ la phéromone)
+    autrement dit, la direction dans laquelle elle regarde.} et la direction du phéromone. \eqref{eq:rot_pheromone}
+    \item L'intensité du phéromone. $e_p$ (avec $p$ le phéromone)
 \end{itemize}
 
 \begin{subequations}
@@ -362,8 +359,8 @@ son attractivité pour la fourmi. \eqref{eq:total_pheromone}
     \label{eq:total_pheromone}
 \end{equation}
 
-Finalement, à chaque direction $u$ nous pouvons récupérer les scores de chaque phéromone $p_{u}$ présente dans cette direction
-et les sommer pour obtenir le score total de cette direction que l'on nommera $\lambda_{u}$. \eqref{eq:total_direction}
+Finalement, à chaque direction $u$ nous pouvons récupérer les scores de chaque phéromone $p_{u}$ présent dans cette direction
+et les sommer pour obtenir le score total de cette direction qu'on nommera $\lambda_{u}$. \eqref{eq:total_direction}
 
 \begin{equation}
     \lambda_{u} = \sum_{p_{u}}{} \mu_{p_{u}}
@@ -371,15 +368,15 @@ et les sommer pour obtenir le score total de cette direction que l'on nommera $\
 \end{equation}
 
 On peut ainsi attribuer un score d'attractivité qui permettra à la fourmi de savoir quelle direction est la plus intéressante de suivre.
-Dans le cas où l'on voudrait que la fourmi soit repoussée par quelque chose, il suffit de faire en sorte que la direction opposée de ce quelque chose
+Dans le cas où l'on voudrait que la fourmi soit repoussé par quelque chose, il suffit de faire en sorte que la direction opposée de ce quelque chose
 soit intéressante, elle serait donc plus intéressée par la fuite. 
 
 \subsubsection{Prise de décision de la fourmi}
 
 Maintenant que la fourmi est capable de sentir son environnement proche, il lui faut une manière de modéliser son comportement.
-Pour cela, nous avons considéré que la fourmi n'avait que deux phases différentes pour accomplir son objectif :
+Pour cela, nous avons considérer que la fourmi n'avait que deux phases différentes pour accomplir son objectif:
 \begin{enumerate}
-    \item La fourmi recherche de la nourriture en suivant éventuellement les phéromones amenant à de la nourriture tout en déposant celles qui ramènent à la colonie.
+    \item La fourmi recherche de la nourriture en suivant éventuellement les phéromones amenant à de la nourriture tout en déposant ceux qui amènent à la colonie.
     \item La fourmi recherche sa colonie en suivant les phéromones la ramenant à sa colonie.
 \end{enumerate}
 
@@ -391,7 +388,7 @@ et s'y dirige directement.
 \subsubsection{Machine à états}
 
 Nous avons donc décidé de modéliser cette succession d'états par une machine à états. En effet, cette modélisation nous permet de faire évoluer 
-le comportement de la fourmi sans problème. La solution "évidente" pour implémenter ce modèle est le design pattern \textit{State} (États) qui répond
+le comportement de la fourmi sans problème. La solution "évidente" à ce problème est le design pattern \textit{State} (États) qui répond
 directement à cette problématique et permet de renforcer notre souhait d'avoir un comportement qui peut évoluer facilement.
 
 \begin{figure}[h]
@@ -402,13 +399,13 @@ directement à cette problématique et permet de renforcer notre souhait d'avoir
 \end{figure}
 
 Le design pattern \textit{State} est pratique car à chaque état du comportement, nous pouvons y associer du code à exécuter pour la fourmi via la méthode 
-Update vue précédemment, mais aussi lorsque la fourmi rentre ou quitte cet état. Cela ouvre ainsi un large panel de possibilités pour les comportements. 
- 
+Update vue précédemment mais aussi lorsque la fourmi rentre ou quitte cet état ouvrant ainsi un large panel de possibilités pour les comportements. 
+
 \subsubsection{Entité vivante qui se déplace}
 
 La fourmi ayant pris une décision pour sa direction, il ne reste plus que de s'y déplacer. Cependant, il existe beaucoup de manières de se déplacer
 d'un point A à un point B. La fourmi peut par exemple s'y rendre en ligne droite ou alors en ondulant de gauche à droite l'essentiel étant que nous
-ne voulons là encore pas nous rendre la vie compliquée plus tard si nous voulons changer cette manière de déplacement.
+ne voulons là encore pas nous rendre la vie compliqué plus tard si nous voulons changer cette manière de déplacement.
 
 Nous avons suivi la même philosophie et avons réfléchi à garder une certaine modularité et c'est ici que le design pattern 
 \textit{Strategy} (Stratégie) intervient. Il permet de rapidement comparer des méthodes de déplacement en attribuant à chaque colonie 
@@ -468,12 +465,16 @@ les fourmis selon l'état dans lequel elles sont:
 
 Ces deux phéromones permettent donc aux fourmis, selon leur état, de savoir dans quelle direction se trouve leur objectif (colonie ou nourriture).
 
-Il est cependant nécessaire pour les phéromones de ne pas être infinie car les fourmis pourraient s'intéresser à des phéromones inutiles car trop anciennes, 
-nous obligeant donc à implémenter un système de minuteur qui, à sa fin déclencherait la suppression de la phéromone.
+Il est cependant nécessaire pour les phéromones de ne pas être infini car les fourmis pourraient s'intéresser à des phéromones inutiles car trop anciens, 
+nous obligeant donc à implémenter un système de minuteur qui à sa fin déclencherait la suppression du phéromone.
 
-Nous avons donc fait en sorte que lorsqu'une fourmi émet une phéromone, elle lui donne son intensité et cette intensité sera la valeur qui servira de décompte
-pour la phéromone. En effet, nous décrémentons l'intensité à chaque tick jusqu'à atteindre 0 et lorsque l'intensité est nulle il est effectivement normal 
-de supprimer la phéromone de la simulation car elle n'a plus aucun impact sur la simulation.
+Nous avons donc fait en sorte que lorsqu'une fourmi émet un phéromone, elle lui donne son intensité et cette intensité sera la valeur qui servira de décompte
+pour le phéromone. En effet, nous décrémentons l'intensité à chaque tick jusqu'à atteindre 0 et lorsque l'intensité est nulle il est effectivement normal 
+de supprimer le phéromone de la simulation car il n'a plus aucun impact sur la simulation.
+
+Il a cependant fallu faire attention à la durée entre les deux types de phéromones car nous avons remarqué que ceux amenant à la nourriture n'avait 
+pas autant d'intérêt à rester longtemps comparés à ceux menant à la colonie car contrairement à la celle-ci, la nourriture est plus susceptible de 
+disparaître et il est donc contre-productif de garder des phéromones amenant à une source de nourriture épuisée.
 
 Pour améliorer les performances de la simulation, nous avons implémenté un système de fusion de phéromones lorsqu'ils sont trop proches car malgré 
 le fait qu'ils comptaient pour deux entités différentes, la fourmi ne pouvait pas faire la distinction entre deux phéromones à seulement quelques 
@@ -905,13 +906,24 @@ En tout, nous pensons avoir bien réussi à accomplir les objectifs initiaux du 
 
 \section{Apports}
 
-%c#
-%configuration de projet
-%git
-%conduite de projet
-%optimisation de code
-%utilisation des outils de debug et profiler
-%connaissances sur les fourmis
+Grâce à ce projet, nous avons appris et renforcé beaucoup de connaissances différentes que nous avions vu à Polytech mais aussi 
+dans nos projets personnels. 
+
+Tout d'abord, nous avons beaucoup progressé dans la maîtrise des de conduite de projet. La mise en place d'un répertoire
+GitHub et son utilisation tout au long du projet pour discuter, nous assigner des tâches et connaître l'avancement global du projet a été un élément essentiel
+et tout aussi important que la programmation elle-même. Ensuite, nous avons pu aussi nous entraîner à une étape très importante d'un 
+projet qui est la configuration des librairies et de l'environnement de travail.
+
+Pour ce qui est des compétences plus techniques, nous avons pu approfondir nos connaissance en C\# et surtout mettre en application
+l'utilisation des design patterns vus en cours de qualité logicielle. Nous avons été amené à nous poser des questions d'optimisation
+et sur la complexité de nos algorithmes. Cela nous a aussi poussé à utiliser des outils de profiling accompagnés aux outils de debugging dont nous
+avions tout de même l'habitude.
+
+Étonnamment, nous avons aussi appris l'utilisation de LateX pour réaliser ce rapport et découvert les miracles que cette technologie est capable 
+de réaliser alors que nous ne pensions pas l'utiliser.
+
+Enfin, nous avons bien évidemment pu en apprendre bien plus sur ces créatures pleines de surprises que sont les fourmis et cela nous a motivé 
+à nous renseigner d'avantage sur le domaine du biomimétisme en général.
 
 
 \section{Évolutions possibles}
@@ -959,7 +971,6 @@ Il faudrait donc rajouter des protections contre les problèmes de concurrence e
 Enfin, malgré le fait que nous sommes contents d'avoir pu apprendre le C\#, il est fort probable que si nous avions fait le projet en C++ 
 ou dans un autre langage qui est plus proche de la machine, l'application aurait été plus rapide et moins complexe à optimiser.
 
-\pagebreak
 
 \subsection{Fonctionnalités liés au monde}
 Ensuite, une autre addition qui pourrait être intéressante est le fait de pouvoir importer et exporter le monde en son état actuel ainsi que les paramètres qu'on aurait modifié dans l'application.
@@ -974,7 +985,12 @@ Elles pourraient également rentrer en conflit avec des colonies voisines pour c
 \addcontentsline{toc}{chapter}{\numberline{}Conclusion}
 \markboth{Conclusion}{}
 
+Pour conclure, ce projet nous a permis de solidifier les connaissances et compétences que nous avons développées et acquises au sein de notre parcours à Polytech.
+Nous pensons également que les efforts qui ont été faites au niveau des outils de communication seront essentiels pour nos futurs projets.
 
+Les objectifs initiaux du projet ont tous été accomplis, malgré le fait que nous n'avons pas pu nous intéresser aux fonctionnalités supplémentaires.
+
+Nous espérons que ce projet pourrait être un jour exploité par d'autres développeurs afin qu'ils/elles y apportent leur touche personnelle ou même l'utiliser dans le cadre d'un autre projet.
 
 %--------------------------------------------------------------------------------
 %exemple de bibliographie
