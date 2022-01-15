@@ -9,7 +9,9 @@ namespace App.Renderers.EntityRenderers
     /// </summary>
     public class ColonyRenderer : EntityRenderer
     {
-        public ColonyRenderer(Colony e, Texture2D colonyCharset) : base(e, colonyCharset)
+        private const float ColonyDepthBuffer = 0.7F;
+        
+        public ColonyRenderer(Colony e, Texture2D colonyCharset) : base(e, colonyCharset, ColonyDepthBuffer)
         {
         }
 
