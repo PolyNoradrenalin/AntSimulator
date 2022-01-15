@@ -237,8 +237,8 @@ namespace App.UIElements
                 Ant ant => new AntRenderer(ant, AntTexture, Color.Black),
                 Colony colony => new ColonyRenderer(colony, ColonyTexture),
                 ResourceEntity resource => new EntityRenderer(resource, CircleTexture, Color.Green),
-                FoodPheromone foodPheromone => new EntityRenderer(foodPheromone, CircleTexture, Color.Red),
-                HomePheromone homePheromone => new EntityRenderer(homePheromone, CircleTexture, Color.Blue),
+                FoodPheromone foodPheromone => new PheromoneRenderer(foodPheromone, CircleTexture, Color.Red),
+                HomePheromone homePheromone => new PheromoneRenderer(homePheromone, CircleTexture, Color.Blue),
                 _ => new EntityRenderer(entity, EntityTexture, Color.White)
             };
 
