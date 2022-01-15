@@ -37,8 +37,7 @@ namespace App
             
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-
+            
             float worldX = float.Parse(Properties.Get("world_size_x", "1000"), CultureInfo.InvariantCulture);
             float worldY = float.Parse(Properties.Get("world_size_y", "1000"), CultureInfo.InvariantCulture);
             int worldCollider = int.Parse(Properties.Get("world_collider_div", "64"));
@@ -55,6 +54,8 @@ namespace App
         {
             base.Initialize();
             
+            IsMouseVisible = true;
+            InactiveSleepTime = new TimeSpan(0);
             Window.AllowUserResizing = true;
             IsFixedTimeStep = false;
             
