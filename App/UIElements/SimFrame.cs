@@ -27,6 +27,46 @@ namespace App.UIElements
         public static Texture2D AntTexture;
         public static Texture2D ColonyTexture;
         public static Texture2D CircleTexture;
+        
+        
+        #region Colony constants
+
+        private readonly Vector2 _colonyScale;
+        private readonly int _colonySpawnCost;
+        private readonly int _colonyStockpileStart;
+
+        private readonly int _colonySpawnDelay;
+        private readonly int _colonySpawnBurst;
+        private readonly float _colonySpawnRadius;
+
+        #endregion
+
+        #region Food constants
+
+        private readonly Resource _food;
+        private readonly Vector2 _foodScale;
+        private readonly int _foodValue;
+
+        #endregion
+
+        #region Ant constants
+
+        private readonly float _antMoveRandom;
+        private readonly float _antMoveOldDir;
+        private readonly float _antPerceptionDistance;
+        private readonly int _antPerceptionPrecision;
+        private readonly int _antPheromoneFoodEmit;
+        private readonly int _antPheromoneFoodMax;
+        private readonly int _antPheromoneHomeEmit;
+        private readonly int _antPheromoneHomeMax;
+        private readonly float _antPheromoneMergeDistance;
+        private readonly int _antPheromoneDelay;
+        private readonly float _antPickupDistance;
+        private readonly int _antPickupCapacity;
+        private readonly float _antMaxSpeed;
+        private readonly int _antTimeout;
+
+        #endregion
 
         private readonly IList<IRenderer> _renderers;
         private PaintBrushSelection.PaintBrushState _paintBrushState = PaintBrushSelection.PaintBrushState.Wall;
@@ -53,11 +93,11 @@ namespace App.UIElements
 
             paintBrushSelection.PaintBrushStateChange += OnBrushStateChange;
 
-            _colonyScale = Vector2.One * float.Parse(AntSimulator.Properties.Get("colony_scale", "20"),
+            _colonyScale = Vector2.One * float.Parse(AntSimulator.Properties.Get("colony_scale", "40"),
                 CultureInfo.InvariantCulture);
-            _colonySpawnCost = int.Parse(AntSimulator.Properties.Get("colony_spawncost", "10"));
-            _colonyStockpileStart = int.Parse(AntSimulator.Properties.Get("colony_stockpilestart", "50"));
-            _colonySpawnDelay = int.Parse(AntSimulator.Properties.Get("colony_spawn_delay", "16"));
+            _colonySpawnCost = int.Parse(AntSimulator.Properties.Get("colony_spawncost", "50"));
+            _colonyStockpileStart = int.Parse(AntSimulator.Properties.Get("colony_stockpilestart", "100"));
+            _colonySpawnDelay = int.Parse(AntSimulator.Properties.Get("colony_spawn_delay", "100"));
             _colonySpawnBurst = int.Parse(AntSimulator.Properties.Get("colony_spawn_burst", "1"));
             _colonySpawnRadius = float.Parse(AntSimulator.Properties.Get("colony_spawn_radius", "0.1"),
                 CultureInfo.InvariantCulture);
@@ -67,25 +107,26 @@ namespace App.UIElements
                 CultureInfo.InvariantCulture);
             _foodValue = int.Parse(AntSimulator.Properties.Get("food_value", "50"));
 
-            _antMoveRandom = float.Parse(AntSimulator.Properties.Get("ant_move_random", "0.5"),
+            _antMoveRandom = float.Parse(AntSimulator.Properties.Get("ant_move_random", "0.7"),
                 CultureInfo.InvariantCulture);
             _antMoveOldDir = float.Parse(AntSimulator.Properties.Get("ant_move_olddir", "0.9"),
                 CultureInfo.InvariantCulture);
-            _antPerceptionDistance = float.Parse(AntSimulator.Properties.Get("ant_perception_dist", "50.0"),
+            _antPerceptionDistance = float.Parse(AntSimulator.Properties.Get("ant_perception_dist", "80.0"),
                 CultureInfo.InvariantCulture);
-            _antPerceptionPrecision = int.Parse(AntSimulator.Properties.Get("ant_perception_precision", "24"));
-            _antPheromoneFoodEmit = int.Parse(AntSimulator.Properties.Get("ant_pheromone_food_emit", "2400"));
-            _antPheromoneFoodMax = int.Parse(AntSimulator.Properties.Get("ant_pheromone_food_max", "2400"));
-            _antPheromoneHomeEmit = int.Parse(AntSimulator.Properties.Get("ant_pheromone_home_emit", "12000"));
-            _antPheromoneHomeMax = int.Parse(AntSimulator.Properties.Get("ant_pheromone_home_max", "20000"));
-            _antPheromoneMergeDistance = float.Parse(AntSimulator.Properties.Get("ant_pheromone_mergedist", "5.0"),
+            _antPerceptionPrecision = int.Parse(AntSimulator.Properties.Get("ant_perception_precision", "12"));
+            _antPheromoneFoodEmit = int.Parse(AntSimulator.Properties.Get("ant_pheromone_food_emit", "10000"));
+            _antPheromoneFoodMax = int.Parse(AntSimulator.Properties.Get("ant_pheromone_food_max", "10000"));
+            _antPheromoneHomeEmit = int.Parse(AntSimulator.Properties.Get("ant_pheromone_home_emit", "50000"));
+            _antPheromoneHomeMax = int.Parse(AntSimulator.Properties.Get("ant_pheromone_home_max", "100000"));
+            _antPheromoneMergeDistance = float.Parse(AntSimulator.Properties.Get("ant_pheromone_mergedist", "3.0"),
                 CultureInfo.InvariantCulture);
             _antPheromoneDelay = int.Parse(AntSimulator.Properties.Get("ant_pheromone_delay", "30"));
             _antPickupDistance = float.Parse(AntSimulator.Properties.Get("ant_pickup_distance", "5.0"),
                 CultureInfo.InvariantCulture);
-            _antPickupCapacity = int.Parse(AntSimulator.Properties.Get("ant_pickup_capacity", "15"));
+            _antPickupCapacity = int.Parse(AntSimulator.Properties.Get("ant_pickup_capacity", "10"));
             _antMaxSpeed = float.Parse(AntSimulator.Properties.Get("ant_maxspeed", "1.0"),
                 CultureInfo.InvariantCulture);
+            _antTimeout = int.Parse(AntSimulator.Properties.Get("ant_timeout", "20000"));
         }
 
         public World SimWorld { get; }
@@ -258,42 +299,5 @@ namespace App.UIElements
                 (int) MathF.Round(relativeY / worldPixelHeight * SimWorld.Collider.Subdivision));
         }
 
-        #region Colony constants
-
-        private readonly Vector2 _colonyScale;
-        private readonly int _colonySpawnCost;
-        private readonly int _colonyStockpileStart;
-
-        private readonly int _colonySpawnDelay;
-        private readonly int _colonySpawnBurst;
-        private readonly float _colonySpawnRadius;
-
-        #endregion
-
-        #region Food constants
-
-        private readonly Resource _food;
-        private readonly Vector2 _foodScale;
-        private readonly int _foodValue;
-
-        #endregion
-
-        #region Ant constants
-
-        private readonly float _antMoveRandom;
-        private readonly float _antMoveOldDir;
-        private readonly float _antPerceptionDistance;
-        private readonly int _antPerceptionPrecision;
-        private readonly int _antPheromoneFoodEmit;
-        private readonly int _antPheromoneFoodMax;
-        private readonly int _antPheromoneHomeEmit;
-        private readonly int _antPheromoneHomeMax;
-        private readonly float _antPheromoneMergeDistance;
-        private readonly int _antPheromoneDelay;
-        private readonly float _antPickupDistance;
-        private readonly int _antPickupCapacity;
-        private readonly float _antMaxSpeed;
-
-        #endregion
     }
 }

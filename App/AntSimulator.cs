@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using AntEngine;
+using AntEngine.Entities;
 using App.Renderers;
 using App.UIElements;
 using Microsoft.Xna.Framework;
@@ -13,6 +14,8 @@ namespace App
 {
     public class AntSimulator : Game
     {
+        private static Texture2D TrashButtonSpriteSheet;
+        
         private const string PropertiesFileName = "simulator.properties";
 
         private const int _defaultTargetTps = 30;
@@ -23,6 +26,7 @@ namespace App
         private bool _isPaused = true;
         private DateTime _lastTimeTick;
         private SpriteBatch _spriteBatch;
+
 
         /// <summary>
         ///     Main MonoGame class. Initializes, loads, updates and draws the application.
@@ -49,6 +53,7 @@ namespace App
 
         private int TargetTps { get; set; }
 
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -62,13 +67,21 @@ namespace App
             _graphics.PreferredBackBufferHeight = 500;
             _graphics.SynchronizeWithVerticalRetrace = false;
             _graphics.ApplyChanges();
+            
+            Button clearButton = new Button(new Rectangle((int) (9 / 10F * _graphics.GraphicsDevice.Viewport.Width),
+                (int) (_graphics.GraphicsDevice.Viewport.Height * (9 / 10F)), 32, 32))
+            {
+                Texture = TrashButtonSpriteSheet
+            };
+            
+            clearButton.MouseReleased += ClearButtonOnMouseReleased;
 
             SimFrame mainSimFrame = new SimFrame(new Rectangle(0, 0, 800, 500), _world);
 
             SpeedSlider speedSlider =
                 new SpeedSlider(
                     new Rectangle(
-                        _graphics.GraphicsDevice.Viewport.Width - _graphics.GraphicsDevice.Viewport.Width / 10, 20,
+                        (int) (9 / 10F * _graphics.GraphicsDevice.Viewport.Width), 20,
                         3 * 32, 32), 1, 32);
 
             speedSlider.SpeedChange += OnSpeedSliderChange;
@@ -83,14 +96,35 @@ namespace App
                     _graphics.GraphicsDevice.Viewport.Width - _graphics.GraphicsDevice.Viewport.Width / 10,
                     speedSlider.Position.Y);
                 speedSlider.RefreshPositions();
+
+                clearButton.Position = ((int) (9 / 10F * _graphics.GraphicsDevice.Viewport.Width),
+                    (int) (_graphics.GraphicsDevice.Viewport.Height * (9 / 10F)));
+                
                 _graphics.ApplyChanges();
             };
-
+            
             _renderers.Add(mainSimFrame);
-
             _renderers.Add(speedSlider);
-
+            _renderers.Add(clearButton);
             _world.ApplyEntityBuffers();
+        }
+
+        private void ClearButtonOnMouseReleased(MouseState arg1, UIElement arg2, Rectangle arg3)
+        {
+            foreach (Entity entity in _world.Entities)
+            {
+                _world.RemoveEntity(entity);
+            }
+            
+            _world.ApplyEntityBuffers();
+
+            for (int y = 0; y < _world.Collider.Subdivision; y++)
+            {
+                for (int x = 0; x < _world.Collider.Subdivision; x++)
+                {
+                    _world.Collider.Matrix[y][x] = false;
+                }
+            }
         }
 
         protected override void LoadContent()
@@ -108,6 +142,7 @@ namespace App
             SpeedSlider.SpeedSliderSpriteSheet = Content.Load<Texture2D>("UIElements/SpeedSliderButtonSpriteSheet");
             PaintBrushSelection.PaintBrushSpriteSheet =
                 Content.Load<Texture2D>("UIElements/PaintBrushButtonSpriteSheet");
+            TrashButtonSpriteSheet = Content.Load<Texture2D>("UIElements/TrashButton");
             TextLabel.Font = Content.Load<SpriteFont>("UIElements/TextFont");
         }
 

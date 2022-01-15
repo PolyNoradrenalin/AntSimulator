@@ -27,6 +27,7 @@ namespace App.UIElements
         private readonly Rectangle _colonyButtonPosition = new Rectangle(0, 1 * 32, 32, 32);
         private readonly Rectangle _foodButtonPosition = new Rectangle(0, 2 * 32, 32, 32);
         private readonly Rectangle _wallButtonPosition = new Rectangle(0, 0 * 32, 32, 32);
+        private readonly Rectangle _clearButtonPosition = new Rectangle(0, 0 * 32, 32, 32);
 
         public PaintBrushSelection(Rectangle posRect, PaintBrushState initialState) : base(posRect)
         {
@@ -35,6 +36,7 @@ namespace App.UIElements
             ColonyButton = new Button(new Rectangle(posRect.Left, posRect.Top, posRect.Width, posRect.Height / 3));
             FoodButton = new Button(new Rectangle(posRect.Left, posRect.Top + posRect.Height / 3, posRect.Width,
                 posRect.Height / 3));
+            
 
             WallButton.Texture = PaintBrushSpriteSheet;
             ColonyButton.Texture = PaintBrushSpriteSheet;
@@ -47,6 +49,7 @@ namespace App.UIElements
             WallButton.MouseReleased += OnWallMouseRelease;
             ColonyButton.MouseReleased += OnColonyMouseRelease;
             FoodButton.MouseReleased += OnFoodMouseRelease;
+            
 
             SetSelectedState(initialState);
         }
@@ -120,7 +123,7 @@ namespace App.UIElements
             ColonyButton.Size = (Size.Width, Size.Height / 3);
 
             FoodButton.Position = (Position.X, Position.Y + Size.Height / 3);
-            FoodButton.Size = (Size.Width, Size.Height / 3);
+            FoodButton.Size = (Size.Width, Size.Height / 3); 
         }
 
         /// <summary>

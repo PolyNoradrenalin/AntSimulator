@@ -105,7 +105,7 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public int HomeMaxPheromoneTime { get; set; } = 10000;
 
-        public int SearchTimeout { get; set; } = 6000;
+        public int SearchTimeout { get; set; } = 20000;
         
         /// <summary>
         ///     Distance from which an ant can pick up or deposit resources.
