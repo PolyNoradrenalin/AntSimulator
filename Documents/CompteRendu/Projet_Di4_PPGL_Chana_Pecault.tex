@@ -309,7 +309,7 @@ Les fourmis sont indépendantes mais ont un objectif commun et doivent donc pouv
 Dans la vraie vie, le principe d'une fourmi est très complexe et varie énormément entre les espèces mais nous pouvons le vulgariser très simplement.
 
 Une fourmi va partir de sa colonie à la recherche de nourriture tout en déposant des phéromones pour indiquer le chemin vers sa colonie. Lorsqu'elle 
-trouvera de la nourriture, elle la récupérera et suivra les phéromones laissés précédemment pour retrouver le chemin menant à sa colonie tout en laissant
+trouvera de la nourriture, elle la récupérera et suivra les phéromones laissées précédemment pour retrouver le chemin menant à sa colonie tout en laissant
 des phéromones menant à la nourriture qu'elle vient de trouver.  Les phéromones servent certes à la fourmi mais servent aussi à ses congénères car, 
 cela leur permet de eux-mêmes aller à la source de nourriture que la fourmi a trouvé. En d'autres termes, cela leur permet de \textbf{communiquer}.
 La fourmi doit donc être capable de sentir son environnement proche à la recherche de phéromones ou d'obstacles pour prendre des décisions et les exécuter.
@@ -324,7 +324,7 @@ d'être basé sur des directions.
 Plus précisément, à chacune de ces directions est attribuée un score qui représenterait la volonté qu'a la fourmi d'aller dans cette direction.
 On considère donc une structure que nous avons appelé PerceptionMap qui remplit cette objectif d'associer un vecteur 2D à un réel.
 
-Une perception map va donc donner à la fourmi l'information de la direction la plus intéressante selon le phéromone qu'elle recherche à un moment donné.
+Une perception map va donc donner à la fourmi l'information de la direction la plus intéressante selon la phéromone qu'elle recherche à un moment donné.
 
 \begin{figure}[h]
     \centering
@@ -333,15 +333,15 @@ Une perception map va donc donner à la fourmi l'information de la direction la 
     \label{fig:perception_map}
 \end{figure}
 
-\autoref{fig:perception_map} montre ce que "voit" une fourmi qui chercherait la direction vers laquelle elle trouverait le plus de phéromones verts.
+\autoref{fig:perception_map} montre ce que "voit" une fourmi qui chercherait la direction vers laquelle elle trouverait le plus de phéromones vertes.
 Dans ce schéma, plus une zone est coloriée en rouge, plus elle a de l'importance pour la fourmi.
 
 Dans le calcul de cette perception map, il intervient 3 facteurs différents:
 \begin{itemize}
-    \item La distance $d$ de la fourmi au phéromone et la distance de perception $\alpha$ (propriété de la fourmi). \eqref{eq:dist_pheromone}
+    \item La distance $d$ de la fourmi à la phéromone et la distance de perception $\alpha$ (propriété de la fourmi). \eqref{eq:dist_pheromone}
     \item L'angle $\Delta$ entre le vecteur directeur\footnote{Le vecteur directeur est le vecteur associé à l'angle de la fourmi ou
-    autrement dit, la direction dans laquelle elle regarde.} et la direction du phéromone. \eqref{eq:rot_pheromone}
-    \item L'intensité du phéromone. $e_p$ (avec $p$ le phéromone)
+    autrement dit, la direction dans laquelle elle regarde.} et la direction de la phéromone. \eqref{eq:rot_pheromone}
+    \item L'intensité de la phéromone. $e_p$ (avec $p$ la phéromone et $\gamma$ le degré de saturation de l'intensité)
 \end{itemize}
 
 \begin{subequations}
@@ -355,11 +355,11 @@ Ces différents facteurs nous permettent de calculer un score $\mu_{p}$ pour cha
 son attractivité pour la fourmi. \eqref{eq:total_pheromone}
 
 \begin{equation}
-    \mu_{p} = \sum_{p}{} f(d) \times r(\Delta) \times e_{p}
+    \mu_{p} = \sum_{p}{} f(d) \times r(\Delta) \times log_{\gamma}(e_{p})
     \label{eq:total_pheromone}
 \end{equation}
 
-Finalement, à chaque direction $u$ nous pouvons récupérer les scores de chaque phéromone $p_{u}$ présent dans cette direction
+Finalement, à chaque direction $u$ nous pouvons récupérer les scores de chaque phéromone $p_{u}$ présente dans cette direction
 et les sommer pour obtenir le score total de cette direction qu'on nommera $\lambda_{u}$. \eqref{eq:total_direction}
 
 \begin{equation}
@@ -370,6 +370,16 @@ et les sommer pour obtenir le score total de cette direction qu'on nommera $\lam
 On peut ainsi attribuer un score d'attractivité qui permettra à la fourmi de savoir quelle direction est la plus intéressante de suivre.
 Dans le cas où l'on voudrait que la fourmi soit repoussé par quelque chose, il suffit de faire en sorte que la direction opposée de ce quelque chose
 soit intéressante, elle serait donc plus intéressée par la fuite. 
+
+Pour qu'elles évitent les murs, nous avons mis cela en pratique en plaçant trois cercles autour de la fourmi. 
+Les cercles qui collisionnent avec un mur vont pousser la fourmi à aller dans la direction opposée.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{wall_avoidance.png}
+    \caption{Schéma d'une représentation de la perception map d'une fourmi lorsqu'elle se rapproche d'un mur.}
+    \label{fig:wall_avoidance}
+\end{figure}
 
 \subsubsection{Prise de décision de la fourmi}
 
@@ -456,7 +466,7 @@ des ressources qui sont apportés par les fourmis de la colonie.
 
 \subsubsection{Pheromones}
 
-Les phéromones sont le moyen de communication unique des fourmis de notre simulation. Il en existe deux types différents qui sont diffusés par
+Les phéromones sont le moyen de communication unique des fourmis de notre simulation. Il en existe deux types différentes qui sont diffusées par
 les fourmis selon l'état dans lequel elles sont:
 \begin{itemize}
     \item Les phéromones de maison
@@ -465,18 +475,18 @@ les fourmis selon l'état dans lequel elles sont:
 
 Ces deux phéromones permettent donc aux fourmis, selon leur état, de savoir dans quelle direction se trouve leur objectif (colonie ou nourriture).
 
-Il est cependant nécessaire pour les phéromones de ne pas être infini car les fourmis pourraient s'intéresser à des phéromones inutiles car trop anciens, 
-nous obligeant donc à implémenter un système de minuteur qui à sa fin déclencherait la suppression du phéromone.
+Il est cependant nécessaire pour les phéromones de ne pas être infinies car les fourmis pourraient s'intéresser à des phéromones inutiles car trop anciennes, 
+nous obligeant donc à implémenter un système de minuteur qui à sa fin déclencherait la suppression de la phéromone.
 
-Nous avons donc fait en sorte que lorsqu'une fourmi émet un phéromone, elle lui donne son intensité et cette intensité sera la valeur qui servira de décompte
-pour le phéromone. En effet, nous décrémentons l'intensité à chaque tick jusqu'à atteindre 0 et lorsque l'intensité est nulle il est effectivement normal 
-de supprimer le phéromone de la simulation car il n'a plus aucun impact sur la simulation.
+Nous avons donc fait en sorte que lorsqu'une fourmi émet une phéromone, elle lui donne son intensité et cette intensité sera la valeur qui servira de décompte
+pour la phéromone. En effet, nous décrémentons l'intensité à chaque tick jusqu'à atteindre 0 et lorsque l'intensité est nulle il est effectivement normal 
+de supprimer la phéromone de la simulation car elle n'a plus aucun impact sur celle-ci.
 
-Il a cependant fallu faire attention à la durée entre les deux types de phéromones car nous avons remarqué que ceux amenant à la nourriture n'avait 
-pas autant d'intérêt à rester longtemps comparés à ceux menant à la colonie car contrairement à la celle-ci, la nourriture est plus susceptible de 
+Il a cependant fallu faire attention à la durée entre les deux types de phéromones car nous avons remarqué que celles amenant à la nourriture n'avaient 
+pas autant d'intérêt à rester longtemps comparées à celles menant à la colonie car contrairement à celle-ci, la nourriture est plus susceptible de 
 disparaître et il est donc contre-productif de garder des phéromones amenant à une source de nourriture épuisée.
 
-Pour améliorer les performances de la simulation, nous avons implémenté un système de fusion de phéromones lorsqu'ils sont trop proches car malgré 
+Pour améliorer les performances de la simulation, nous avons implémenté un système de fusion de phéromones lorsqu'elles sont trop proches car malgré 
 le fait qu'ils comptaient pour deux entités différentes, la fourmi ne pouvait pas faire la distinction entre deux phéromones à seulement quelques 
 nanomètres d'écart.
 
@@ -798,7 +808,7 @@ Le découpage par régions est l'optimisation la plus "simple" mais évidente qu
 Dans la figure \ref{fig:decoupage_region} on observe que la plupart des entités sont loin de l'individu au centre, l'optimisation par régions permet de ne pas les prendre en compte et donc de ne faire des calculs
 de collision qu'avec les objets dans la zone de perception de l'individu.
 Nous avons implémenté ce découpage en permettant aux fourmis de récupérer les entités qui sont dans une certaine zone autour d'eux (en nombre de régions ou en distance réel dans le monde).
-Cette optimisation nous a apporté un énorme gain en performances et a notamment rendu la présence d'un grand nombre de fourmis et de phéromone peu impactant sur les performances.
+Cette optimisation nous a apporté un énorme gain en performances et a notamment rendu la présence d'un grand nombre de fourmis et de phéromones peu impactant sur les performances.
 
 
 \pagebreak
@@ -955,7 +965,7 @@ se perdre sur le chemin du retour à leur colonie. Il peut aussi arriver qu'une 
 Comme énoncé précédemment, il serait possible de rajouter un endroit à l'intérieur de la simulation qui permet de modifier les règles de la simulation.
 On pourrait aussi rajouter de la personnalisation en plus dans l'application (liste non-exhaustive) : 
 \begin{itemize}
-    \item Déterminer quelle quantité de nourriture est dans l'entité qu'on pose.
+    \item Déterminer quelle quantité de nourriture est dans l'entité de nourriture qu'on pose.
     \item Pouvoir placer des colonies qui ont des propriétés différentes.
     \item Pouvoir modifier la couleur des fourmis d'une colonie.
     \item Une brosse pour poser des éléments plus gros (une plus grosse colonie ou un plus gros mur par exemple).
