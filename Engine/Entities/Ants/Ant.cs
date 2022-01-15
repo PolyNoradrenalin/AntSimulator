@@ -33,7 +33,7 @@ namespace AntEngine.Entities.Ants
 
         /// <summary>
         ///     The number of ticks since the ant is searching food.
-        ///     When this value is greater than SearchTimeout
+        ///     When this value is greater than SearchTimeout, the ant will exit the SearchState.
         /// </summary>
         public int SearchTime;
         
@@ -105,6 +105,10 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public int HomeMaxPheromoneTime { get; set; } = 10000;
 
+        /// <summary>
+        ///     This value defines the amount of ticks before the ant goes to CarryState so that it can
+        ///     return to the colony.
+        /// </summary>
         public int SearchTimeout { get; set; } = 20000;
         
         /// <summary>
