@@ -20,9 +20,9 @@ namespace AntEngine.Entities.Ants
     {
         private const float DefaultMaxSpeed = 1F;
 
+        // Size of pheromones emitted.
         private static readonly Vector2 PheromoneScale = Vector2.One * 2;
-
-
+        
         private readonly PerceptionMap _currentPerceptionMap;
         private readonly List<Vector2> _perceptionMapKeys;
 
@@ -45,10 +45,7 @@ namespace AntEngine.Entities.Ants
             new SearchState(), precision)
         {
         }
-
-
-        //TODO: Some attributes/properties are not initialised with the constructor. Example : MovementStrategy.
-
+        
         public Ant(string name, Transform transform, World world, IState initialState, int precision) : base(name,
             transform, world,
             initialState)
@@ -83,23 +80,46 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public int PerceptionMapPrecision { get; set; } = 12;
 
+        /// <summary>
+        ///     Value at which a pheromone will no longer increase in importance according to its intensity.
+        /// </summary>
         public int PerceptionSaturationBase { get; set; } = 10000;
-
+        
+        /// <summary>
+        ///     Duration of a food pheromone.
+        /// </summary>
         public int FoodPheromoneTimeSpan { get; set; } = 1200;
+        
+        /// <summary>
+        ///     Max duration of a food pheromone.
+        /// </summary>
         public int FoodMaxPheromoneTime { get; set; } = 1200;
+        
+        /// <summary>
+        ///     Duration of a home pheromone.
+        /// </summary>
         public int HomePheromoneTimeSpan { get; set; } = 6000;
+        
+        /// <summary>
+        ///     Max duration of a home pheromone.
+        /// </summary>
         public int HomeMaxPheromoneTime { get; set; } = 10000;
 
         public int SearchTimeout { get; set; } = 6000;
         
         /// <summary>
-        ///     Distance from which an ant can pick up or depose ressources.
+        ///     Distance from which an ant can pick up or deposit resources.
         /// </summary>
         public float PickUpDistance { get; set; } = 5F;
 
-
+        /// <summary>
+        ///     Inventory size of the ant.
+        /// </summary>
         public int PickUpCapacity { get; set; } = 15;
 
+        /// <summary>
+        ///     Distance in which two pheromones can fuse together.
+        /// </summary>
         public float PheromoneMergeDistance { get; set; } = 5F;
 
         /// <summary>
@@ -107,6 +127,9 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public int PheromoneEmissionDelay { get; set; } = 30;
 
+        /// <summary>
+        ///     Home colony of this ant.
+        /// </summary>
         public Colony Home { get; set; }
 
         /// <summary>
@@ -116,10 +139,13 @@ namespace AntEngine.Entities.Ants
         /// <returns>Perception Map</returns>
         public PerceptionMap GetPerceptionMap<T>() where T : Pheromone
         {
+            // Get all pheromones originating from this ant's colony.
             IEnumerable<T> entities = GetSurroundingEntities<T>().Where(pheromone => pheromone.ColonyOrigin == Home);
-
+            
+            // Initialize weights of PerceptionMap.
             foreach (Vector2 dir in _perceptionMapKeys) _currentPerceptionMap.Weights[dir] = 0;
-
+            
+            // Calculate weight list according to the pheromones situated around the ant.
             foreach (T e in entities)
             {
                 Vector2 antDir = Transform.GetDirectorVector();
@@ -140,9 +166,7 @@ namespace AntEngine.Entities.Ants
 
             return _currentPerceptionMap;
         }
-
-        //TODO: Could be added to a higher level of entity. The only problem is that it depends on PerceptionDistance so maybe in LivingEntity?
-
+        
         /// <summary>
         ///     Generates a list of the entities that are in this Ant's perceptionDistance.
         /// </summary>

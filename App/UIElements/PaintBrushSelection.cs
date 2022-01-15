@@ -10,17 +10,22 @@ namespace App.UIElements
     /// </summary>
     public class PaintBrushSelection : UIElement
     {
+        /// <summary>
+        ///     Represents the possible selection states. 
+        /// </summary>
         public enum PaintBrushState
         {
             Wall,
             Colony,
             Food
         }
-
+        
+        // Brightness to be applied when a brush is not selected.
         private const float _brightnessMultiplier = (100 - 70) / 100F;
+        
+        // Position of textures in spritesheet.
         private readonly Rectangle _colonyButtonPosition = new Rectangle(0, 1 * 32, 32, 32);
         private readonly Rectangle _foodButtonPosition = new Rectangle(0, 2 * 32, 32, 32);
-
         private readonly Rectangle _wallButtonPosition = new Rectangle(0, 0 * 32, 32, 32);
 
         public PaintBrushSelection(Rectangle posRect, PaintBrushState initialState) : base(posRect)
@@ -54,24 +59,45 @@ namespace App.UIElements
 
         public Button FoodButton { get; set; }
 
+        /// <summary>
+        ///     Activates when the wall brush is clicked.
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
         private void OnWallMouseRelease(MouseState arg1, UIElement arg2, Rectangle arg3)
         {
             PaintBrushStateChange?.Invoke(PaintBrushState.Wall);
             SetSelectedState(PaintBrushState.Wall);
         }
 
+        /// <summary>
+        ///     Activates when the colony brush is clicked.
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
         private void OnColonyMouseRelease(MouseState arg1, UIElement arg2, Rectangle arg3)
         {
             PaintBrushStateChange?.Invoke(PaintBrushState.Colony);
             SetSelectedState(PaintBrushState.Colony);
         }
 
+        /// <summary>
+        ///     Activates when the food brush is clicked.
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
         private void OnFoodMouseRelease(MouseState arg1, UIElement arg2, Rectangle arg3)
         {
             PaintBrushStateChange?.Invoke(PaintBrushState.Food);
             SetSelectedState(PaintBrushState.Food);
         }
 
+        /// <summary>
+        ///     Represents the StateChange of the PaintBrushSelection.
+        /// </summary>
         public event Action<PaintBrushState> PaintBrushStateChange;
 
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
@@ -97,6 +123,11 @@ namespace App.UIElements
             FoodButton.Size = (Size.Width, Size.Height / 3);
         }
 
+        /// <summary>
+        ///     Sets current state of brush.
+        ///     Will make non-selected buttons more opaque.
+        /// </summary>
+        /// <param name="state">New brush state</param>
         private void SetSelectedState(PaintBrushState state)
         {
             switch (state)

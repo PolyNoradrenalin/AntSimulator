@@ -24,6 +24,9 @@ namespace App
         private DateTime _lastTimeTick;
         private SpriteBatch _spriteBatch;
 
+        /// <summary>
+        ///     Main MonoGame class. Initializes, loads, updates and draws the application.
+        /// </summary>
         public AntSimulator()
         {
             Properties = new Properties(PropertiesFileName);
@@ -70,6 +73,7 @@ namespace App
 
             speedSlider.SpeedChange += OnSpeedSliderChange;
 
+            // On window size change all application elements are moved to correctly fit the new window size.
             Window.ClientSizeChanged += (sender, args) =>
             {
                 mainSimFrame.Size = (_graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
@@ -93,11 +97,13 @@ namespace App
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            // Entity textures.
             SimFrame.EntityTexture = Content.Load<Texture2D>("Entities/Entity");
             SimFrame.AntTexture = Content.Load<Texture2D>("Entities/Ant");
             SimFrame.ColonyTexture = Content.Load<Texture2D>("Entities/Colony");
             SimFrame.CircleTexture = Content.Load<Texture2D>("Entities/Circle");
 
+            // UIElement textures.
             Button.DefaultTexture = Content.Load<Texture2D>("UIElements/Button");
             SpeedSlider.SpeedSliderSpriteSheet = Content.Load<Texture2D>("UIElements/SpeedSliderButtonSpriteSheet");
             PaintBrushSelection.PaintBrushSpriteSheet =

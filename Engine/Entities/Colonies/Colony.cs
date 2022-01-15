@@ -13,6 +13,7 @@ namespace AntEngine.Entities.Colonies
     /// </summary>
     public class Colony : LivingEntity
     {
+        // Method used to spawn a colony member.
         public delegate IColonyMember ColonySpawnMethod(string name, Transform transform, World world, Colony colony);
 
         private const string ColonyDefaultName = "Colony";

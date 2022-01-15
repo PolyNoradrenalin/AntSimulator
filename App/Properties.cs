@@ -5,7 +5,9 @@ using System.Linq;
 namespace App
 {
     /// <summary>
-    ///     Class used to store and load properties. It is used to
+    ///     Class used to store and load properties.
+    ///     It is used to initialize all simulation parameters.
+    ///     If certain properties are absent, a default value will be used.
     /// </summary>
     /// <author>
     ///     We used the code published by Nick Rimmer

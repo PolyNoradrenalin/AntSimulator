@@ -20,9 +20,19 @@ namespace App.UIElements
             Size = (rectangle.Width, rectangle.Height);
         }
 
+        /// <summary>
+        ///     Position of the UIElement.
+        /// </summary>
         public (int X, int Y) Position { get; set; }
+        
+        /// <summary>
+        ///     Size of the UIElement.
+        /// </summary>
         public (int Width, int Height) Size { get; set; }
 
+        /// <summary>
+        ///     True if this element is hovered by the mouse.
+        /// </summary>
         public bool IsHovered { get; private set; }
 
         /// <summary>

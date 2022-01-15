@@ -31,6 +31,9 @@ namespace AntEngine.Entities.Pheromones
             ColonyOrigin = colony;
         }
 
+        /// <summary>
+        /// Decreases Intensity of pheromone on each tick.
+        /// </summary>
         public override void Update()
         {
             Intensity--;
