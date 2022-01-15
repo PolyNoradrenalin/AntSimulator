@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using AntEngine;
 using AntEngine.Entities;
 using AntEngine.Entities.Ants;
@@ -38,8 +39,8 @@ namespace App
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-            float worldX = float.Parse(Properties.Get("world_size_x", "1000"));
-            float worldY = float.Parse(Properties.Get("world_size_y", "1000"));
+            float worldX = float.Parse(Properties.Get("world_size_x", "1000"), CultureInfo.InvariantCulture);
+            float worldY = float.Parse(Properties.Get("world_size_y", "1000"), CultureInfo.InvariantCulture);
             int worldCollider = int.Parse(Properties.Get("world_collider_div", "64"));
             int worldRegion = int.Parse(Properties.Get("world_region_div", "256"));
             _world = new World(new Vector2(worldX, worldY), worldCollider, worldRegion);
