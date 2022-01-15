@@ -1030,11 +1030,13 @@ Voici une petite liste d'url intéressantes au sujet de ce projet :
 
 
 \chapter{Tutoriel de configuration}
-Dans cette annexe sont expliquées les étapes pour configurer le projet sous Ubuntu.
+Dans cette annexe sont expliquées les étapes pour configurer et pouvoir build le projet.
 
 \section*{Pré-requis}
-\subsubsection*{.NET 3.0/5.0}
-Il est nécessaire d'installer le SDK .NET 5.0 mais aussi le 3.0 pour pouvoir build le projet.
+\subsubsection*{.NET 3.1/5.0}
+Il est nécessaire d'installer le SDK .NET 5.0 mais aussi le 3.1 pour pouvoir build le projet.
+
+\paragraph{Ubuntu :}
 
 \small
 Pour cela, il faut exécuter ces commandes dans un terminal pour avoir les paquets .NET depuis Microsoft:
@@ -1048,13 +1050,36 @@ Pour cela, il faut exécuter ces commandes dans un terminal pour avoir les paque
 
 Ensuite, il faut installer les paquets que l'on vient de dépaqueter:
 
-
 \begin{verbatim}
     # sudo apt-get update
     # sudo apt-get install -y apt-transport-https
     # sudo apt-get install -y dotnet-sdk-5.0
     # sudo apt-get install -y dotnet-sdk-3.1
 \end{verbatim}
+
+On peut ensuite passer à la suite (Installation de MGCB)
+
+\pagebreak
+
+\paragraph{MacOS :\\}
+
+Lien pour installer .NET 5.0 : \url{https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-5.0.404-macos-x64-installer}
+
+Lien pour installer .NET 3.1 : \url{https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-3.1.416-macos-x64-installer}
+
+Il se peut qu'on soit obligé de lier l'executable dotnet au bin : 
+
+\begin{verbatim}
+    # ln -s /usr/local/share/dotnet/x64/dotnet /usr/local/bin/
+\end{verbatim}
+
+Pour plus d'informations dans le cas de problèmes : \url{https://docs.microsoft.com/en-us/dotnet/core/install/macos}
+
+Si la commande \begin{verbatim}
+    # dotnet --version
+\end{verbatim} fonctionne alors il ne reste plus qu'à faire la dernière étape. 
+
+\subsubsection*{Installation de MGCB}
 
 Le dernier pré-requis est MGCB.
 
@@ -1069,6 +1094,8 @@ et doit être installée. Sur Ubuntu par exemple:
     # sudo fc-cache -f
 \end{verbatim}
 
+Sur MacOS le font est à priori installée de base.
+
 \section*{Installation du projet}
 Pour télécharger le projet, il est disponible directement depuis le git:
 \begin{verbatim}
@@ -1078,7 +1105,7 @@ Pour télécharger le projet, il est disponible directement depuis le git:
 Sinon, il faut décompresser les sources fournies.
 
 \section*{Commandes .NET pour le projet}
-Les commandes suivantes nécessitent d'être dans le répertoire du projet (au même niveau que le fichier .sln).
+Les commandes suivantes nécessitent d'être dans le répertoire du projet (au même niveau que le fichier .sln du module qu'on veut exécuter).
 
 Pour build toute la solution (Application, Moteur et Tests), il faut appeler:
 \begin{verbatim}
@@ -1105,15 +1132,13 @@ Pour lancer les tests:
 
 \resume{Au sein de ce projet de semestre de programmation et de génie logiciel, nous avons réalisé une simulation de colonie de fourmis. Nous avons donc eu à apprendre comment les fourmis font pour découvrir et intéragir avec leur environnement. Nous avons également pu mettre en pratique les conseils et normes de qualité logiciel qui ont été apprise en cours. Au delà des aspects de qualité logiciel, nous avons appris comment structurer un projet en C\# et comment mieux utiliser les outils de communication sur GitHub.}
 
-\motcles{???, ????, ?????, ?????????, ??, ????}
+\motcles{Fourmi, Carte de perception, Collision, Phéromone, Optimisation, C\#, .NET, MonoGame}
 
-\abstract{During this semester's projet in programming and software engineering, we created an ant colony simulator. To accomplish this we had to learn about how ants discover and interact with their environnements. We were also able to put into practise the standards and practises of software engineering taught in class. Beyond the software engineering aspects, we learned how to structure a C\# project and how to communicate better using GitHub.}
+\abstract{During this semester's projet in programming and software engineering, we created an ant colony simulator. To accomplish this we had to learn about how ants discover and interact with their environnements. We were also able to put into practise the standards of software engineering taught in class. Beyond the software engineering aspects, we learned how to structure a C\# project and how to communicate better using GitHub.}
 
-\keywords{???, ????, ?????, ?????????, ??, ????}
-
+\keywords{Ant, Perception map, Collision, Pheromone, Optimization, C\#, .NET, MonoGame}
 
 \makedernierepage
-
 
 \end{document}
 %%FIN du fichier
