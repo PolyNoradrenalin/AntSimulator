@@ -32,18 +32,18 @@ namespace AntEngine.Entities.Ants
         private PerceptionMap _currentPerceptionMap;
         private List<Vector2> _perceptionMapKeys;
 
-        public Ant(World world) : this("Ant", new Transform(), world)
+        public Ant(World world) : this("Ant", new Transform(), world, 24)
         {
         }
 
-        public Ant(string name, Transform transform, World world) : this(name, transform, world, new SearchState())
+        public Ant(string name, Transform transform, World world, int precision) : this(name, transform, world, new SearchState(), precision)
         {
         }
 
 
         //TODO: Some attributes/properties are not initialised with the constructor. Example : MovementStrategy.
 
-        public Ant(string name, Transform transform, World world, IState initialState) : base(name, transform, world,
+        public Ant(string name, Transform transform, World world, IState initialState, int precision) : base(name, transform, world,
             initialState)
         {
             Collider = new CircleCollider(Transform);
@@ -51,7 +51,7 @@ namespace AntEngine.Entities.Ants
             Speed = MaxSpeed;
 
             MovementStrategy = new WandererStrategy(0.5f, Transform.GetDirectorVector(), 0.90f);
-            List<float> weights = new(new float[PerceptionMapPrecision]);
+            List<float> weights = new(new float[precision]);
             _currentPerceptionMap = new PerceptionMap(weights);
             _perceptionMapKeys = _currentPerceptionMap.Weights.Keys.ToList();
         }
@@ -74,7 +74,7 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         ///     Precision that will determine the size of the weights list.
         /// </summary>
-        public int PerceptionMapPrecision { get; set; } = 24;
+        public int PerceptionMapPrecision { get; set; } = 12;
 
 
         public int FoodPheromoneTimeSpan { get; set; } = 1200;
@@ -121,7 +121,7 @@ namespace AntEngine.Entities.Ants
                 float angle = MathF.Atan2(pheromoneDirection.Y, Vector2.Dot(pheromoneDirection, Vector2.UnitX));
                 angle = angle < 0F ? angle + 2 * MathF.PI : angle;
 
-                float angleDiff = MathF.Atan2(antDir.Y * pheromoneDirection.X - antDir.X * pheromoneDirection.X,
+                float angleDiff = MathF.Atan2(antDir.Y * pheromoneDirection.X - antDir.X * pheromoneDirection.Y,
                     antDir.X * pheromoneDirection.X + antDir.Y * pheromoneDirection.Y);
 
                 int weightListIndex = (int) Math.Min(PerceptionDistance-1, (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision)));

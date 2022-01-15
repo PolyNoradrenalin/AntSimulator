@@ -155,7 +155,7 @@ namespace App.UIElements
                 {
                     case PaintBrushSelection.PaintBrushState.Colony:
                         Colony colony = new Colony(SimWorld,
-                            (name, transform, world, _) => new Ant("Ant", transform, world)
+                            (name, transform, world, _) => new Ant("Ant", transform, world, _antPerceptionPrecision)
                             {
                                 MaxSpeed = _antMaxSpeed,
                                 MovementStrategy = new WandererStrategy(_antMoveRandom, transform.GetDirectorVector(), _antMoveOldDir),
