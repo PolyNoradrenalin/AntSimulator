@@ -1011,12 +1011,80 @@ Nous espérons que ce projet pourrait être un jour exploité par d'autres déve
 
 %--------------------------------------------------------------------------------
 
-\chapter{Liens utiles\label{sec:liens_utiles}}
+\chapter{Liens utiles}
 Voici une petite liste d'url intéressantes au sujet de ce projet :
 
 \begin{itemize}
 \item {\url{https://github.com/PolyNoradrenalin/AntSimulator} Répertoire GitHub du projet}
 \end{itemize}
+
+
+\chapter{Tutoriel de configuration}
+Dans cette annexe sont expliquées les étapes pour configurer le projet sous Ubuntu.
+
+\section*{Pré-requis}
+\subsubsection*{.NET 3.0/5.0}
+Il est nécessaire d'installer le SDK .NET 5.0 mais aussi le 3.0 pour pouvoir build le projet.
+
+\small
+Pour cela, il faut exécuter ces commandes dans un terminal pour avoir les paquets .NET depuis Microsoft:
+\begin{verbatim}
+    # wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb 
+     -O packages-microsoft-prod.deb
+    # sudo dpkg -i packages-microsoft-prod.deb
+    # rm packages-microsoft-prod.deb
+\end{verbatim}
+\normalsize
+
+Ensuite, il faut installer les paquets que l'on vient de dépaqueter:
+
+
+\begin{verbatim}
+    # sudo apt-get update
+    # sudo apt-get install -y apt-transport-https
+    # sudo apt-get install -y dotnet-sdk-5.0
+    # sudo apt-get install -y dotnet-sdk-3.1
+\end{verbatim}
+
+Le dernier pré-requis est MGCB.
+
+\begin{verbatim}
+    # dotnet tool install -g dotnet-mgcb-editor
+\end{verbatim}
+
+(Optionnel) Il arrive que la police d'écriture Arial ne soit pas installée sur le système, elle est cependant nécessaire
+et doit être installée. Sur Ubuntu par exemple:
+\begin{verbatim}
+    # sudo apt install ttf-mscorefonts-installer
+    # sudo fc-cache -f
+\end{verbatim}
+
+\section*{Installation du projet}
+Pour télécharger le projet, il est disponible directement depuis le git:
+\begin{verbatim}
+    # git clone https://github.com/PolyNoradrenalin/AntSimulator
+\end{verbatim}
+
+Sinon, il faut décompresser les sources fournies.
+
+\section*{Commandes .NET pour le projet}
+Les commandes suivantes nécessitent d'être dans le répertoire du projet (au même niveau que le fichier .sln).
+
+Pour build toute la solution (Application, Moteur et Tests), il faut appeler:
+\begin{verbatim}
+    # dotnet build
+\end{verbatim}
+
+Pour lancer le projet Application, il faut exécuter:
+\begin{verbatim}
+    # dotnet run -p App
+\end{verbatim}
+
+Pour lancer les tests:
+\begin{verbatim}
+    # dotnet test
+\end{verbatim}
+
 
 %--------------------------------------------------------------------------------
 %index : attention, le fichier dindex .ind doit avoir le même nom que le fichier .tex
