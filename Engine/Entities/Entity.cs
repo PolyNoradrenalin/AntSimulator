@@ -41,6 +41,9 @@ namespace AntEngine.Entities
         /// </summary>
         public World World { get; }
 
+        /// <summary>
+        ///     Region of the entity in the world.
+        /// </summary>
         public (int X, int Y) Region { get; set; }
 
         /// <summary>

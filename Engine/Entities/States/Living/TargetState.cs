@@ -27,6 +27,10 @@ namespace AntEngine.Entities.States.Living
                 throw new ArgumentException("TargetState is only valid on Ant entity");
         }
 
+        /// <summary>
+        ///     Moves towards a specified target in a straight line.
+        /// </summary>
+        /// <param name="stateEntity"></param>
         public override void OnStateUpdate(StateEntity stateEntity)
         {
             Ant ant = (Ant) stateEntity;

@@ -74,8 +74,7 @@ namespace AntEngine.Entities
 
             World.UpdateEntityRegion(this);
         }
-
-
+        
         /// <summary>
         ///     Kills the entity.
         /// </summary>
