@@ -44,7 +44,7 @@ namespace App.Renderers
                     if (isWall)
                     {
                         Rectangle destRectangle = new Rectangle(
-                            canvasOffset.Left + posX - (int) MathF.Floor((float) worldPixelWidth / _worldCollider.Subdivision),
+                            canvasOffset.Left + posX,
                             canvasOffset.Bottom - posY,
                             xTileSize,
                             yTileSize);
