@@ -29,8 +29,8 @@ namespace AntEngine.Entities.Ants
         public int LastEmitTime;
 
 
-        private PerceptionMap _currentPerceptionMap;
-        private List<Vector2> _perceptionMapKeys;
+        private readonly PerceptionMap _currentPerceptionMap;
+        private readonly List<Vector2> _perceptionMapKeys;
 
         public Ant(World world) : this("Ant", new Transform(), world, 24)
         {
@@ -76,6 +76,7 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public int PerceptionMapPrecision { get; set; } = 12;
 
+        public int PerceptionSaturationBase { get; set; } = 10000;
 
         public int FoodPheromoneTimeSpan { get; set; } = 1200;
         public int FoodMaxPheromoneTime { get; set; } = 1200;
@@ -128,7 +129,7 @@ namespace AntEngine.Entities.Ants
 
                 float weightSum = _currentPerceptionMap.Weights[_perceptionMapKeys[weightListIndex]];
                 weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform)) *
-                             GetWeightFactorFromRotation(angleDiff) * e.Intensity;
+                             GetWeightFactorFromRotation(angleDiff) * MathF.Log(e.Intensity, PerceptionSaturationBase);
                 _currentPerceptionMap.Weights[_perceptionMapKeys[weightListIndex]] = weightSum;
             }
 
