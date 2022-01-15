@@ -121,8 +121,7 @@ namespace AntEngine.Entities.Ants
 
                 float angleDiff = Vector2Utils.AngleBetween(antDir, pheromoneDirection);
 
-                int weightListIndex = (int) Math.Min(PerceptionDistance - 1,
-                    (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision)));
+                int weightListIndex = Math.Min(PerceptionMapPrecision - 1, (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision)));
 
                 float weightSum = _currentPerceptionMap.Weights[_perceptionMapKeys[weightListIndex]];
                 weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform)) *

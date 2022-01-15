@@ -11,8 +11,9 @@ namespace AntEngine.Entities.States.Living
 {
     public abstract class WanderState<T> : LivingState where T : Pheromone
     {
-        private const int ObstacleRayIndex = 4;
-        private const float WallAvoidanceFactor = 10000F;
+        private const float ObstacleFieldOfView = 2F;
+        private const float ObstacleRadius = 2F;
+        private const float WallAvoidanceFactor = 1000000F;
 
         public override void OnStateUpdate(StateEntity stateEntity)
         {
@@ -23,16 +24,17 @@ namespace AntEngine.Entities.States.Living
 
             // Detects obstacles in 3 directions in front of the ant.
             // The ant will be attracted by the opposite direction to avoid the obstacles.
-            float obstacleDetectRadius = ant.Transform.Scale.Length() / 2F;
             int maxDirIndex = perceptionMap.Weights.Count;
             float positiveRotation = ant.Transform.Rotation < 0
                 ? ant.Transform.Rotation + 2F * MathF.PI
                 : ant.Transform.Rotation;
 
+            int obstacleRayIndex = (int) MathF.Min(maxDirIndex - 1 ,MathF.Round(ObstacleFieldOfView / 2 / (2 * MathF.PI) * maxDirIndex));
+            
             int[] dirs = new int[3];
             dirs[0] = (int) MathF.Floor(positiveRotation / (2 * MathF.PI) * maxDirIndex);
-            dirs[1] = (dirs[0] + ObstacleRayIndex) % maxDirIndex;
-            dirs[2] = (dirs[0] + maxDirIndex - ObstacleRayIndex) % maxDirIndex;
+            dirs[1] = (dirs[0] + obstacleRayIndex) % maxDirIndex;
+            dirs[2] = (dirs[0] + maxDirIndex - obstacleRayIndex) % maxDirIndex;
 
             foreach (int i in dirs)
             {
@@ -41,8 +43,8 @@ namespace AntEngine.Entities.States.Living
 
                 HashSet<Collider> collisions = new(
                     stateEntity.World.CircleCast(
-                        stateEntity.Transform.Position + dir * obstacleDetectRadius,
-                        obstacleDetectRadius, true));
+                        stateEntity.Transform.Position + dir * ant.Transform.Scale.Length(),
+                        ObstacleRadius * ant.Transform.Scale.Length(), true));
 
                 if (collisions.Count > 0) perceptionMap.Weights[opposite] += WallAvoidanceFactor;
             }
