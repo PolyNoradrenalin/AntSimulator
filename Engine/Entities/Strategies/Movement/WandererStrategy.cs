@@ -44,7 +44,7 @@ namespace AntEngine.Entities.Strategies.Movement
 
         public Vector2 Move(PerceptionMap map)
         {
-            float oldDirAngle = MathF.Atan2(_dir.Y, Vector2.Dot(_dir, Vector2.UnitX));
+            float oldDirAngle = Vector2Utils.AngleBetween(Vector2.UnitX, _dir);
             
             float randomAngle = (float) _random.NextDouble() * RandomAngleRange;
             float centeredAngle = randomAngle - RandomAngleRange / 2;

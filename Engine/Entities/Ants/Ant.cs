@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using AntEngine.Colliders;
@@ -119,17 +120,15 @@ namespace AntEngine.Entities.Ants
                 Vector2 antDir = Transform.GetDirectorVector();
                 Vector2 pheromoneDirection = e.Transform.Position - Transform.Position;
 
-                float angle = MathF.Atan2(pheromoneDirection.Y, Vector2.Dot(pheromoneDirection, Vector2.UnitX));
-                angle = angle < 0F ? angle + 2 * MathF.PI : angle;
+                float angle = Vector2Utils.AngleBetweenNormalized(Vector2.UnitX, pheromoneDirection);
 
-                float angleDiff = MathF.Atan2(antDir.Y * pheromoneDirection.X - antDir.X * pheromoneDirection.Y,
-                    antDir.X * pheromoneDirection.X + antDir.Y * pheromoneDirection.Y);
+                float angleDiff = Vector2Utils.AngleBetween(antDir, pheromoneDirection);
 
                 int weightListIndex = (int) Math.Min(PerceptionDistance-1, (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision)));
 
                 float weightSum = _currentPerceptionMap.Weights[_perceptionMapKeys[weightListIndex]];
                 weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform)) *
-                             GetWeightFactorFromRotation(angleDiff) * MathF.Log(e.Intensity, PerceptionSaturationBase);
+                             GetWeightFactorFromRotation(angleDiff) * MathF.Log(e.Intensity + 1, PerceptionSaturationBase);
                 _currentPerceptionMap.Weights[_perceptionMapKeys[weightListIndex]] = weightSum;
             }
 
