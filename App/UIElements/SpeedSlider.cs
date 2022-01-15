@@ -102,6 +102,25 @@ namespace App.UIElements
             SpeedLabel.Render(spriteBatch, gdm, canvasOffset);
         }
 
+        /// <summary>
+        /// Refreshes the positions of all elements in this object.
+        /// Used when the position of this object changes.
+        /// </summary>
+        public void RefreshPositions()
+        {
+            DecreaseButton.Position = (Position.X - Size.Width / 3, Position.Y);
+            DecreaseButton.Size = (Size.Width / 3, Size.Height);
+            
+            PauseButton.Position = (Position.X, Position.Y);
+            PauseButton.Size = (Size.Width / 3, Size.Height);
+
+            IncreaseButton.Position =  (Position.X + Size.Width / 3, Position.Y);
+            IncreaseButton.Size = (Size.Width / 3, Size.Height);
+
+            SpeedLabel.Position = (Position.X, Position.Y + Size.Height);
+            SpeedLabel.Size = (Size.Width / 3, Size.Height);
+        }
+
         private void UpdateSpeedLabelText()
         {
             SpeedLabel.Text = SpeedValue.ToString();

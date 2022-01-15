@@ -62,22 +62,25 @@ namespace App
             _graphics.PreferredBackBufferHeight = 500;
             _graphics.SynchronizeWithVerticalRetrace = false;
             _graphics.ApplyChanges();
-            
+
             SimFrame mainSimFrame = new SimFrame(new Rectangle(0, 0, 800, 500), _world);
 
+            SpeedSlider speedSlider = new SpeedSlider(new Rectangle(_graphics.GraphicsDevice.Viewport.Width - _graphics.GraphicsDevice.Viewport.Width / 10, 20, 3 * 32, 32), 1, 32);
+
+            speedSlider.SpeedChange += OnSpeedSliderChange;
+            
             Window.ClientSizeChanged += (sender, args) =>
             {
                 mainSimFrame.Size = (_graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
+                mainSimFrame.UpdatePaintBrushPosition(_graphics.GraphicsDevice.Viewport.Width - _graphics.GraphicsDevice.Viewport.Width / 10);
+                speedSlider.Position = (_graphics.GraphicsDevice.Viewport.Width - _graphics.GraphicsDevice.Viewport.Width / 10, speedSlider.Position.Y);
+                speedSlider.RefreshPositions();
                 _graphics.ApplyChanges();
             };
             
             _renderers.Add(mainSimFrame);
-
-            SpeedSlider speedSlider = new SpeedSlider(new Rectangle(600, 20, 3 * 32, 32), 1, 16);
             
             _renderers.Add(speedSlider);
-            
-            speedSlider.SpeedChange += OnSpeedSliderChange;
             
             _world.ApplyEntityBuffers();
         }
