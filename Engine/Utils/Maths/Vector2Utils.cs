@@ -4,13 +4,13 @@ using System.Numerics;
 namespace AntEngine.Utils.Maths
 {
     /// <summary>
-    /// Extension methods to class Vector2.
-    /// Used to avoid code duplication on common operations using Vector2.
+    ///     Extension methods to class Vector2.
+    ///     Used to avoid code duplication on common operations using Vector2.
     /// </summary>
     public static class Vector2Utils
     {
         /// <summary>
-        /// Determines the angle between two vectors.
+        ///     Determines the angle between two vectors.
         /// </summary>
         /// <param name="from">First vector</param>
         /// <param name="to">Second vector</param>
@@ -19,9 +19,9 @@ namespace AntEngine.Utils.Maths
         {
             return MathF.Atan2(to.Y, to.X) - MathF.Atan2(from.Y, from.X);
         }
-        
+
         /// <summary>
-        /// Determines the angle between two vectors.
+        ///     Determines the angle between two vectors.
         /// </summary>
         /// <param name="from">First vector</param>
         /// <param name="to">Second vector</param>

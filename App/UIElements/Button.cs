@@ -21,7 +21,7 @@ namespace App.UIElements
 
         // TODO : Add color to UIElement so that all rendered elements will have Color property.
         public Color Color { get; set; } = Color.White;
-        
+
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             base.Render(spriteBatch, gdm, canvasOffset);

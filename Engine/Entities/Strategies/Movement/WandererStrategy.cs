@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Specialized;
 using System.Numerics;
 using AntEngine.Utils.Maths;
 
@@ -13,10 +12,10 @@ namespace AntEngine.Entities.Strategies.Movement
     {
         private const float RandomAngleRange = MathF.PI / 2F;
         private const float DefaultOldDirFactor = 0.1F;
-        
+
         private readonly float _oldDirFactor;
-        private readonly float _randomFactor;
         private readonly Random _random;
+        private readonly float _randomFactor;
         private Vector2 _dir;
 
         /// <summary>
@@ -25,7 +24,10 @@ namespace AntEngine.Entities.Strategies.Movement
         /// </summary>
         /// <param name="randomFactor"></param>
         /// <param name="oldDirFactor"></param>
-        public WandererStrategy(float randomFactor, float oldDirFactor = DefaultOldDirFactor) : this(randomFactor, Vector2.Zero, oldDirFactor) { }
+        public WandererStrategy(float randomFactor, float oldDirFactor = DefaultOldDirFactor) : this(randomFactor,
+            Vector2.Zero, oldDirFactor)
+        {
+        }
 
         /// <summary>
         ///     Creates a wanderer strategy with a random factor between 0 (inclusive) and 1 (inclusive).
@@ -45,7 +47,7 @@ namespace AntEngine.Entities.Strategies.Movement
         public Vector2 Move(PerceptionMap map)
         {
             float oldDirAngle = Vector2Utils.AngleBetween(Vector2.UnitX, _dir);
-            
+
             float randomAngle = (float) _random.NextDouble() * RandomAngleRange;
             float centeredAngle = randomAngle - RandomAngleRange / 2;
             Vector2 randomDir = new(MathF.Cos(centeredAngle + oldDirAngle), MathF.Sin(centeredAngle + oldDirAngle));

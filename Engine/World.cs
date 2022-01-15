@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using AntEngine.Colliders;
@@ -14,40 +13,37 @@ namespace AntEngine
     /// </summary>
     public class World
     {
-        public readonly int WorldColliderDivision;
-        private readonly int WorldRegionDivision;
-
-        /// <summary>
-        ///     Size of the world.
-        /// </summary>
-        public readonly Vector2 Size;
-        
-        /// <summary>
-        ///     Stores entities into a region with all other entities in the same region.
-        /// </summary>
-        private readonly List<Entity>[][] Regions;
-
         private readonly IList<Entity> _entitiesAddedBuffer;
 
         private readonly IList<Entity> _entitiesRemovedBuffer;
 
         private readonly IList<Entity> _entitiesUpdatedBuffer;
 
+        /// <summary>
+        ///     Stores entities into a region with all other entities in the same region.
+        /// </summary>
+        private readonly List<Entity>[][] Regions;
+
+        /// <summary>
+        ///     Size of the world.
+        /// </summary>
+        public readonly Vector2 Size;
+
+        public readonly int WorldColliderDivision;
+        private readonly int WorldRegionDivision;
+
         public World(Vector2 size, int worldColliderDivision = 64, int worldRegionDivision = 256)
         {
             WorldColliderDivision = worldColliderDivision;
             WorldRegionDivision = worldRegionDivision;
-            
+
             Size = size;
             Regions = new List<Entity>[WorldRegionDivision][];
 
             for (int i = 0; i < WorldRegionDivision; i++)
             {
                 Regions[i] = new List<Entity>[WorldRegionDivision];
-                for (int j = 0; j < WorldRegionDivision; j++)
-                {
-                    Regions[i][j] = new List<Entity>();
-                }
+                for (int j = 0; j < WorldRegionDivision; j++) Regions[i][j] = new List<Entity>();
             }
 
             _entitiesAddedBuffer = new List<Entity>();
@@ -68,16 +64,14 @@ namespace AntEngine
 
                 for (int i = 0; i < WorldRegionDivision; i++)
                 for (int j = 0; j < WorldRegionDivision; j++)
-                {
                     retList.AddRange(Regions[i][j]);
-                }
 
                 return retList;
             }
         }
 
         /// <summary>
-        /// Number of entities present in the world.
+        ///     Number of entities present in the world.
         /// </summary>
         public int EntityCount
         {
@@ -86,9 +80,7 @@ namespace AntEngine
                 int count = 0;
                 for (int i = 0; i < WorldRegionDivision; i++)
                 for (int j = 0; j < WorldRegionDivision; j++)
-                {
                     count += Regions[i][j].Count;
-                }
 
                 return count;
             }
@@ -116,12 +108,8 @@ namespace AntEngine
         {
             for (int i = 0; i < WorldRegionDivision; i++)
             for (int j = 0; j < WorldRegionDivision; j++)
-            {
                 foreach (Entity e in Regions[i][j])
-                {
                     e.Update();
-                }
-            }
 
             ApplyEntityBuffers();
         }
@@ -183,24 +171,24 @@ namespace AntEngine
         /// </summary>
         /// <param name="position">Origin of the detection range</param>
         /// <param name="radius">Radius of the range</param>
-        /// <param name="onlyCheckWorld">If this boolean is true, the CircleCast will ignore all colliders that are not a world collider.</param>
+        /// <param name="onlyCheckWorld">
+        ///     If this boolean is true, the CircleCast will ignore all colliders that are not a world
+        ///     collider.
+        /// </param>
         /// <returns>List of the colliders</returns>
         public HashSet<Collider> CircleCast(Vector2 position, float radius, bool onlyCheckWorld)
         {
             CircleCollider circle = new(new Transform(position, 0, Vector2.One * radius));
-            
+
             (int x, int y) = GetRegionFromPosition(position);
 
             bool worldCollides = Collider.CheckCollision(circle);
 
-            if (onlyCheckWorld)
-            {
-                return worldCollides ? new HashSet<Collider> {Collider} : new HashSet<Collider>();
-            }
+            if (onlyCheckWorld) return worldCollides ? new HashSet<Collider> {Collider} : new HashSet<Collider>();
 
             HashSet<Entity> entities = CheckEntitiesInRegion<Entity>(x, y, radius);
             HashSet<Collider> colliders = (from e in entities where e.Collider != null select e.Collider).ToHashSet();
-            
+
             if (worldCollides) colliders.Add(Collider);
             return colliders;
         }
@@ -223,12 +211,11 @@ namespace AntEngine
                 int xRegion = x - radius + i;
                 int yRegion = y - radius + j;
 
-                if (xRegion < 0 || xRegion >= WorldRegionDivision || yRegion < 0 || yRegion >= WorldRegionDivision) continue;
+                if (xRegion < 0 || xRegion >= WorldRegionDivision || yRegion < 0 ||
+                    yRegion >= WorldRegionDivision) continue;
                 foreach (Entity e in Regions[xRegion][yRegion])
-                {
                     if (e is T entity)
                         set.Add(entity);
-                }
             }
 
             return set;

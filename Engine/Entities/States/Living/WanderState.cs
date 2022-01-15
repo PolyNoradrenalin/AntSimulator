@@ -9,7 +9,7 @@ using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities.States.Living
 {
-    public abstract class WanderState<T> : LivingState where T : Pheromone 
+    public abstract class WanderState<T> : LivingState where T : Pheromone
     {
         private const int ObstacleRayIndex = 4;
         private const float WallAvoidanceFactor = 10000F;
@@ -17,7 +17,7 @@ namespace AntEngine.Entities.States.Living
         public override void OnStateUpdate(StateEntity stateEntity)
         {
             base.OnStateUpdate(stateEntity);
-            
+
             Ant ant = (Ant) stateEntity;
             PerceptionMap perceptionMap = ant.GetPerceptionMap<T>();
 

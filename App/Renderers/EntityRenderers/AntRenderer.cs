@@ -14,12 +14,12 @@ namespace App.Renderers.EntityRenderers
         public AntRenderer(Ant e, Texture2D antCharset) : base(e, antCharset, AntDepthBuffer)
         {
         }
-        
+
         public AntRenderer(Ant e, Texture2D antCharset, Color color) : base(e, antCharset, AntDepthBuffer)
         {
             Color = color;
         }
-        
+
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             base.Render(spriteBatch, gdm, canvasOffset);

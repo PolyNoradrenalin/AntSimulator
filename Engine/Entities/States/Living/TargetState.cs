@@ -2,7 +2,6 @@ using System;
 using System.Numerics;
 using AntEngine.Entities.Ants;
 using AntEngine.Entities.Colonies;
-using AntEngine.Entities.Pheromones;
 
 namespace AntEngine.Entities.States.Living
 {
@@ -34,7 +33,7 @@ namespace AntEngine.Entities.States.Living
             Vector2 dir = _target.Transform.Position - ant.Transform.Position;
 
             ant.Move(dir);
-            
+
             if (ant.LastEmitTime > ant.PheromoneEmissionDelay)
             {
                 switch (_target)

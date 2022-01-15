@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using AntEngine.Colliders;
+﻿using System.Collections.Generic;
 using AntEngine.Entities.Ants;
 using AntEngine.Entities.Colonies;
 using AntEngine.Entities.Pheromones;
 using AntEngine.Resources;
-using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities.States.Living
 {
@@ -29,9 +24,9 @@ namespace AntEngine.Entities.States.Living
             base.OnStateUpdate(stateEntity);
 
             Ant ant = (Ant) stateEntity;
-            
+
             HashSet<Colony> colonies = ant.GetSurroundingEntities<Colony>();
-            
+
             // When we find a colony, we check if this is the Ant's colony and try to deposit all the resources.
             foreach (Colony c in colonies)
             {
@@ -54,7 +49,7 @@ namespace AntEngine.Entities.States.Living
                 break;
             }
 
-            
+
             if (ant.LastEmitTime > ant.PheromoneEmissionDelay)
             {
                 ant.EmitFoodPheromone();

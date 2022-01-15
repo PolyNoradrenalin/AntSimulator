@@ -1,4 +1,3 @@
-using System;
 using System.Numerics;
 using AntEngine.Entities.States;
 using AntEngine.Entities.States.Living;

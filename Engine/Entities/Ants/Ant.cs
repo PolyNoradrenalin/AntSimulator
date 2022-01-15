@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using AntEngine.Colliders;
@@ -24,27 +22,29 @@ namespace AntEngine.Entities.Ants
 
         private static readonly Vector2 PheromoneScale = Vector2.One * 2;
 
+
+        private readonly PerceptionMap _currentPerceptionMap;
+        private readonly List<Vector2> _perceptionMapKeys;
+
         /// <summary>
         ///     The number of ticks since the ant emitted a pheromone
         /// </summary>
         public int LastEmitTime;
 
-
-        private readonly PerceptionMap _currentPerceptionMap;
-        private readonly List<Vector2> _perceptionMapKeys;
-
         public Ant(World world) : this("Ant", new Transform(), world, 24)
         {
         }
 
-        public Ant(string name, Transform transform, World world, int precision) : this(name, transform, world, new SearchState(), precision)
+        public Ant(string name, Transform transform, World world, int precision) : this(name, transform, world,
+            new SearchState(), precision)
         {
         }
 
 
         //TODO: Some attributes/properties are not initialised with the constructor. Example : MovementStrategy.
 
-        public Ant(string name, Transform transform, World world, IState initialState, int precision) : base(name, transform, world,
+        public Ant(string name, Transform transform, World world, IState initialState, int precision) : base(name,
+            transform, world,
             initialState)
         {
             Collider = new CircleCollider(Transform);
@@ -110,11 +110,8 @@ namespace AntEngine.Entities.Ants
         {
             IEnumerable<T> entities = GetSurroundingEntities<T>().Where(pheromone => pheromone.ColonyOrigin == Home);
 
-            foreach (Vector2 dir in _perceptionMapKeys)
-            {
-                _currentPerceptionMap.Weights[dir] = 0;
-            }
-            
+            foreach (Vector2 dir in _perceptionMapKeys) _currentPerceptionMap.Weights[dir] = 0;
+
             foreach (T e in entities)
             {
                 Vector2 antDir = Transform.GetDirectorVector();
@@ -124,11 +121,13 @@ namespace AntEngine.Entities.Ants
 
                 float angleDiff = Vector2Utils.AngleBetween(antDir, pheromoneDirection);
 
-                int weightListIndex = (int) Math.Min(PerceptionDistance-1, (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision)));
+                int weightListIndex = (int) Math.Min(PerceptionDistance - 1,
+                    (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision)));
 
                 float weightSum = _currentPerceptionMap.Weights[_perceptionMapKeys[weightListIndex]];
                 weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform)) *
-                             GetWeightFactorFromRotation(angleDiff) * MathF.Log(e.Intensity + 1, PerceptionSaturationBase);
+                             GetWeightFactorFromRotation(angleDiff) *
+                             MathF.Log(e.Intensity + 1, PerceptionSaturationBase);
                 _currentPerceptionMap.Weights[_perceptionMapKeys[weightListIndex]] = weightSum;
             }
 
@@ -147,9 +146,8 @@ namespace AntEngine.Entities.Ants
             HashSet<T> filteredEntities = new();
 
             foreach (T e in entities)
-            {
-                if (e.Transform.GetDistance(Transform) <= PerceptionDistance) filteredEntities.Add(e);
-            }
+                if (e.Transform.GetDistance(Transform) <= PerceptionDistance)
+                    filteredEntities.Add(e);
 
             return filteredEntities;
         }
@@ -217,9 +215,7 @@ namespace AntEngine.Entities.Ants
             }
 
             if (candidate.pheromone != null)
-            {
                 candidate.pheromone.Intensity = Math.Min(candidate.pheromone.Intensity + intensity, maxIntensity);
-            }
 
             return candidate.pheromone != null;
         }

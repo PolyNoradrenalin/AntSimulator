@@ -1,5 +1,4 @@
-﻿using System;
-using AntEngine.Resources;
+﻿using AntEngine.Resources;
 
 namespace AntEngine.Entities
 {

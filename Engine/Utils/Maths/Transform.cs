@@ -9,8 +9,8 @@ namespace AntEngine.Utils.Maths
     /// </summary>
     public class Transform
     {
-        private readonly Vector2[] _rotationCoefficients = { new(1, 1), new(-1, 1), new(-1, -1), new(1, -1) };
-        
+        private readonly Vector2[] _rotationCoefficients = {new(1, 1), new(-1, 1), new(-1, -1), new(1, -1)};
+
         private float _rotation;
 
         /// <summary>

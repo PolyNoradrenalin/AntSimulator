@@ -55,7 +55,7 @@ namespace AntEngine.Colliders
 
             Vector2 normalVector = new(-directorVector.Y, directorVector.X);
 
-            List<Vector2> axes = new() { directorVector, normalVector, circleAxis };
+            List<Vector2> axes = new() {directorVector, normalVector, circleAxis};
 
             // Iterate through the axis, projecting each time all the rectangle's vertices and the circle's center +/- its width
             foreach (Vector2 axis in axes)
@@ -143,7 +143,7 @@ namespace AntEngine.Colliders
             Vector2 normal1 = new(-direct1.Y, direct1.X);
             Vector2 normal2 = new(-direct2.Y, direct2.X);
 
-            List<Vector2> axes = new() { direct1, direct2, normal1, normal2 };
+            List<Vector2> axes = new() {direct1, direct2, normal1, normal2};
 
             //TODO : Remove duplicate axes.
 
@@ -222,10 +222,8 @@ namespace AntEngine.Colliders
 
             for (int y = 0; y < minDiv; y++)
             for (int x = 0; x < minDiv; x++)
-            {
                 if (worldA.Matrix[y][x] && worldB.Matrix[x][y])
                     return true;
-            }
 
             return false;
         }

@@ -32,10 +32,7 @@ namespace AntEngine.Colliders
             Size = size;
             Subdivision = div;
             Matrix = new bool[div][];
-            for (int i = 0; i < div; i++)
-            {
-                Matrix[i] = new bool[div];
-            }
+            for (int i = 0; i < div; i++) Matrix[i] = new bool[div];
         }
 
         /// <summary>

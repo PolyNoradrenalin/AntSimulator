@@ -6,11 +6,11 @@ using Microsoft.Xna.Framework.Input;
 namespace App.UIElements
 {
     /// <summary>
-    /// Allows for the selection of an element to be used as a paint brush.
+    ///     Allows for the selection of an element to be used as a paint brush.
     /// </summary>
     public class PaintBrushSelection : UIElement
     {
-        public enum PaintBrushState 
+        public enum PaintBrushState
         {
             Wall,
             Colony,
@@ -18,31 +18,41 @@ namespace App.UIElements
         }
 
         private const float _brightnessMultiplier = (100 - 70) / 100F;
-        
-        private readonly Rectangle _wallButtonPosition = new Rectangle(0, 0 * 32, 32, 32);
         private readonly Rectangle _colonyButtonPosition = new Rectangle(0, 1 * 32, 32, 32);
         private readonly Rectangle _foodButtonPosition = new Rectangle(0, 2 * 32, 32, 32);
-        
+
+        private readonly Rectangle _wallButtonPosition = new Rectangle(0, 0 * 32, 32, 32);
+
         public PaintBrushSelection(Rectangle posRect, PaintBrushState initialState) : base(posRect)
         {
-            WallButton = new Button(new Rectangle(posRect.Left, posRect.Top - posRect.Height / 3, posRect.Width, posRect.Height / 3));
+            WallButton = new Button(new Rectangle(posRect.Left, posRect.Top - posRect.Height / 3, posRect.Width,
+                posRect.Height / 3));
             ColonyButton = new Button(new Rectangle(posRect.Left, posRect.Top, posRect.Width, posRect.Height / 3));
-            FoodButton = new Button(new Rectangle(posRect.Left, posRect.Top + posRect.Height / 3, posRect.Width, posRect.Height / 3));
+            FoodButton = new Button(new Rectangle(posRect.Left, posRect.Top + posRect.Height / 3, posRect.Width,
+                posRect.Height / 3));
 
             WallButton.Texture = PaintBrushSpriteSheet;
             ColonyButton.Texture = PaintBrushSpriteSheet;
             FoodButton.Texture = PaintBrushSpriteSheet;
-            
+
             WallButton.SpriteRectangle = _wallButtonPosition;
             ColonyButton.SpriteRectangle = _colonyButtonPosition;
             FoodButton.SpriteRectangle = _foodButtonPosition;
-            
+
             WallButton.MouseReleased += OnWallMouseRelease;
             ColonyButton.MouseReleased += OnColonyMouseRelease;
             FoodButton.MouseReleased += OnFoodMouseRelease;
 
             SetSelectedState(initialState);
         }
+
+        public static Texture2D PaintBrushSpriteSheet { get; set; }
+
+        public Button WallButton { get; set; }
+
+        public Button ColonyButton { get; set; }
+
+        public Button FoodButton { get; set; }
 
         private void OnWallMouseRelease(MouseState arg1, UIElement arg2, Rectangle arg3)
         {
@@ -63,14 +73,6 @@ namespace App.UIElements
         }
 
         public event Action<PaintBrushState> PaintBrushStateChange;
-        
-        public static Texture2D PaintBrushSpriteSheet { get; set; }
-
-        public Button WallButton { get; set; }
-
-        public Button ColonyButton { get; set; }
-
-        public Button FoodButton { get; set; }
 
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
@@ -78,16 +80,16 @@ namespace App.UIElements
             ColonyButton.Render(spriteBatch, gdm, canvasOffset);
             FoodButton.Render(spriteBatch, gdm, canvasOffset);
         }
-        
+
         /// <summary>
-        /// Refreshes the positions of all elements in this object.
-        /// Used when the position of this object changes.
+        ///     Refreshes the positions of all elements in this object.
+        ///     Used when the position of this object changes.
         /// </summary>
         public void RefreshPositions()
         {
             WallButton.Position = (Position.X, Position.Y - Size.Height / 3);
             WallButton.Size = (Size.Width, Size.Height / 3);
-            
+
             ColonyButton.Position = (Position.X, Position.Y);
             ColonyButton.Size = (Size.Width, Size.Height / 3);
 

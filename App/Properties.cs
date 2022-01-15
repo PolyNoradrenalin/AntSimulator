@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,10 +5,13 @@ using System.Linq;
 namespace App
 {
     /// <summary>
-    /// Class used to store and load properties. It is used to
+    ///     Class used to store and load properties. It is used to
     /// </summary>
-    /// <author> We used the code published by Nick Rimmer 
-    /// Link : (https://stackoverflow.com/questions/485659/can-net-load-and-parse-a-properties-file-equivalent-to-java-properties-class#answer-7696370 </author>
+    /// <author>
+    ///     We used the code published by Nick Rimmer
+    ///     Link :
+    ///     (https://stackoverflow.com/questions/485659/can-net-load-and-parse-a-properties-file-equivalent-to-java-properties-class#answer-7696370
+    /// </author>
     public class Properties
     {
         private string filename;
@@ -53,10 +55,8 @@ namespace App
             StreamWriter file = new StreamWriter(filename);
 
             foreach (string prop in list.Keys.ToArray())
-            {
                 if (!string.IsNullOrWhiteSpace(list[prop]))
                     file.WriteLine(prop + "=" + list[prop]);
-            }
 
             file.Close();
         }
@@ -80,7 +80,6 @@ namespace App
         private void LoadFromFile(string file)
         {
             foreach (string line in File.ReadAllLines(file))
-            {
                 if (!string.IsNullOrEmpty(line) &&
                     !line.StartsWith(";") &&
                     !line.StartsWith("#") &&
@@ -96,10 +95,8 @@ namespace App
                         value = value.Substring(1, value.Length - 2);
 
 
-                    
                     list.Add(key, value);
                 }
-            }
         }
     }
 }
