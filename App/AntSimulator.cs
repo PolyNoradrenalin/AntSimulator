@@ -65,7 +65,7 @@ namespace App
 
             SimFrame mainSimFrame = new SimFrame(new Rectangle(0, 0, 800, 500), _world);
 
-            SpeedSlider speedSlider = new SpeedSlider(new Rectangle(_graphics.GraphicsDevice.Viewport.Width - _graphics.GraphicsDevice.Viewport.Width / 10, 20, 3 * 32, 32), 1, 16);
+            SpeedSlider speedSlider = new SpeedSlider(new Rectangle(_graphics.GraphicsDevice.Viewport.Width - _graphics.GraphicsDevice.Viewport.Width / 10, 20, 3 * 32, 32), 1, 32);
 
             speedSlider.SpeedChange += OnSpeedSliderChange;
             
