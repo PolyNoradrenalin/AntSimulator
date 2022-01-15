@@ -79,7 +79,7 @@ namespace App.UIElements
             _renderers.Add(worldRenderer);
             // TODO: Unsubscribe to allow GC.
 
-            Rectangle paintBrushSelectionRectangle = new Rectangle(rect.Width - 200, rect.Height / 2, 32, 32 * 3);
+            Rectangle paintBrushSelectionRectangle = new Rectangle(rect.Width - rect.Width / 10, rect.Height / 2, 32, 32 * 3);
 
             PaintBrushSelection paintBrushSelection =
                 new PaintBrushSelection(paintBrushSelectionRectangle, PaintBrushSelection.PaintBrushState.Wall);
@@ -111,7 +111,6 @@ namespace App.UIElements
             _antPickupDistance = float.Parse(AntSimulator.Properties.Get("ant_pickup_distance", "5.0"), CultureInfo.InvariantCulture);
             _antPickupCapacity = int.Parse(AntSimulator.Properties.Get("ant_pickup_capacity", "15"));
             _antMaxSpeed = float.Parse(AntSimulator.Properties.Get("ant_maxspeed", "1.0"), CultureInfo.InvariantCulture);
-            
         }
 
         private void OnBrushStateChange(PaintBrushSelection.PaintBrushState state)
@@ -214,6 +213,21 @@ namespace App.UIElements
         public void RemoveRenderer(IRenderer r)
         {
             _renderers.Remove(r);
+        }
+
+        /// <summary>
+        /// Updates the position of all PaintBrushPosition objects in this SimFrame.
+        /// </summary>
+        public void UpdatePaintBrushPosition(int newPosition)
+        {
+            foreach (IRenderer _renderer in _renderers)
+            {
+                if (_renderer is PaintBrushSelection pbs)
+                {
+                    pbs.Position = (newPosition, pbs.Position.Y);
+                    pbs.RefreshPositions();
+                }
+            }
         }
 
         private void OnEntityAdded(Entity entity)

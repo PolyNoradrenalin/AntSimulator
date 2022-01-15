@@ -52,8 +52,8 @@ namespace App.Renderers.EntityRenderers
             Rectangle spritePos = new Rectangle(
                 canvasOffset.Left + posX,
                 canvasOffset.Top + worldPixelHeight - posY,
-                scaleX,
-                scaleY);
+                Math.Max(scaleX, 2),
+                Math.Max(scaleY, 2));
 
             spriteBatch.Draw(EntityCharset,
                 spritePos,

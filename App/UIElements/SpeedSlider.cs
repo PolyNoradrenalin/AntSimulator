@@ -103,7 +103,7 @@ namespace App.UIElements
         }
 
         /// <summary>
-        /// Refreshes the positions of all elements in this button.
+        /// Refreshes the positions of all elements in this object.
         /// Used when the position of this object changes.
         /// </summary>
         public void RefreshPositions()

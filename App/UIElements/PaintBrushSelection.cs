@@ -78,6 +78,22 @@ namespace App.UIElements
             ColonyButton.Render(spriteBatch, gdm, canvasOffset);
             FoodButton.Render(spriteBatch, gdm, canvasOffset);
         }
+        
+        /// <summary>
+        /// Refreshes the positions of all elements in this object.
+        /// Used when the position of this object changes.
+        /// </summary>
+        public void RefreshPositions()
+        {
+            WallButton.Position = (Position.X, Position.Y - Size.Height / 3);
+            WallButton.Size = (Size.Width, Size.Height / 3);
+            
+            ColonyButton.Position = (Position.X, Position.Y);
+            ColonyButton.Size = (Size.Width, Size.Height / 3);
+
+            FoodButton.Position = (Position.X, Position.Y + Size.Height / 3);
+            FoodButton.Size = (Size.Width, Size.Height / 3);
+        }
 
         private void SetSelectedState(PaintBrushState state)
         {

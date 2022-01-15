@@ -65,14 +65,15 @@ namespace App
 
             SimFrame mainSimFrame = new SimFrame(new Rectangle(0, 0, 800, 500), _world);
 
-            SpeedSlider speedSlider = new SpeedSlider(new Rectangle(_graphics.GraphicsDevice.Viewport.Width - 200, 20, 3 * 32, 32), 1, 16);
+            SpeedSlider speedSlider = new SpeedSlider(new Rectangle(_graphics.GraphicsDevice.Viewport.Width - _graphics.GraphicsDevice.Viewport.Width / 10, 20, 3 * 32, 32), 1, 16);
 
             speedSlider.SpeedChange += OnSpeedSliderChange;
             
             Window.ClientSizeChanged += (sender, args) =>
             {
                 mainSimFrame.Size = (_graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
-                speedSlider.Position = (_graphics.GraphicsDevice.Viewport.Width - 200, speedSlider.Position.Y);
+                mainSimFrame.UpdatePaintBrushPosition(_graphics.GraphicsDevice.Viewport.Width - _graphics.GraphicsDevice.Viewport.Width / 10);
+                speedSlider.Position = (_graphics.GraphicsDevice.Viewport.Width - _graphics.GraphicsDevice.Viewport.Width / 10, speedSlider.Position.Y);
                 speedSlider.RefreshPositions();
                 _graphics.ApplyChanges();
             };
