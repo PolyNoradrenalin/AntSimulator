@@ -65,6 +65,7 @@ namespace App.UIElements
         private readonly int _antPickupCapacity;
         private readonly float _antMaxSpeed;
         private readonly int _antTimeout;
+        private readonly int _antSaturation;
 
         #endregion
 
@@ -127,6 +128,7 @@ namespace App.UIElements
             _antMaxSpeed = float.Parse(AntSimulator.Properties.Get("ant_maxspeed", "1.0"),
                 CultureInfo.InvariantCulture);
             _antTimeout = int.Parse(AntSimulator.Properties.Get("ant_timeout", "20000"));
+            _antSaturation = int.Parse(AntSimulator.Properties.Get("ant_saturation", "10000"));
         }
 
         public World SimWorld { get; }
@@ -187,7 +189,9 @@ namespace App.UIElements
                                 PheromoneMergeDistance = _antPheromoneMergeDistance,
                                 PheromoneEmissionDelay = _antPheromoneDelay,
                                 PickUpDistance = _antPickupDistance,
-                                PickUpCapacity = _antPickupCapacity
+                                PickUpCapacity = _antPickupCapacity,
+                                SearchTimeout = _antTimeout,
+                                PerceptionSaturationBase = _antSaturation
                             })
                         {
                             Transform = {Position = new Vector2(simX, simY), Scale = _colonyScale},
