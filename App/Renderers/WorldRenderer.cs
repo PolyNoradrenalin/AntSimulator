@@ -7,6 +7,8 @@ namespace App.Renderers
 {
     public class WorldRenderer : IRenderer
     {
+        private const int BorderWidth = 2;
+        
         private WorldCollider _worldCollider;
 
         public WorldRenderer(WorldCollider worldCollider, Texture2D tileTexture)
@@ -58,6 +60,14 @@ namespace App.Renderers
 
                 posY += yTileSize;
             }
+            // Drawing of the world's border
+            Texture2D pointTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+            pointTexture.SetData(new[]{Color.White});
+            
+            spriteBatch.Draw(pointTexture, new Rectangle(canvasOffset.X, canvasOffset.Y, BorderWidth, worldPixelHeight + BorderWidth), Color.Black);
+            spriteBatch.Draw(pointTexture, new Rectangle(canvasOffset.X, canvasOffset.Y, worldPixelWidth + BorderWidth, BorderWidth), Color.Black);
+            spriteBatch.Draw(pointTexture, new Rectangle(canvasOffset.X + worldPixelWidth, canvasOffset.Y, BorderWidth, worldPixelHeight + BorderWidth), Color.Black);
+            spriteBatch.Draw(pointTexture, new Rectangle(canvasOffset.X, canvasOffset.Y + worldPixelHeight - BorderWidth, worldPixelWidth + BorderWidth, BorderWidth), Color.Black);
         }
 
         public static (int worldPixelWidth, int worldPixelHeight) WorldPixelSize(Rectangle canvasOffset, System.Numerics.Vector2 worldSize)
