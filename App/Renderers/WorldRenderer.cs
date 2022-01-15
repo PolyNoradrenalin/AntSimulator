@@ -48,7 +48,7 @@ namespace App.Renderers
                     {
                         Rectangle destRectangle = new Rectangle(
                             canvasOffset.Left + posX,
-                            canvasOffset.Bottom - posY,
+                            canvasOffset.Bottom - posY - yTileSize,
                             xTileSize,
                             yTileSize);
 
