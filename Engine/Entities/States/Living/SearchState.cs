@@ -20,6 +20,14 @@ namespace AntEngine.Entities.States.Living
                 return _instance;
             }
         }
+        
+        public override void OnStateStart(StateEntity stateEntity)
+        {
+            base.OnStateStart(stateEntity);
+            
+            Ant ant = (Ant) stateEntity;
+            ant.SearchTime = 0;
+        }
 
         public override void OnStateUpdate(StateEntity stateEntity)
         {
@@ -54,6 +62,16 @@ namespace AntEngine.Entities.States.Living
             else
             {
                 ant.LastEmitTime++;
+            }
+            
+            
+            if (ant.SearchTime >= ant.SearchTimeout)
+            {
+                stateEntity.State = Next(stateEntity);
+            }
+            else
+            {
+                ant.SearchTime++;
             }
         }
 

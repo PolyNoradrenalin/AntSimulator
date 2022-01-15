@@ -46,11 +46,11 @@ namespace AntEngine.Entities.States.Living
 
                 stateEntity.State = Next(stateEntity);
 
-                break;
+                return;
             }
 
 
-            if (ant.LastEmitTime > ant.PheromoneEmissionDelay)
+            if (ant.LastEmitTime > ant.PheromoneEmissionDelay && ant.SearchTime < ant.SearchTimeout)
             {
                 ant.EmitFoodPheromone();
                 ant.LastEmitTime = 0;

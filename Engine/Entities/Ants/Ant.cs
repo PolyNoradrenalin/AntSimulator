@@ -31,6 +31,12 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public int LastEmitTime;
 
+        /// <summary>
+        ///     The number of ticks since the ant is searching food.
+        ///     When this value is greater than SearchTimeout
+        /// </summary>
+        public int SearchTime;
+        
         public Ant(World world) : this("Ant", new Transform(), world, 24)
         {
         }
@@ -84,6 +90,8 @@ namespace AntEngine.Entities.Ants
         public int HomePheromoneTimeSpan { get; set; } = 6000;
         public int HomeMaxPheromoneTime { get; set; } = 10000;
 
+        public int SearchTimeout { get; set; } = 6000;
+        
         /// <summary>
         ///     Distance from which an ant can pick up or depose ressources.
         /// </summary>

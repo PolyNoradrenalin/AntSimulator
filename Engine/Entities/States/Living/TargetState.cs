@@ -34,7 +34,7 @@ namespace AntEngine.Entities.States.Living
 
             ant.Move(dir);
 
-            if (ant.LastEmitTime > ant.PheromoneEmissionDelay)
+            if (ant.LastEmitTime > ant.PheromoneEmissionDelay && ant.SearchTime < ant.SearchTimeout)
             {
                 switch (_target)
                 {
