@@ -16,40 +16,65 @@ namespace App
     /// </author>
     public class Properties
     {
-        private string filename;
-        private Dictionary<string, string> list;
+        private string _filename;
+        private Dictionary<string, string> _list;
 
         public Properties(string file)
         {
-            Reload(file);
+            IsJustCreated = Reload(file);
         }
 
+        public bool IsJustCreated { get; }
+
+        /// <summary>
+        /// Gets the value of the field by its name or a default value if the field does not exists. 
+        /// </summary>
+        /// <param name="field">Field name</param>
+        /// <param name="defValue">Default value</param>
+        /// <returns>The value of the field or the default value if it doesn't exists</returns>
         public string Get(string field, string defValue)
         {
             return Get(field) == null ? defValue : Get(field);
         }
 
+        /// <summary>
+        /// Gets the value of the field by its name.
+        /// </summary>
+        /// <param name="field">Field name</param>
+        /// <returns>The value of the field or null if no field found</returns>
         public string Get(string field)
         {
-            return list.ContainsKey(field) ? list[field] : null;
+            return _list.ContainsKey(field) ? _list[field] : null;
         }
 
+        /// <summary>
+        /// Sets the value of a field.
+        /// </summary>
+        /// <param name="field">The field name.</param>
+        /// <param name="value">The new value of the field.</param>
         public void Set(string field, object value)
         {
-            if (!list.ContainsKey(field))
-                list.Add(field, value.ToString());
+            if (!_list.ContainsKey(field))
+                _list.Add(field, value.ToString());
             else
-                list[field] = value.ToString();
+                _list[field] = value.ToString();
         }
 
+        /// <summary>
+        /// Saves the file at its location.
+        /// </summary>
         public void Save()
         {
-            Save(filename);
+            Save(_filename);
         }
 
+        /// <summary>
+        /// Saves the file at the given location and updates the path currently stored. 
+        /// </summary>
+        /// <param name="filename">The destination file path</param>
         public void Save(string filename)
         {
-            this.filename = filename;
+            _filename = filename;
 
             if (!File.Exists(filename))
                 using(File.Create(filename))
@@ -58,29 +83,42 @@ namespace App
 
             StreamWriter file = new StreamWriter(filename);
 
-            foreach (string prop in list.Keys.ToArray())
-                if (!string.IsNullOrWhiteSpace(list[prop]))
-                    file.WriteLine(prop + "=" + list[prop]);
+            foreach (string prop in _list.Keys.ToArray())
+                if (!string.IsNullOrWhiteSpace(_list[prop]))
+                    file.WriteLine(prop + "=" + _list[prop]);
 
             file.Close();
         }
 
-        public void Reload()
+        /// <summary>
+        /// Reload the values from the file.
+        /// </summary>
+        public bool Reload()
         {
-            Reload(filename);
+            return Reload(_filename);
         }
 
-        public void Reload(string filename)
+        /// <summary>
+        /// Reload the values from the given file or creates the corresponding file.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns>True if the file had to be created, false otherwise.</returns>
+        public bool Reload(string filename)
         {
-            this.filename = filename;
-            list = new Dictionary<string, string>();
+            _filename = filename;
+            _list = new Dictionary<string, string>();
 
             if (File.Exists(filename))
+            {
                 LoadFromFile(filename);
-            else
-                using (File.Create(filename))
-                {
-                }
+                return false;
+            }
+
+            using (File.Create(filename))
+            {
+            }
+
+            return true;
         }
 
         private void LoadFromFile(string file)
@@ -101,7 +139,7 @@ namespace App
                         value = value.Substring(1, value.Length - 2);
 
 
-                    list.Add(key, value);
+                    _list.Add(key, value);
                 }
         }
     }
