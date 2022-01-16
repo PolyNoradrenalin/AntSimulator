@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using AntEngine;
 using AntEngine.Entities;
+using AntEngine.Resources;
 using App.Renderers;
 using App.UIElements;
 using Microsoft.Xna.Framework;
@@ -34,8 +35,9 @@ namespace App
         public AntSimulator()
         {
             Properties = new Properties(PropertiesFileName);
-            Properties.Save();
-
+            if (Properties.IsJustCreated)
+                FillPropertiesValues(Properties);
+            
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
@@ -47,6 +49,39 @@ namespace App
 
             _renderers = new List<IRenderer>();
             TargetTps = _defaultTargetTps;
+        }
+
+        private static void FillPropertiesValues(Properties properties)
+        {
+            properties.Set("world_size_x", "1000");
+            properties.Set("world_size_y", "1000");
+            properties.Set("world_collider_div", "64");
+            properties.Set("world_region_div", "256");
+            properties.Set("colony_scale", "40");
+            properties.Set("colony_spawncost", "50");
+            properties.Set("colony_stockpilestart", "100");
+            properties.Set("colony_spawn_delay", "100");
+            properties.Set("colony_spawn_burst", "1");
+            properties.Set("colony_spawn_radius", "0.1");
+            properties.Set("food_scale", "10");
+            properties.Set("food_value", "50");
+            properties.Set("ant_move_random", "0.7");
+            properties.Set("ant_move_olddir", "0.9");
+            properties.Set("ant_perception_dist", "80.0");
+            properties.Set("ant_perception_precision", "12");
+            properties.Set("ant_pheromone_food_emit", "10000");
+            properties.Set("ant_pheromone_food_max", "10000");
+            properties.Set("ant_pheromone_home_emit", "50000");
+            properties.Set("ant_pheromone_home_max", "100000");
+            properties.Set("ant_pheromone_mergedist", "3.0");
+            properties.Set("ant_pheromone_delay", "30");
+            properties.Set("ant_pickup_distance", "5.0");
+            properties.Set("ant_pickup_capacity", "10");
+            properties.Set("ant_maxspeed", "1.0");
+            properties.Set("ant_timeout", "20000");
+            properties.Set("ant_saturation", "10000");
+            
+            Properties.Save();
         }
 
         public static Properties Properties { get; private set; }
