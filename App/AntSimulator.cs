@@ -34,7 +34,6 @@ namespace App
         public AntSimulator()
         {
             Properties = new Properties(PropertiesFileName);
-            Properties.Save();
 
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -47,6 +46,13 @@ namespace App
 
             _renderers = new List<IRenderer>();
             TargetTps = _defaultTargetTps;
+        }
+
+        protected override void OnExiting(object sender, EventArgs args)
+        {
+            base.OnExiting(sender, args);
+            
+            Properties.Save();
         }
 
         public static Properties Properties { get; private set; }

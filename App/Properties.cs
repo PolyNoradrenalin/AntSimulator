@@ -52,7 +52,9 @@ namespace App
             this.filename = filename;
 
             if (!File.Exists(filename))
-                File.Create(filename);
+                using(File.Create(filename))
+                {
+                }
 
             StreamWriter file = new StreamWriter(filename);
 
@@ -76,7 +78,9 @@ namespace App
             if (File.Exists(filename))
                 LoadFromFile(filename);
             else
-                File.Create(filename);
+                using (File.Create(filename))
+                {
+                }
         }
 
         private void LoadFromFile(string file)
