@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using AntEngine.Colliders;
 using AntEngine.Entities.Ants;
 using AntEngine.Entities.Pheromones;
-using AntEngine.Utils.Maths;
 
 namespace AntEngine.Entities.States.Living
 {
@@ -24,11 +20,19 @@ namespace AntEngine.Entities.States.Living
                 return _instance;
             }
         }
+        
+        public override void OnStateStart(StateEntity stateEntity)
+        {
+            base.OnStateStart(stateEntity);
+            
+            Ant ant = (Ant) stateEntity;
+            ant.SearchTime = 0;
+        }
 
         public override void OnStateUpdate(StateEntity stateEntity)
         {
             base.OnStateUpdate(stateEntity);
-            
+
             Ant ant = (Ant) stateEntity;
 
             HashSet<ResourceEntity> list = ant.GetSurroundingEntities<ResourceEntity>();
@@ -40,20 +44,16 @@ namespace AntEngine.Entities.States.Living
                     r1, r2) => r1.Transform.GetDistance(ant.Transform) < r2.Transform.GetDistance(ant.Transform)
                     ? r1
                     : r2);
-                
+
                 if (closest != null)
                 {
                     if (ant.PickUp(closest))
-                    {
                         stateEntity.State = Next(stateEntity);
-                    }
                     else
-                    {
                         stateEntity.State = new TargetState(this, closest);
-                    }
                 }
             }
-            
+
             if (ant.LastEmitTime > ant.PheromoneEmissionDelay)
             {
                 ant.EmitHomePheromone();
@@ -62,6 +62,16 @@ namespace AntEngine.Entities.States.Living
             else
             {
                 ant.LastEmitTime++;
+            }
+            
+            
+            if (ant.SearchTime >= ant.SearchTimeout)
+            {
+                stateEntity.State = Next(stateEntity);
+            }
+            else
+            {
+                ant.SearchTime++;
             }
         }
 

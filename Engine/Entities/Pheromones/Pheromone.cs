@@ -10,24 +10,30 @@ namespace AntEngine.Entities.Pheromones
     {
         protected const string DefaultPheromoneName = "Pheromone";
         protected const int DefaultMaxTimeSpan = 100;
-
-        public int Intensity;
         public Colony ColonyOrigin;
 
-        public Pheromone(World world, Colony colony) : this(DefaultPheromoneName, new Transform(), world, colony, DefaultMaxTimeSpan)
+        public int Intensity;
+
+        public Pheromone(World world, Colony colony) : this(DefaultPheromoneName, new Transform(), world, colony,
+            DefaultMaxTimeSpan)
         {
         }
 
-        public Pheromone(World world, Colony colony, int maxTimeSpan) : this(DefaultPheromoneName, new Transform(), world, colony, maxTimeSpan)
+        public Pheromone(World world, Colony colony, int maxTimeSpan) : this(DefaultPheromoneName, new Transform(),
+            world, colony, maxTimeSpan)
         {
         }
 
-        public Pheromone(string name, Transform transform, World world, Colony colony, int maxTimeSpan) : base(name, transform, world)
+        public Pheromone(string name, Transform transform, World world, Colony colony, int maxTimeSpan) : base(name,
+            transform, world)
         {
             Intensity = maxTimeSpan;
             ColonyOrigin = colony;
         }
 
+        /// <summary>
+        /// Decreases Intensity of pheromone on each tick.
+        /// </summary>
         public override void Update()
         {
             Intensity--;

@@ -1,4 +1,3 @@
-using System;
 using System.Numerics;
 using AntEngine.Entities.States;
 using AntEngine.Entities.States.Living;
@@ -65,7 +64,7 @@ namespace AntEngine.Entities
         /// <param name="dir"></param>
         public void Move(Vector2 dir)
         {
-            Transform.Rotation = MathF.Atan2(dir.Y, Vector2.Dot(dir, Vector2.UnitX));
+            Transform.Rotation = Vector2Utils.AngleBetween(Vector2.UnitX, dir);
 
             Vector2 lastPos = Transform.Position;
             Vector2 movement = dir * Speed;
@@ -75,8 +74,7 @@ namespace AntEngine.Entities
 
             World.UpdateEntityRegion(this);
         }
-
-
+        
         /// <summary>
         ///     Kills the entity.
         /// </summary>

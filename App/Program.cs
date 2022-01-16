@@ -2,6 +2,9 @@
 
 namespace App
 {
+    /// <summary>
+    ///     Main method that launches the application.
+    /// </summary>
     public static class Program
     {
         [STAThread]

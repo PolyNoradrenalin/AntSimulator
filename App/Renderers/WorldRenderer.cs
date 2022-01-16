@@ -2,6 +2,7 @@ using System;
 using AntEngine.Colliders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Vector2 = System.Numerics.Vector2;
 
 namespace App.Renderers
 {
@@ -9,7 +10,7 @@ namespace App.Renderers
     {
         private const int BorderWidth = 2;
         
-        private WorldCollider _worldCollider;
+        private readonly WorldCollider _worldCollider;
 
         public WorldRenderer(WorldCollider worldCollider, Texture2D tileTexture)
         {
@@ -25,7 +26,7 @@ namespace App.Renderers
             // The size (in pixels) of each cell is defined by the size of the canvas divided by the collider subdivision.
             // In the case the cell size have decimals (ex: 12.25px), we correct this by adding 1px to the first cells
             // until we corrected the offset.
-            
+
             (int worldPixelWidth, int worldPixelHeight) = WorldPixelSize(canvasOffset, _worldCollider.Size);
 
             int posY = 0;
@@ -33,25 +34,28 @@ namespace App.Renderers
             {
                 int posX = 0;
                 int yTileSize = (int) MathF.Floor((float) worldPixelHeight / _worldCollider.Subdivision);
-                int yCorrectionThreshold = (int) (_worldCollider.Subdivision * ((float) worldPixelHeight / _worldCollider.Subdivision % 1));
+                int yCorrectionThreshold = (int) (_worldCollider.Subdivision *
+                                                  ((float) worldPixelHeight / _worldCollider.Subdivision % 1));
                 if (y < yCorrectionThreshold) yTileSize++;
-                
+
                 for (int x = 0; x < _worldCollider.Subdivision; x++)
                 {
                     bool isWall = _worldCollider.Matrix[y][x];
                     int xTileSize = (int) MathF.Floor((float) worldPixelWidth / _worldCollider.Subdivision);
-                    int xCorrectionThreshold = (int) (_worldCollider.Subdivision * ((float) worldPixelWidth / _worldCollider.Subdivision % 1));
+                    int xCorrectionThreshold = (int) (_worldCollider.Subdivision *
+                                                      ((float) worldPixelWidth / _worldCollider.Subdivision % 1));
                     if (x < xCorrectionThreshold) xTileSize++;
-                    
+
                     if (isWall)
                     {
                         Rectangle destRectangle = new Rectangle(
-                            canvasOffset.Left + posX - (int) MathF.Floor((float) worldPixelWidth / _worldCollider.Subdivision),
-                            canvasOffset.Bottom - posY,
+                            canvasOffset.Left + posX,
+                            canvasOffset.Bottom - posY - yTileSize,
                             xTileSize,
                             yTileSize);
-                        
-                        spriteBatch.Draw(TileTexture, destRectangle, null, Color.Black, 0, Vector2.Zero,
+
+                        spriteBatch.Draw(TileTexture, destRectangle, null, Color.Black, 0,
+                            Microsoft.Xna.Framework.Vector2.Zero,
                             SpriteEffects.None, 0F);
                     }
 
@@ -70,7 +74,8 @@ namespace App.Renderers
             spriteBatch.Draw(pointTexture, new Rectangle(canvasOffset.X, canvasOffset.Y + worldPixelHeight - BorderWidth, worldPixelWidth + BorderWidth, BorderWidth), Color.Black);
         }
 
-        public static (int worldPixelWidth, int worldPixelHeight) WorldPixelSize(Rectangle canvasOffset, System.Numerics.Vector2 worldSize)
+        public static (int worldPixelWidth, int worldPixelHeight) WorldPixelSize(Rectangle canvasOffset,
+            Vector2 worldSize)
         {
             float worldAspectRatio = worldSize.X / worldSize.Y;
             float simFrameAspectRatio = (float) canvasOffset.Width / canvasOffset.Height;

@@ -19,21 +19,31 @@ namespace App.UIElements
 
             Size = (rectangle.Width, rectangle.Height);
         }
-        
+
+        /// <summary>
+        ///     Position of the UIElement.
+        /// </summary>
         public (int X, int Y) Position { get; set; }
+        
+        /// <summary>
+        ///     Size of the UIElement.
+        /// </summary>
         public (int Width, int Height) Size { get; set; }
 
+        /// <summary>
+        ///     True if this element is hovered by the mouse.
+        /// </summary>
         public bool IsHovered { get; private set; }
 
         /// <summary>
-        /// Local texture of this UIElement.
-        /// UIElements must also contain static texture to serve as a fallback.
+        ///     Local texture of this UIElement.
+        ///     UIElements must also contain static texture to serve as a fallback.
         /// </summary>
         public Texture2D Texture { get; set; } = null;
 
         /// <summary>
-        /// Used when a UIElement's texture is a spritesheet.
-        /// Specifies which part of the spritesheet to use (SourceRectangle).
+        ///     Used when a UIElement's texture is a spritesheet.
+        ///     Specifies which part of the spritesheet to use (SourceRectangle).
         /// </summary>
         public Rectangle SpriteRectangle { get; set; } = Rectangle.Empty;
 

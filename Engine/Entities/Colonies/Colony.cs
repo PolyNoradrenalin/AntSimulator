@@ -13,13 +13,14 @@ namespace AntEngine.Entities.Colonies
     /// </summary>
     public class Colony : LivingEntity
     {
+        // Method used to spawn a colony member.
         public delegate IColonyMember ColonySpawnMethod(string name, Transform transform, World world, Colony colony);
 
         private const string ColonyDefaultName = "Colony";
 
         private readonly List<IColonyMember> _population;
 
-        private int _lastUpdateTick = 0;
+        private int _lastUpdateTick;
 
         public Colony(World world, ColonySpawnMethod spawnMethod) : this(ColonyDefaultName, new Transform(), world,
             spawnMethod)
@@ -107,8 +108,8 @@ namespace AntEngine.Entities.Colonies
 
                 Vector2 position = SpawnPosition;
                 Vector2 direction = Vector2.Normalize(position - Transform.Position);
-                float angle = MathF.Atan2(direction.Y, Vector2.Dot(direction, Vector2.UnitX));
-                
+                float angle = Vector2Utils.AngleBetween(Vector2.UnitX, direction);
+
                 IColonyMember pop = SpawnMethod("", new Transform(position, angle, Vector2.One * 10F), World, this);
                 // TODO : REMOVE POP MEMBER
                 _population.Add(pop);
@@ -123,7 +124,6 @@ namespace AntEngine.Entities.Colonies
         protected bool HasEnoughResources()
         {
             foreach ((Resource resource, int cost) in SpawnCost.All)
-            {
                 if (Stockpile.All.ContainsKey(resource))
                 {
                     if (Stockpile.All[resource] < cost) return false;
@@ -132,7 +132,6 @@ namespace AntEngine.Entities.Colonies
                 {
                     return false;
                 }
-            }
 
             return true;
         }
@@ -145,10 +144,7 @@ namespace AntEngine.Entities.Colonies
         {
             if (!HasEnoughResources()) return;
 
-            foreach ((Resource resource, int cost) in SpawnCost.All)
-            {
-                Stockpile.RemoveResource(resource, cost);
-            }
+            foreach ((Resource resource, int cost) in SpawnCost.All) Stockpile.RemoveResource(resource, cost);
         }
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Dynamic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -7,32 +6,34 @@ using Microsoft.Xna.Framework.Input;
 namespace App.UIElements
 {
     /// <summary>
-    /// Speed slider allowing for the change of a game's speed via an event.
-    /// Speed limits are positive and should be between 1 and MAX_INT.
-    /// If the speed is too high, the system will be unable to go faster and the simulation will start lagging.
+    ///     Speed slider allowing for the change of a game's speed via an event.
+    ///     Speed limits are positive and should be between 1 and MAX_INT.
+    ///     If the speed is too high, the system will be unable to go faster and the simulation will start lagging.
     /// </summary>
     public class SpeedSlider : UIElement
     {
-        private bool _isPaused = true;
+        private readonly Rectangle DecreaseButtonPosition = new Rectangle(0, 2 * 32, 32, 32);
+        private readonly Rectangle IncreaseButtonPosition = new Rectangle(0, 1 * 32, 32, 32);
 
         private readonly Rectangle PauseButtonPosition = new Rectangle(0, 0 * 32, 32, 32);
-        private readonly Rectangle IncreaseButtonPosition = new Rectangle(0, 1 * 32, 32, 32);
-        private readonly Rectangle DecreaseButtonPosition = new Rectangle(0, 2 * 32, 32, 32);
         private readonly Rectangle PlayButtonPosition = new Rectangle(0, 3 * 32, 32, 32);
+        private bool _isPaused = true;
 
         public SpeedSlider(Rectangle posRect, int minimumSpeedValue, int maximumSpeedValue) : base(posRect)
         {
             SpeedValueLimit = (minimumSpeedValue, maximumSpeedValue);
             SpeedValue = 1;
 
-            DecreaseButton = new Button(new Rectangle(posRect.Left - posRect.Width / 3, posRect.Top, posRect.Width / 3, posRect.Height));
+            DecreaseButton = new Button(new Rectangle(posRect.Left - posRect.Width / 3, posRect.Top, posRect.Width / 3,
+                posRect.Height));
             PauseButton = new Button(new Rectangle(posRect.Left, posRect.Top, posRect.Width / 3, posRect.Height));
-            IncreaseButton = new Button(new Rectangle(posRect.Left + posRect.Width / 3, posRect.Top, posRect.Width / 3, posRect.Height));
+            IncreaseButton = new Button(new Rectangle(posRect.Left + posRect.Width / 3, posRect.Top, posRect.Width / 3,
+                posRect.Height));
 
             DecreaseButton.Texture = SpeedSliderSpriteSheet;
             PauseButton.Texture = SpeedSliderSpriteSheet;
             IncreaseButton.Texture = SpeedSliderSpriteSheet;
-            
+
             DecreaseButton.SpriteRectangle = DecreaseButtonPosition;
             PauseButton.SpriteRectangle = PlayButtonPosition;
             IncreaseButton.SpriteRectangle = IncreaseButtonPosition;
@@ -41,13 +42,12 @@ namespace App.UIElements
             PauseButton.MouseReleased += OnPauseMouseRelease;
             IncreaseButton.MouseReleased += OnIncreaseMouseRelease;
 
-            SpeedLabel = new TextLabel(new Rectangle(posRect.Left, posRect.Top + posRect.Height, posRect.Width / 3, posRect.Height))
+            SpeedLabel = new TextLabel(new Rectangle(posRect.Left, posRect.Top + posRect.Height, posRect.Width / 3,
+                posRect.Height))
             {
                 Text = SpeedValue.ToString()
             };
         }
-
-        public event Action<int, bool> SpeedChange;
 
         public static Texture2D SpeedSliderSpriteSheet { get; set; }
 
@@ -60,8 +60,10 @@ namespace App.UIElements
         public Button PauseButton { get; set; }
 
         public Button IncreaseButton { get; set; }
-        
+
         public TextLabel SpeedLabel { get; set; }
+
+        public event Action<int, bool> SpeedChange;
 
         private void OnDecreaseMouseRelease(MouseState arg1, UIElement arg2, Rectangle rectangle)
         {
@@ -103,18 +105,18 @@ namespace App.UIElements
         }
 
         /// <summary>
-        /// Refreshes the positions of all elements in this object.
-        /// Used when the position of this object changes.
+        ///     Refreshes the positions of all elements in this object.
+        ///     Used when the position of this object changes.
         /// </summary>
         public void RefreshPositions()
         {
             DecreaseButton.Position = (Position.X - Size.Width / 3, Position.Y);
             DecreaseButton.Size = (Size.Width / 3, Size.Height);
-            
+
             PauseButton.Position = (Position.X, Position.Y);
             PauseButton.Size = (Size.Width / 3, Size.Height);
 
-            IncreaseButton.Position =  (Position.X + Size.Width / 3, Position.Y);
+            IncreaseButton.Position = (Position.X + Size.Width / 3, Position.Y);
             IncreaseButton.Size = (Size.Width / 3, Size.Height);
 
             SpeedLabel.Position = (Position.X, Position.Y + Size.Height);

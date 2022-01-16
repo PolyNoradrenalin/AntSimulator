@@ -17,11 +17,14 @@ namespace App.UIElements
             Texture = buttonTexture;
         }
 
+        /// <summary>
+        ///     Default texture of the button.
+        ///     If a Texture is defined, this will be ignored.
+        /// </summary>
         public static Texture2D DefaultTexture { get; set; }
-
-        // TODO : Add color to UIElement so that all rendered elements will have Color property.
-        public Color Color { get; set; } = Color.White;
         
+        public Color Color { get; set; } = Color.White;
+
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             base.Render(spriteBatch, gdm, canvasOffset);

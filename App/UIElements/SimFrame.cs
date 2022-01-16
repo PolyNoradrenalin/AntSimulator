@@ -2,16 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Numerics;
-
 using AntEngine;
-using AntEngine.Colliders;
 using AntEngine.Entities;
 using AntEngine.Entities.Ants;
 using AntEngine.Entities.Colonies;
-using AntEngine.Resources;
 using AntEngine.Entities.Pheromones;
 using AntEngine.Entities.Strategies.Movement;
+using AntEngine.Resources;
 using App.Renderers;
 using App.Renderers.EntityRenderers;
 using Microsoft.Xna.Framework;
@@ -30,27 +27,30 @@ namespace App.UIElements
         public static Texture2D AntTexture;
         public static Texture2D ColonyTexture;
         public static Texture2D CircleTexture;
-
-        private readonly IList<IRenderer> _renderers;
-        private PaintBrushSelection.PaintBrushState _paintBrushState = PaintBrushSelection.PaintBrushState.Wall;
-
+        
+        
         #region Colony constants
+
         private readonly Vector2 _colonyScale;
         private readonly int _colonySpawnCost;
         private readonly int _colonyStockpileStart;
-        
+
         private readonly int _colonySpawnDelay;
         private readonly int _colonySpawnBurst;
         private readonly float _colonySpawnRadius;
+
         #endregion
 
         #region Food constants
+
         private readonly Resource _food;
         private readonly Vector2 _foodScale;
         private readonly int _foodValue;
+
         #endregion
 
         #region Ant constants
+
         private readonly float _antMoveRandom;
         private readonly float _antMoveOldDir;
         private readonly float _antPerceptionDistance;
@@ -64,7 +64,13 @@ namespace App.UIElements
         private readonly float _antPickupDistance;
         private readonly int _antPickupCapacity;
         private readonly float _antMaxSpeed;
+        private readonly int _antTimeout;
+        private readonly int _antSaturation;
+
         #endregion
+
+        private readonly IList<IRenderer> _renderers;
+        private PaintBrushSelection.PaintBrushState _paintBrushState = PaintBrushSelection.PaintBrushState.Wall;
 
         public SimFrame(Rectangle rect, World world) : base(rect)
         {
@@ -79,39 +85,53 @@ namespace App.UIElements
             _renderers.Add(worldRenderer);
             // TODO: Unsubscribe to allow GC.
 
-            Rectangle paintBrushSelectionRectangle = new Rectangle(rect.Width - rect.Width / 10, rect.Height / 2, 32, 32 * 3);
+            Rectangle paintBrushSelectionRectangle =
+                new Rectangle(rect.Width - rect.Width / 10, rect.Height / 2, 32, 32 * 3);
 
             PaintBrushSelection paintBrushSelection =
                 new PaintBrushSelection(paintBrushSelectionRectangle, PaintBrushSelection.PaintBrushState.Wall);
             _renderers.Add(paintBrushSelection);
 
             paintBrushSelection.PaintBrushStateChange += OnBrushStateChange;
-            
-            _colonyScale = Vector2.One * float.Parse(AntSimulator.Properties.Get("colony_scale", "20"), CultureInfo.InvariantCulture);
-            _colonySpawnCost = int.Parse(AntSimulator.Properties.Get("colony_spawncost", "10"));
-            _colonyStockpileStart = int.Parse(AntSimulator.Properties.Get("colony_stockpilestart", "50"));
-            _colonySpawnDelay = int.Parse(AntSimulator.Properties.Get("colony_spawn_delay", "16"));
+
+            _colonyScale = Vector2.One * float.Parse(AntSimulator.Properties.Get("colony_scale", "40"),
+                CultureInfo.InvariantCulture);
+            _colonySpawnCost = int.Parse(AntSimulator.Properties.Get("colony_spawncost", "50"));
+            _colonyStockpileStart = int.Parse(AntSimulator.Properties.Get("colony_stockpilestart", "100"));
+            _colonySpawnDelay = int.Parse(AntSimulator.Properties.Get("colony_spawn_delay", "100"));
             _colonySpawnBurst = int.Parse(AntSimulator.Properties.Get("colony_spawn_burst", "1"));
-            _colonySpawnRadius = float.Parse(AntSimulator.Properties.Get("colony_spawn_radius", "0.1"), CultureInfo.InvariantCulture);
+            _colonySpawnRadius = float.Parse(AntSimulator.Properties.Get("colony_spawn_radius", "0.1"),
+                CultureInfo.InvariantCulture);
 
             _food = new Resource("food", "fruit");
-            _foodScale = Vector2.One * float.Parse(AntSimulator.Properties.Get("food_scale", "10"), CultureInfo.InvariantCulture);
+            _foodScale = Vector2.One * float.Parse(AntSimulator.Properties.Get("food_scale", "10"),
+                CultureInfo.InvariantCulture);
             _foodValue = int.Parse(AntSimulator.Properties.Get("food_value", "50"));
 
-            _antMoveRandom = float.Parse(AntSimulator.Properties.Get("ant_move_random", "0.5"), CultureInfo.InvariantCulture);
-            _antMoveOldDir = float.Parse(AntSimulator.Properties.Get("ant_move_olddir", "0.9"), CultureInfo.InvariantCulture);
-            _antPerceptionDistance = float.Parse(AntSimulator.Properties.Get("ant_perception_dist", "50.0"), CultureInfo.InvariantCulture);
-            _antPerceptionPrecision = int.Parse(AntSimulator.Properties.Get("ant_perception_precision", "24"));
-            _antPheromoneFoodEmit = int.Parse(AntSimulator.Properties.Get("ant_pheromone_food_emit", "2400"));
-            _antPheromoneFoodMax = int.Parse(AntSimulator.Properties.Get("ant_pheromone_food_max", "2400"));
-            _antPheromoneHomeEmit = int.Parse(AntSimulator.Properties.Get("ant_pheromone_home_emit", "12000"));
-            _antPheromoneHomeMax = int.Parse(AntSimulator.Properties.Get("ant_pheromone_home_max", "20000"));
-            _antPheromoneMergeDistance = float.Parse(AntSimulator.Properties.Get("ant_pheromone_mergedist", "5.0"), CultureInfo.InvariantCulture);
+            _antMoveRandom = float.Parse(AntSimulator.Properties.Get("ant_move_random", "0.7"),
+                CultureInfo.InvariantCulture);
+            _antMoveOldDir = float.Parse(AntSimulator.Properties.Get("ant_move_olddir", "0.9"),
+                CultureInfo.InvariantCulture);
+            _antPerceptionDistance = float.Parse(AntSimulator.Properties.Get("ant_perception_dist", "80.0"),
+                CultureInfo.InvariantCulture);
+            _antPerceptionPrecision = int.Parse(AntSimulator.Properties.Get("ant_perception_precision", "12"));
+            _antPheromoneFoodEmit = int.Parse(AntSimulator.Properties.Get("ant_pheromone_food_emit", "10000"));
+            _antPheromoneFoodMax = int.Parse(AntSimulator.Properties.Get("ant_pheromone_food_max", "10000"));
+            _antPheromoneHomeEmit = int.Parse(AntSimulator.Properties.Get("ant_pheromone_home_emit", "50000"));
+            _antPheromoneHomeMax = int.Parse(AntSimulator.Properties.Get("ant_pheromone_home_max", "100000"));
+            _antPheromoneMergeDistance = float.Parse(AntSimulator.Properties.Get("ant_pheromone_mergedist", "3.0"),
+                CultureInfo.InvariantCulture);
             _antPheromoneDelay = int.Parse(AntSimulator.Properties.Get("ant_pheromone_delay", "30"));
-            _antPickupDistance = float.Parse(AntSimulator.Properties.Get("ant_pickup_distance", "5.0"), CultureInfo.InvariantCulture);
-            _antPickupCapacity = int.Parse(AntSimulator.Properties.Get("ant_pickup_capacity", "15"));
-            _antMaxSpeed = float.Parse(AntSimulator.Properties.Get("ant_maxspeed", "1.0"), CultureInfo.InvariantCulture);
+            _antPickupDistance = float.Parse(AntSimulator.Properties.Get("ant_pickup_distance", "5.0"),
+                CultureInfo.InvariantCulture);
+            _antPickupCapacity = int.Parse(AntSimulator.Properties.Get("ant_pickup_capacity", "10"));
+            _antMaxSpeed = float.Parse(AntSimulator.Properties.Get("ant_maxspeed", "1.0"),
+                CultureInfo.InvariantCulture);
+            _antTimeout = int.Parse(AntSimulator.Properties.Get("ant_timeout", "20000"));
+            _antSaturation = int.Parse(AntSimulator.Properties.Get("ant_saturation", "10000"));
         }
+
+        public World SimWorld { get; }
 
         private void OnBrushStateChange(PaintBrushSelection.PaintBrushState state)
         {
@@ -155,10 +175,11 @@ namespace App.UIElements
                 {
                     case PaintBrushSelection.PaintBrushState.Colony:
                         Colony colony = new Colony(SimWorld,
-                            (name, transform, world, _) => new Ant("Ant", transform, world)
+                            (name, transform, world, _) => new Ant("Ant", transform, world, _antPerceptionPrecision)
                             {
                                 MaxSpeed = _antMaxSpeed,
-                                MovementStrategy = new WandererStrategy(_antMoveRandom, transform.GetDirectorVector(), _antMoveOldDir),
+                                MovementStrategy = new WandererStrategy(_antMoveRandom, transform.GetDirectorVector(),
+                                    _antMoveOldDir),
                                 PerceptionDistance = _antPerceptionDistance,
                                 PerceptionMapPrecision = _antPerceptionPrecision,
                                 FoodPheromoneTimeSpan = _antPheromoneFoodEmit,
@@ -168,7 +189,9 @@ namespace App.UIElements
                                 PheromoneMergeDistance = _antPheromoneMergeDistance,
                                 PheromoneEmissionDelay = _antPheromoneDelay,
                                 PickUpDistance = _antPickupDistance,
-                                PickUpCapacity = _antPickupCapacity
+                                PickUpCapacity = _antPickupCapacity,
+                                SearchTimeout = _antTimeout,
+                                PerceptionSaturationBase = _antSaturation
                             })
                         {
                             Transform = {Position = new Vector2(simX, simY), Scale = _colonyScale},
@@ -191,18 +214,14 @@ namespace App.UIElements
             }
         }
 
-        public World SimWorld { get; }
-
         public override void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             base.Render(spriteBatch, gdm, canvasOffset);
 
             foreach (IRenderer r in _renderers)
-            {
                 r.Render(spriteBatch, gdm,
                     new Rectangle(Position.X + canvasOffset.Left, Position.Y + canvasOffset.Top, Size.Width,
                         Size.Height));
-            }
         }
 
         public void AddRenderer(IRenderer r)
@@ -216,18 +235,16 @@ namespace App.UIElements
         }
 
         /// <summary>
-        /// Updates the position of all PaintBrushPosition objects in this SimFrame.
+        ///     Updates the position of all PaintBrushPosition objects in this SimFrame.
         /// </summary>
         public void UpdatePaintBrushPosition(int newPosition)
         {
             foreach (IRenderer _renderer in _renderers)
-            {
                 if (_renderer is PaintBrushSelection pbs)
                 {
                     pbs.Position = (newPosition, pbs.Position.Y);
                     pbs.RefreshPositions();
                 }
-            }
         }
 
         private void OnEntityAdded(Entity entity)
@@ -256,8 +273,8 @@ namespace App.UIElements
         }
 
         /// <summary>
-        /// Returns the relative coordinates of the mouse.
-        /// Represents the value in pixels inside the SimFrame.
+        ///     Returns the relative coordinates of the mouse.
+        ///     Represents the value in pixels inside the SimFrame.
         /// </summary>
         private (float relativeX, float relativeY) GetRelativeCoords(MouseState mouseState)
         {
@@ -266,7 +283,7 @@ namespace App.UIElements
         }
 
         /// <summary>
-        /// Returns the coordinates of the mouse in relation to the World.
+        ///     Returns the coordinates of the mouse in relation to the World.
         /// </summary>
         private (float X, float Y) GetWorldCoords(MouseState mouseState, int worldPixelWidth, int worldPixelHeight)
         {
@@ -276,7 +293,7 @@ namespace App.UIElements
         }
 
         /// <summary>
-        /// Returns index of the mouse's position corresponding to WorldCollider array.
+        ///     Returns index of the mouse's position corresponding to WorldCollider array.
         /// </summary>
         private (int X, int Y) GetWorldDivisionCoords(MouseState mouseState, int worldPixelWidth, int worldPixelHeight)
         {
@@ -285,5 +302,6 @@ namespace App.UIElements
             return ((int) MathF.Round(relativeX / worldPixelWidth * SimWorld.Collider.Subdivision),
                 (int) MathF.Round(relativeY / worldPixelHeight * SimWorld.Collider.Subdivision));
         }
+
     }
 }

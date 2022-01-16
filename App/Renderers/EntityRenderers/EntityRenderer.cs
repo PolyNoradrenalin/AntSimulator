@@ -20,7 +20,7 @@ namespace App.Renderers.EntityRenderers
             EntityCharset = entityCharset;
             _depthBuffer = depthBuffer;
         }
-        
+
         public EntityRenderer(Entity e, Texture2D entityCharset, Color color, float depthBuffer = DefaultDepthBuffer)
         {
             Entity = e;
@@ -34,7 +34,7 @@ namespace App.Renderers.EntityRenderers
         public Texture2D EntityCharset { get; set; }
 
         public Color Color { get; set; } = Color.White;
-        
+
         public virtual void Render(SpriteBatch spriteBatch, GraphicsDeviceManager gdm, Rectangle canvasOffset)
         {
             if (EntityCharset == null) return;
@@ -45,7 +45,7 @@ namespace App.Renderers.EntityRenderers
             int posY = (int) (Entity.Transform.Position.Y / Entity.World.Size.Y * worldPixelHeight);
 
             float scale = worldPixelWidth / Entity.World.Size.X;
-            
+
             int scaleX = (int) MathF.Round(Entity.Transform.Scale.X * scale);
             int scaleY = (int) MathF.Round(Entity.Transform.Scale.Y * scale);
 

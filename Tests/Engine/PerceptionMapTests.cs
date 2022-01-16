@@ -9,11 +9,11 @@ namespace Tests.Engine
     public class PerceptionMapTests
     {
         [Theory]
-        [InlineData(new[] { 1f })]
-        [InlineData(new[] { 1f, 1 })]
-        [InlineData(new[] { 1f, 1, 1 })]
-        [InlineData(new[] { 1f, 1, 1, 1 })]
-        [InlineData(new[] { 1f, 1, 1, 1, 1 })]
+        [InlineData(new[] {1f})]
+        [InlineData(new[] {1f, 1})]
+        [InlineData(new[] {1f, 1, 1})]
+        [InlineData(new[] {1f, 1, 1, 1})]
+        [InlineData(new[] {1f, 1, 1, 1, 1})]
         public void MapCreation_SeveralDirections_AnglesEquallySpaced(float[] weights)
         {
             PerceptionMap perceptionMap = new(weights);
@@ -27,10 +27,10 @@ namespace Tests.Engine
         }
 
         [Theory]
-        [InlineData(new[] { 1f, 1 })]
-        [InlineData(new[] { 1f, 1, 1 })]
-        [InlineData(new[] { 1f, 1, 1, 1 })]
-        [InlineData(new[] { 1f, 1, 1, 1, 1 })]
+        [InlineData(new[] {1f, 1})]
+        [InlineData(new[] {1f, 1, 1})]
+        [InlineData(new[] {1f, 1, 1, 1})]
+        [InlineData(new[] {1f, 1, 1, 1, 1})]
         public void Mean_MoreThanOneEqualWeights_VectorZero(float[] weights)
         {
             PerceptionMap perceptionMap = new(weights);

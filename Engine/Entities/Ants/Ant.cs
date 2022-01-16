@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Numerics;
 using AntEngine.Colliders;
@@ -21,29 +20,34 @@ namespace AntEngine.Entities.Ants
     {
         private const float DefaultMaxSpeed = 1F;
 
+        // Size of pheromones emitted.
         private static readonly Vector2 PheromoneScale = Vector2.One * 2;
+        
+        private readonly PerceptionMap _currentPerceptionMap;
+        private readonly List<Vector2> _perceptionMapKeys;
 
         /// <summary>
         ///     The number of ticks since the ant emitted a pheromone
         /// </summary>
         public int LastEmitTime;
 
-
-        private PerceptionMap _currentPerceptionMap;
-        private List<Vector2> _perceptionMapKeys;
-
-        public Ant(World world) : this("Ant", new Transform(), world)
+        /// <summary>
+        ///     The number of ticks since the ant is searching food.
+        ///     When this value is greater than SearchTimeout, the ant will exit the SearchState.
+        /// </summary>
+        public int SearchTime;
+        
+        public Ant(World world) : this("Ant", new Transform(), world, 24)
         {
         }
 
-        public Ant(string name, Transform transform, World world) : this(name, transform, world, new SearchState())
+        public Ant(string name, Transform transform, World world, int precision) : this(name, transform, world,
+            new SearchState(), precision)
         {
         }
-
-
-        //TODO: Some attributes/properties are not initialised with the constructor. Example : MovementStrategy.
-
-        public Ant(string name, Transform transform, World world, IState initialState) : base(name, transform, world,
+        
+        public Ant(string name, Transform transform, World world, IState initialState, int precision) : base(name,
+            transform, world,
             initialState)
         {
             Collider = new CircleCollider(Transform);
@@ -51,7 +55,7 @@ namespace AntEngine.Entities.Ants
             Speed = MaxSpeed;
 
             MovementStrategy = new WandererStrategy(0.5f, Transform.GetDirectorVector(), 0.90f);
-            List<float> weights = new(new float[PerceptionMapPrecision]);
+            List<float> weights = new(new float[precision]);
             _currentPerceptionMap = new PerceptionMap(weights);
             _perceptionMapKeys = _currentPerceptionMap.Weights.Keys.ToList();
         }
@@ -74,22 +78,52 @@ namespace AntEngine.Entities.Ants
         /// <summary>
         ///     Precision that will determine the size of the weights list.
         /// </summary>
-        public int PerceptionMapPrecision { get; set; } = 24;
+        public int PerceptionMapPrecision { get; set; } = 12;
 
-
+        /// <summary>
+        ///     Value at which a pheromone will no longer increase in importance according to its intensity.
+        /// </summary>
+        public int PerceptionSaturationBase { get; set; } = 10000;
+        
+        /// <summary>
+        ///     Duration of a food pheromone.
+        /// </summary>
         public int FoodPheromoneTimeSpan { get; set; } = 1200;
+        
+        /// <summary>
+        ///     Max duration of a food pheromone.
+        /// </summary>
         public int FoodMaxPheromoneTime { get; set; } = 1200;
+        
+        /// <summary>
+        ///     Duration of a home pheromone.
+        /// </summary>
         public int HomePheromoneTimeSpan { get; set; } = 6000;
+        
+        /// <summary>
+        ///     Max duration of a home pheromone.
+        /// </summary>
         public int HomeMaxPheromoneTime { get; set; } = 10000;
 
         /// <summary>
-        ///     Distance from which an ant can pick up or depose ressources.
+        ///     This value defines the amount of ticks before the ant goes to CarryState so that it can
+        ///     return to the colony.
+        /// </summary>
+        public int SearchTimeout { get; set; } = 20000;
+        
+        /// <summary>
+        ///     Distance from which an ant can pick up or deposit resources.
         /// </summary>
         public float PickUpDistance { get; set; } = 5F;
 
-
+        /// <summary>
+        ///     Inventory size of the ant.
+        /// </summary>
         public int PickUpCapacity { get; set; } = 15;
 
+        /// <summary>
+        ///     Distance in which two pheromones can fuse together.
+        /// </summary>
         public float PheromoneMergeDistance { get; set; } = 5F;
 
         /// <summary>
@@ -97,6 +131,9 @@ namespace AntEngine.Entities.Ants
         /// </summary>
         public int PheromoneEmissionDelay { get; set; } = 30;
 
+        /// <summary>
+        ///     Home colony of this ant.
+        /// </summary>
         public Colony Home { get; set; }
 
         /// <summary>
@@ -106,37 +143,34 @@ namespace AntEngine.Entities.Ants
         /// <returns>Perception Map</returns>
         public PerceptionMap GetPerceptionMap<T>() where T : Pheromone
         {
+            // Get all pheromones originating from this ant's colony.
             IEnumerable<T> entities = GetSurroundingEntities<T>().Where(pheromone => pheromone.ColonyOrigin == Home);
-
-            foreach (Vector2 dir in _perceptionMapKeys)
-            {
-                _currentPerceptionMap.Weights[dir] = 0;
-            }
             
+            // Initialize weights of PerceptionMap.
+            foreach (Vector2 dir in _perceptionMapKeys) _currentPerceptionMap.Weights[dir] = 0;
+            
+            // Calculate weight list according to the pheromones situated around the ant.
             foreach (T e in entities)
             {
                 Vector2 antDir = Transform.GetDirectorVector();
                 Vector2 pheromoneDirection = e.Transform.Position - Transform.Position;
 
-                float angle = MathF.Atan2(pheromoneDirection.Y, Vector2.Dot(pheromoneDirection, Vector2.UnitX));
-                angle = angle < 0F ? angle + 2 * MathF.PI : angle;
+                float angle = Vector2Utils.AngleBetweenNormalized(Vector2.UnitX, pheromoneDirection);
 
-                float angleDiff = MathF.Atan2(antDir.Y * pheromoneDirection.X - antDir.X * pheromoneDirection.X,
-                    antDir.X * pheromoneDirection.X + antDir.Y * pheromoneDirection.Y);
+                float angleDiff = Vector2Utils.AngleBetween(antDir, pheromoneDirection);
 
-                int weightListIndex = (int) Math.Min(PerceptionDistance-1, (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision)));
+                int weightListIndex = Math.Min(PerceptionMapPrecision - 1, (int) MathF.Floor(angle / (2 * MathF.PI / PerceptionMapPrecision)));
 
                 float weightSum = _currentPerceptionMap.Weights[_perceptionMapKeys[weightListIndex]];
                 weightSum += GetWeightFactorFromDistance(e.Transform.GetDistance(Transform)) *
-                             GetWeightFactorFromRotation(angleDiff) * e.Intensity;
+                             GetWeightFactorFromRotation(angleDiff) *
+                             MathF.Log(e.Intensity + 1, PerceptionSaturationBase);
                 _currentPerceptionMap.Weights[_perceptionMapKeys[weightListIndex]] = weightSum;
             }
 
             return _currentPerceptionMap;
         }
-
-        //TODO: Could be added to a higher level of entity. The only problem is that it depends on PerceptionDistance so maybe in LivingEntity?
-
+        
         /// <summary>
         ///     Generates a list of the entities that are in this Ant's perceptionDistance.
         /// </summary>
@@ -147,9 +181,8 @@ namespace AntEngine.Entities.Ants
             HashSet<T> filteredEntities = new();
 
             foreach (T e in entities)
-            {
-                if (e.Transform.GetDistance(Transform) <= PerceptionDistance) filteredEntities.Add(e);
-            }
+                if (e.Transform.GetDistance(Transform) <= PerceptionDistance)
+                    filteredEntities.Add(e);
 
             return filteredEntities;
         }
@@ -217,9 +250,7 @@ namespace AntEngine.Entities.Ants
             }
 
             if (candidate.pheromone != null)
-            {
                 candidate.pheromone.Intensity = Math.Min(candidate.pheromone.Intensity + intensity, maxIntensity);
-            }
 
             return candidate.pheromone != null;
         }

@@ -2,7 +2,6 @@ using System;
 using System.Numerics;
 using AntEngine.Entities.Ants;
 using AntEngine.Entities.Colonies;
-using AntEngine.Entities.Pheromones;
 
 namespace AntEngine.Entities.States.Living
 {
@@ -28,14 +27,18 @@ namespace AntEngine.Entities.States.Living
                 throw new ArgumentException("TargetState is only valid on Ant entity");
         }
 
+        /// <summary>
+        ///     Moves towards a specified target in a straight line.
+        /// </summary>
+        /// <param name="stateEntity"></param>
         public override void OnStateUpdate(StateEntity stateEntity)
         {
             Ant ant = (Ant) stateEntity;
             Vector2 dir = _target.Transform.Position - ant.Transform.Position;
 
             ant.Move(dir);
-            
-            if (ant.LastEmitTime > ant.PheromoneEmissionDelay)
+
+            if (ant.LastEmitTime > ant.PheromoneEmissionDelay && ant.SearchTime < ant.SearchTimeout)
             {
                 switch (_target)
                 {
